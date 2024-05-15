@@ -4,12 +4,11 @@
 //
 //  Created by Wagner De Paula on 3/24/24.
 //
-
 import SwiftUI
+
 
 // Define an enum for your options
 enum ProfileOption: String, CaseIterable, Identifiable {
-    
     case myAccount = "My Account"
     case search = "Search"
     case calendars = "Calendars"
@@ -36,6 +35,7 @@ enum ProfileOption: String, CaseIterable, Identifiable {
     }
 }
 
+
 struct ProfileView: View {
     
     @State private var selectedOption: ProfileOption = .myAccount
@@ -46,7 +46,12 @@ struct ProfileView: View {
         NavigationStack {
             
             List(ProfileOption.allCases, id: \.self) { option in
-                Button(action: {}) {
+                
+                Button(action: {
+                    selectedOption = option
+                    isPresented = true
+                    UIApplication.triggerHapticFeedback()
+                }) {
                     HStack(spacing: 10) {
                         Image(systemName: option.iconName)
                             .imageScale(.large)
@@ -54,38 +59,32 @@ struct ProfileView: View {
                             .foregroundColor(.white)
                         
                         Text(option.rawValue)
-                            .button()
                             .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
                     }
-                    //.padding(EdgeInsets(top: 0, leading: 17, bottom: 0, trailing: 0))
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                //.padding(.vertical, 10)
-                //.background(Color("BackgroundColor"))
-                
-                //.listRowBackground(Color("BackgroundColor"))
-                //.listRowInsets(EdgeInsets())
-                // .listRowSeparator(.hidden)
-                //.listRowSeparatorTint(Color("DividerColor"))
-                
-                
-                .scaleEffect(pressedStates[option.id] ?? false ? 0.9 : 1, anchor: .leading)
-                .opacity(pressedStates[option.id] ?? false ? 0.5 : 1)
-                .gesture(DragGesture(minimumDistance: 0)
-                    .onChanged({ _ in
-                        withAnimation {
-                            pressedStates[option.id] = true
-                        }
-                    })
-                        .onEnded({ _ in
-                            selectedOption = option
-                            isPresented = true
-                            UIApplication.triggerHapticFeedback()
-                            withAnimation(.easeOut(duration: 0.1)) {
-                                pressedStates[option.id] = false
-                            }
-                        }))
+                .listRowSeparatorTint(Color("DividerColor"))
+                .listRowBackground(Color.white.opacity(0.1))
+                .listRowInsets(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
             }
+            //                .scaleEffect(pressedStates[option.id] ?? false ? 0.9 : 1, anchor: .leading)
+            //                .opacity(pressedStates[option.id] ?? false ? 0.5 : 1)
+            //                .gesture(DragGesture(minimumDistance: 0)
+            //                    .onChanged({ _ in
+            //                        withAnimation {
+            //                            pressedStates[option.id] = true
+            //                        }
+            //                    })
+            //                    .onEnded({ _ in
+            //                        withAnimation(.easeOut(duration: 0.1)) {
+            //                            pressedStates[option.id] = false
+            //                        }
+            //                    }))
+            
             .navigationDestination(isPresented: $isPresented) {
                 switch selectedOption {
                 case .myAccount, .search, .calendars, .themes, .preferences, .whatsNew, .welcome, .helpSupport:
@@ -93,13 +92,10 @@ struct ProfileView: View {
                 }
             }
             .listStyle(InsetGroupedListStyle())
-            //.background(Color("BackgroundColor"))
             .navigationTitle("Profile")
-            
         }
     }
 }
-
 
 
 

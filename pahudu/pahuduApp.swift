@@ -39,12 +39,14 @@ struct PahuduApp: App {
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
         navigationBarAppearance.backgroundColor = UIColor(Color("BackgroundColor"))
-        navigationBarAppearance.shadowColor = UIColor(Color("DividerColor"))
+        navigationBarAppearance.shadowColor = UIColor(Color.clear)
+        //UIColor(Color("DividerColor"))
         
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithOpaqueBackground()
         toolbarAppearance.backgroundColor = UIColor(Color("BackgroundColor"))
-        toolbarAppearance.shadowColor = UIColor(Color("DividerColor"))
+        toolbarAppearance.shadowColor = UIColor(Color.clear)
+        //UIColor(Color("DividerColor"))
         
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()

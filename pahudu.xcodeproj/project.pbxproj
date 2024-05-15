@@ -19,7 +19,7 @@
 		D0426F7B2BB8B0F1001ADB0B /* MonthListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0426F7A2BB8B0F1001ADB0B /* MonthListView.swift */; };
 		D048D6A82BAE22A00034FF48 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6A72BAE22A00034FF48 /* DetailsView.swift */; };
 		D048D6B12BB055040034FF48 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B02BB055040034FF48 /* extensions.swift */; };
-		D048D6B32BB0570F0034FF48 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B22BB0570F0034FF48 /* ProfileView.swift */; };
+		D048D6B32BB0570F0034FF48 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B22BB0570F0034FF48 /* SettingsView.swift */; };
 		D048D6B52BB0572C0034FF48 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B42BB0572C0034FF48 /* DiscoverView.swift */; };
 		D080AA472B9DE77800FAC890 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D080AA462B9DE77800FAC890 /* DayView.swift */; };
 		D09196442B990D830095DFBF /* calendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09196432B990D830095DFBF /* calendarModel.swift */; };
@@ -46,7 +46,7 @@
 		D0426F7A2BB8B0F1001ADB0B /* MonthListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListView.swift; sourceTree = "<group>"; };
 		D048D6A72BAE22A00034FF48 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
 		D048D6B02BB055040034FF48 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
-		D048D6B22BB0570F0034FF48 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		D048D6B22BB0570F0034FF48 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D048D6B42BB0572C0034FF48 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
 		D080AA462B9DE77800FAC890 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		D09196432B990D830095DFBF /* calendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarModel.swift; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 				D048D6B42BB0572C0034FF48 /* DiscoverView.swift */,
 				D09196472B9920190095DFBF /* MonthView.swift */,
 				D0426F7A2BB8B0F1001ADB0B /* MonthListView.swift */,
-				D048D6B22BB0570F0034FF48 /* ProfileView.swift */,
+				D048D6B22BB0570F0034FF48 /* SettingsView.swift */,
 				D0A5FB9E2BB4AC0D001CC1EE /* SearchView.swift */,
 				D09196452B9913CA0095DFBF /* YearView.swift */,
 			);
@@ -252,7 +252,7 @@
 				D03F7BB62B952B6A0096A540 /* ContentView.swift in Sources */,
 				D03F7BB42B952B6A0096A540 /* pahuduApp.swift in Sources */,
 				D0A5FB9F2BB4AC0D001CC1EE /* SearchView.swift in Sources */,
-				D048D6B32BB0570F0034FF48 /* ProfileView.swift in Sources */,
+				D048D6B32BB0570F0034FF48 /* SettingsView.swift in Sources */,
 				D09196442B990D830095DFBF /* calendarModel.swift in Sources */,
 				D048D6B52BB0572C0034FF48 /* DiscoverView.swift in Sources */,
 			);

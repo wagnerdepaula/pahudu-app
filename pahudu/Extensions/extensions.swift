@@ -90,7 +90,7 @@ extension Text {
         self
             .fontWeight(.medium)
 //            .font(.system(size: 22, design: .monospaced))
-            .font(.custom("SuisseBPIntl-Medium", size: 22))
+            .font(.custom("SuisseBPIntl-Medium", size: 28))
             .kerning(0.2)
             .lineSpacing(0)
     }

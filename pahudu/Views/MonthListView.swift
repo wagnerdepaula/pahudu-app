@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct MonthListView: View {
+    
     @StateObject private var viewModel = CalendarViewModel()
     @State private var navBarTitle = "Events"
     @State private var showDetails: Bool = false
@@ -28,17 +29,18 @@ struct MonthListView: View {
         List {
             ForEach(viewModel.monthsData, id: \.monthIndex) { monthData in
                 itemListView(for: monthData)
+                    .background(Color("BackgroundColor"))
+                    .listRowBackground(Color("BackgroundColor"))
+                    .listRowSeparatorTint(Color("DividerColor"))
+                    .listRowInsets(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
+                    .listSectionSeparator(.hidden, edges: .top)
                     .onAppear {
                         navBarTitle = "\(monthData.month) \(monthData.year)"
                     }
-            }
-            .background(Color("BackgroundColor"))
-            .listRowBackground(Color("BackgroundColor"))
-            .listRowSeparatorTint(Color("DividerColor"))
-            .listRowInsets(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-            .onTapGesture {
-                showDayView = true
-                UIApplication.triggerHapticFeedback()
+                    .onTapGesture {
+                        showDayView = true
+                        UIApplication.triggerHapticFeedback()
+                    }
             }
         }
         .background(Color("BackgroundColor"))
@@ -96,6 +98,7 @@ struct DayCell: View {
     private func dateItemView(_ dateItem: DateItem) -> some View {
         VStack(alignment: .leading) {
             HStack {
+                Spacer(minLength: 20)
                 dateLabel(dateItem)
                 Spacer()
                 //showDetails

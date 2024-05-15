@@ -27,6 +27,16 @@ struct YearView: View {
             }
             .navigationBarTitle(navBarTitle, displayMode: .inline)
             .toolbar {
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        UIApplication.triggerHapticFeedback()
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+                }
+                
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation {

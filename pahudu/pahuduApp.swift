@@ -56,7 +56,7 @@ struct PahuduApp: App {
         
         // Set large title attributes with a custom font and kerning
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "SuisseBPIntl-Regular", size: 34) ?? UIFont.systemFont(ofSize: 34),
+            .font: UIFont(name: "SuisseBPIntl-Regular", size: 36) ?? UIFont.systemFont(ofSize: 36),
 //            .font: UIFont.systemFont(ofSize: 34, weight: .semibold, width: .standard),
             .kern: NSNumber(value: 0)
             //.font: UIFont.monospacedSystemFont(ofSize: 32, weight: .light),
@@ -65,7 +65,7 @@ struct PahuduApp: App {
         
         // Set title attributes with a custom font and kerning
         navigationBarAppearance.titleTextAttributes = [
-            .font: UIFont(name: "SuisseBPIntl-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "SuisseBPIntl-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18),
 //            .font: UIFont.systemFont(ofSize: 18, weight: .medium, width: .standard),
             //.font: UIFont.monospacedSystemFont(ofSize: 18, weight: .regular),
             .kern: NSNumber(value: 0)

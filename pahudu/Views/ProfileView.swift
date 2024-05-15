@@ -4,6 +4,7 @@
 //
 //  Created by Wagner De Paula on 3/24/24.
 //
+
 import SwiftUI
 
 
@@ -11,7 +12,6 @@ import SwiftUI
 enum ProfileOption: String, CaseIterable, Identifiable {
     case myAccount = "My Account"
     case search = "Search"
-    case calendars = "Calendars"
     case themes = "Themes"
     case preferences = "Preferences"
     case whatsNew = "What’s New"
@@ -25,8 +25,7 @@ enum ProfileOption: String, CaseIterable, Identifiable {
         switch self {
         case .myAccount: return "person"
         case .search: return "magnifyingglass"
-        case .calendars: return "circle.grid.3x3"
-        case .themes: return "theatermasks"
+        case .themes: return "circle.lefthalf.filled"
         case .preferences: return "gearshape"
         case .whatsNew: return "star"
         case .welcome: return "figure.wave"
@@ -52,10 +51,10 @@ struct ProfileView: View {
                     isPresented = true
                     UIApplication.triggerHapticFeedback()
                 }) {
-                    HStack(spacing: 10) {
+                    HStack(spacing: 12) {
                         Image(systemName: option.iconName)
                             .imageScale(.large)
-                            .frame(width: 30, height: 30)
+                            .frame(width: 28, height: 28)
                             .foregroundColor(.white)
                         
                         Text(option.rawValue)
@@ -68,8 +67,8 @@ struct ProfileView: View {
                     }
                 }
                 .listRowSeparatorTint(Color("DividerColor"))
-                .listRowBackground(Color.white.opacity(0.1))
-                .listRowInsets(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
+                .listRowBackground(Color("SecondaryBackgroundColor"))
+                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
             //                .scaleEffect(pressedStates[option.id] ?? false ? 0.9 : 1, anchor: .leading)
             //                .opacity(pressedStates[option.id] ?? false ? 0.5 : 1)
@@ -87,7 +86,7 @@ struct ProfileView: View {
             
             .navigationDestination(isPresented: $isPresented) {
                 switch selectedOption {
-                case .myAccount, .search, .calendars, .themes, .preferences, .whatsNew, .welcome, .helpSupport:
+                case .myAccount, .search, .themes, .preferences, .whatsNew, .welcome, .helpSupport:
                     DefaultView(text: selectedOption.rawValue)
                 }
             }

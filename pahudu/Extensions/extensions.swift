@@ -29,7 +29,7 @@ extension Text {
     func headline() -> some View {
         self
             .fontWeight(.medium)
-            .font(.custom("SuisseBPIntl-Medium", size: 17))
+            .font(.custom("SuisseBPIntl-Medium", size: 18))
 //            .font(.system(size: 17))
             .lineSpacing(5)
             .kerning(0.2)
@@ -38,7 +38,7 @@ extension Text {
     func body() -> some View {
         self
             .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 17))
+            .font(.custom("SuisseBPIntl-Medium", size: 18))
 //            .font(.system(size: 17))
             .lineSpacing(5)
             .kerning(0.2)
@@ -47,7 +47,7 @@ extension Text {
     func callout() -> some View {
         self
             .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 16))
+            .font(.custom("SuisseBPIntl-Medium", size: 18))
 //            .font(.system(size: 16))
             .lineSpacing(5)
             .kerning(0.2)
@@ -56,7 +56,7 @@ extension Text {
     func subheadline() -> some View {
         self
             .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 15))
+            .font(.custom("SuisseBPIntl-Medium", size: 16))
 //            .font(.system(size: 15))
             .lineSpacing(5)
             .kerning(0.2)
@@ -80,7 +80,7 @@ extension Text {
         self
             .fontWeight(.regular)
 //            .font(.system(size: 16, weight: .medium))
-            .font(.custom("SuisseBPIntl-Medium", size: 18))
+            .font(.custom("SuisseBPIntl-Medium", size: 16))
             .kerning(0.2)
             .lineSpacing(0)
     }

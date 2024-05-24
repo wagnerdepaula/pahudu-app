@@ -17,15 +17,13 @@ struct DiscoverView: View {
                     Spacer()
                     Text("DiscoverView")
                         .headline()
-                        .foregroundColor(.primary)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color("BackgroundColor"))
-            .navigationTitle("Discover")
+            .navigationBarTitle("Discover", displayMode: .inline)
             .scrollIndicators(.hidden)
         }
     }

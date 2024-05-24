@@ -190,11 +190,20 @@ class EventModel: ObservableObject {
         return nil
     }
     
+    func eventsForDate(_ date: Date) -> [Event] {
+        return events.filter { event in
+            event.shows.contains { show in
+                Calendar.current.isDate(show.date, inSameDayAs: date)
+            }
+        }
+    }
+
+    
     func showsForDate(_ date: Date) -> [Show] {
-        // Filtering shows by date
         return events.flatMap { event in
             event.shows.filter { Calendar.current.isDate($0.date, inSameDayAs: date) }
         }
     }
+    
     
 }

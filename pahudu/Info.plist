@@ -4,10 +4,14 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Suisse Black.otf</string>
-		<string>Suisse Bold.otf</string>
-		<string>Suisse Medium.otf</string>
-		<string>Suisse Regular.otf</string>
+		<string>Geist-Bold.ttf</string>
+		<string>Geist-Regular.ttf</string>
+		<string>Geist-Medium.ttf</string>
+		<string>Geist-SemiBold.ttf</string>
+		<string>GeistMono-Bold.ttf</string>
+		<string>GeistMono-Regular.ttf</string>
+		<string>GeistMono-Medium.ttf</string>
+		<string>GeistMono-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

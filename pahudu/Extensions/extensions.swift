@@ -12,96 +12,85 @@ extension Text {
     
     func largeTitle() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 34))
-//            .font(.system(size: 34))
-            .kerning(0.2)
+            .font(.custom("Geist-Regular", size: 34))
+            .kerning(0.3)
     }
     
     func title() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 22))
-//            .font(.system(size: 22))
-            .kerning(0.2)
+            .font(.custom("Geist-Regular", size: 22))
+            .kerning(0.3)
     }
     
     func headline() -> some View {
         self
-            .fontWeight(.medium)
-            .font(.custom("SuisseBPIntl-Medium", size: 18))
-//            .font(.system(size: 17))
+            .font(.custom("Geist-Regular", size: 18))
             .lineSpacing(5)
-            .kerning(0.2)
+            .kerning(0.3)
     }
     
     func body() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 18))
-//            .font(.system(size: 17))
+            .font(.custom("Geist-Regular", size: 16))
             .lineSpacing(5)
-            .kerning(0.2)
+            .kerning(0.3)
     }
     
     func callout() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 18))
-//            .font(.system(size: 16))
+            .font(.custom("Geist-Medium", size: 16))
             .lineSpacing(5)
-            .kerning(0.2)
+            .kerning(0.3)
     }
     
     func subheadline() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 16))
-//            .font(.system(size: 15))
+            .font(.custom("Geist-Medium", size: 16))
             .lineSpacing(5)
-            .kerning(0.2)
+            .kerning(0.3)
     }
     
     func caption() -> some View {
         self
-            .fontWeight(.regular)
-            .font(.custom("SuisseBPIntl-Medium", size: 12))
-//            .font(.system(size: 12))
+            .font(.custom("Geist-Medium", size: 12))
             .lineSpacing(5)
-            .kerning(0.2)
+            .kerning(0.3)
     }
     
     
     
     
-// Custom
+    // Custom
     
     func button() -> some View {
         self
-            .fontWeight(.regular)
-//            .font(.system(size: 16, weight: .medium))
-            .font(.custom("SuisseBPIntl-Medium", size: 16))
-            .kerning(0.2)
+            .font(.custom("Geist-Regular", size: 16))
+            .kerning(0.3)
             .lineSpacing(0)
     }
     
     
     func numberLarge() -> some View {
         self
-            .fontWeight(.medium)
-//            .font(.system(size: 22, design: .monospaced))
-            .font(.custom("SuisseBPIntl-Medium", size: 28))
-            .kerning(0.2)
+            .font(.custom("GeistMono-Bold", size: 22))
+            .kerning(0.3)
             .lineSpacing(0)
+    }
+    
+    func numberMedium() -> some View {
+        self
+            .font(.custom("GeistMono-Medium", size: 16))
+            .kerning(0.5)
+            .lineSpacing(0)
+            .multilineTextAlignment(.center)
     }
     
     func numberSmall() -> some View {
         self
-            .fontWeight(.medium)
-//            .font(.system(size: 16, design: .monospaced))
-            .font(.custom("SuisseBPIntl-Medium", size: 18))
-            .kerning(0.2)
+            .font(.custom("GeistMono-Regular", size: 12))
+            .kerning(0.5)
             .lineSpacing(0)
+            .multilineTextAlignment(.center)
     }
     
 }

@@ -33,14 +33,12 @@ struct DetailsView: View {
                 
                 Text(show.description)
                     .body()
-                
-                
-                
+     
                 Text("\(show.venue.name),")
-                    .foregroundColor(.gray)
+                    //.foregroundColor(.gray)
                 
                 Text("\(show.venue.location)")
-                    .foregroundColor(.gray)
+                    //.foregroundColor(.gray)
                 
                 
                 
@@ -49,7 +47,6 @@ struct DetailsView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .edgesIgnoringSafeArea(.horizontal)
-        .navigationTitle(show.brand.name)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitle(show.brand.name, displayMode: .inline)
     }
 }

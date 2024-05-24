@@ -15,7 +15,9 @@ enum SettingsOption: String, CaseIterable, Identifiable {
     case preferences = "Preferences"
     case whatsNew = "What’s New"
     case welcome = "Welcome"
-    case helpSupport = "Help & Support"
+    case helpCenter = "Help Center"
+    case termsOfUse = "Terms of Use"
+    case privacyPolicy = "Privacy Policy"
     
     var id: String { self.rawValue }
     
@@ -23,21 +25,23 @@ enum SettingsOption: String, CaseIterable, Identifiable {
     var iconName: String {
         switch self {
         case .myAccount: return "person"
-        case .search: return "magnifyingglass"
-        case .themes: return "circle.lefthalf.filled"
-        case .preferences: return "gearshape"
+        case .welcome: return "hand.wave"
         case .whatsNew: return "star"
-        case .welcome: return "figure.wave"
-        case .helpSupport: return "questionmark"
+        case .search: return "magnifyingglass"
+        case .themes: return "paintbrush"
+        case .preferences: return "gearshape"
+        case .helpCenter: return "questionmark"
+        case .termsOfUse: return "doc.text"
+        case .privacyPolicy: return "lock.shield"
         }
     }
     
     // Associated category for each option
     var category: SettingsCategory {
         switch self {
-        case .myAccount, .welcome: return .accountGeneral
-        case .search, .whatsNew: return .searchUpdates
-        case .themes, .preferences, .helpSupport: return .settingsSupport
+        case .myAccount, .welcome, .whatsNew, .search: return .accountGeneral
+        case .themes, .preferences: return .appearanceCustomization
+        case .helpCenter, .termsOfUse, .privacyPolicy: return .supportLegal
         }
     }
 }
@@ -45,89 +49,51 @@ enum SettingsOption: String, CaseIterable, Identifiable {
 // Define an enum for your categories
 enum SettingsCategory: String, CaseIterable, Identifiable {
     case accountGeneral = "Account & General"
-    case searchUpdates = "Search & Updates"
-    case settingsSupport = "Settings & Support"
+    case appearanceCustomization = "Appearance & Customization"
+    case supportLegal = "Support & Legal"
     var id: String { self.rawValue }
 }
 
 
-
 struct SettingsView: View {
-    
-    @State private var selectedOption: SettingsOption = .myAccount
-    @State private var isPresented: Bool = false
-    @State private var pressedStates: [String: Bool] = [:]
     
     var body: some View {
         NavigationStack {
-            Spacer(minLength: 20)
             List {
-                ForEach(SettingsCategory.allCases, id: \.self) { category in
+                ForEach(SettingsCategory.allCases) { category in
                     Section {
-                        ForEach(SettingsOption.allCases.filter { $0.category == category }, id: \.self) { option in
-                            Button(action: {
-                                selectedOption = option
-                                isPresented = true
-                                UIApplication.triggerHapticFeedback()
+                        ForEach(SettingsOption.allCases.filter { $0.category == category }) { option in
+                            NavigationLink(destination: {
+                                switch option {
+                                case .search:
+                                    SearchView()
+                                default:
+                                    DefaultView(text: option.rawValue)
+                                }
                             }) {
-                                HStack(spacing: 12) {
-                                    Image(systemName: option.iconName)
-                                        .imageScale(.large)
-                                        .frame(width: 32, height: 32)
-                                        .foregroundColor(.white)
-                                    
+                                Label {
                                     Text(option.rawValue)
-                                        .foregroundColor(.white)
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
+                                        .button()
+                                } icon: {
+                                    Image(systemName: option.iconName)
                                 }
                             }
-                            .listRowSeparatorTint(Color("DividerColor"))
-                            .listRowBackground(Color("SecondaryBackgroundColor"))
-                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                            .listRowSeparator(.hidden)
                         }
                     }
                 }
             }
-            .navigationDestination(isPresented: $isPresented) {
-                switch selectedOption {
-                case .myAccount, .search, .themes, .preferences, .whatsNew, .welcome, .helpSupport:
-                    DefaultView(text: selectedOption.rawValue)
-                }
-            }
-            .listStyle(InsetGroupedListStyle())
-            .navigationTitle("Settings")
-            .listSectionSpacing(32)
+            .navigationBarTitle("Settings", displayMode: .inline)
         }
     }
 }
-
-
-
 
 struct DefaultView: View {
     let text: String
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack {
-                    Spacer()
-                    Text(text)
-                        .headline()
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color("BackgroundColor"))
-            .navigationTitle(text)
-            .scrollIndicators(.hidden)
-        }
+        Text(text)
+            .navigationBarTitle(text, displayMode: .inline)
     }
 }

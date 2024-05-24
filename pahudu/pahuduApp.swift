@@ -10,75 +10,80 @@ import SwiftUI
 @main
 struct PahuduApp: App {
     
-    // MARK: - Initialization
     init() {
         configureNavigationBarAppearance()
-        
-//                for familyName in UIFont.familyNames.sorted() {
-//                    print("Family: \(familyName)")
-//                    for fontName in UIFont.fontNames(forFamilyName: familyName).sorted() {
-//                        print(" - \(fontName)")
-//                    }
-//                }
-        
+        configureToolbarAppearance()
+        configureTableViewAppearance()
+        configureTabBarAppearance()
     }
     
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .accentColor(Color("AccentColor")) // Set accent color for the app
+                .foregroundColor(Color("ForegroundColor"))
+                .background(Color("BackgroundColor"))
+                .accentColor(Color("AccentColor"))
         }
     }
     
-    // MARK: - Private Methods
+    private func listFonts() {
+        for familyName in UIFont.familyNames.sorted() {
+            print("Family: \(familyName)")
+            for fontName in UIFont.fontNames(forFamilyName: familyName).sorted() {
+                print(" - \(fontName)")
+            }
+        }
+    }
+    
     private func configureNavigationBarAppearance() {
-        
-        // Create an instance of UINavigationBarAppearance
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
-        navigationBarAppearance.backgroundColor = UIColor(Color("BackgroundColor"))
         navigationBarAppearance.shadowColor = UIColor(Color.clear)
-        //UIColor(Color("DividerColor"))
-        
-        let toolbarAppearance = UIToolbarAppearance()
-        toolbarAppearance.configureWithOpaqueBackground()
-        toolbarAppearance.backgroundColor = UIColor(Color("BackgroundColor"))
-        toolbarAppearance.shadowColor = UIColor(Color.clear)
-        //UIColor(Color("DividerColor"))
-        
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor(Color("BackgroundColor"))
-        tabBarAppearance.shadowColor = UIColor(Color.clear)
-        
-        
-        // Set large title attributes with a custom font and kerning
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "SuisseBPIntl-Regular", size: 36) ?? UIFont.systemFont(ofSize: 36),
-//            .font: UIFont.systemFont(ofSize: 34, weight: .semibold, width: .standard),
-            .kern: NSNumber(value: 0)
-            //.font: UIFont.monospacedSystemFont(ofSize: 32, weight: .light),
-            //.kern: NSNumber(value: -1)
+            .font: UIFont(name: "Geist-Regular", size: 34) ?? UIFont.systemFont(ofSize: 34),
+            .kern: NSNumber(value: 0.3),
+            .foregroundColor: UIColor(Color("AccentColor"))
         ]
-        
-        // Set title attributes with a custom font and kerning
         navigationBarAppearance.titleTextAttributes = [
-            .font: UIFont(name: "SuisseBPIntl-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18),
-//            .font: UIFont.systemFont(ofSize: 18, weight: .medium, width: .standard),
-            //.font: UIFont.monospacedSystemFont(ofSize: 18, weight: .regular),
-            .kern: NSNumber(value: 0)
+            .font: UIFont(name: "Geist-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18),
+            .kern: NSNumber(value: 0.3),
+            .foregroundColor: UIColor(Color("AccentColor"))
         ]
-        
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
         UINavigationBar.appearance().compactAppearance = navigationBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
-        
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
+    }
+    
+    private func configureToolbarAppearance() {
+        let toolbarAppearance = UIToolbarAppearance()
+        toolbarAppearance.configureWithOpaqueBackground()
+        toolbarAppearance.shadowColor = UIColor(Color.clear)
+        let barButtonItemAppearance = UIBarButtonItemAppearance()
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color("AccentColor"))]
+        toolbarAppearance.buttonAppearance = barButtonItemAppearance
+        toolbarAppearance.doneButtonAppearance = barButtonItemAppearance
         UIToolbar.appearance().standardAppearance = toolbarAppearance
         UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
+        UIToolbar.appearance().tintColor = UIColor(Color("AccentColor"))
     }
+    
+    private func configureTableViewAppearance() {
+        let tableViewAppearance = UITableView.appearance()
+        tableViewAppearance.separatorColor = .blue
+        tableViewAppearance.separatorStyle = .singleLine
+    }
+    
+    private func configureTabBarAppearance() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.shadowColor = UIColor(Color.clear)
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Color("QuaternaryColor"))
+        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color("QuaternaryColor"))]
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color("AccentColor"))
+        tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color("AccentColor"))]
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+
 }

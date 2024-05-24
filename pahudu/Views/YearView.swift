@@ -10,12 +10,13 @@ import SwiftUI
 
 
 struct YearView: View {
+    
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = CalendarViewModel()
     @State private var navBarTitle = "Fashion Calendar"
     @State var showCalendarView = true
     @State var selectedMenuOption: String = "calendar"
-
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -27,25 +28,15 @@ struct YearView: View {
             }
             .navigationBarTitle(navBarTitle, displayMode: .inline)
             .toolbar {
-                
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        UIApplication.triggerHapticFeedback()
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                    }
-                }
-                
-                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation {
                             showCalendarView.toggle()
-                            selectedMenuOption = showCalendarView ? "list.bullet" : "circle.grid.3x3"
+                            selectedMenuOption = showCalendarView ? "rectangle.grid.1x2.fill" : "circle.grid.3x3.fill"
                         }
                         UIApplication.triggerHapticFeedback()
                     } label: {
-                        Image(systemName: showCalendarView ? "list.bullet" : "circle.grid.3x3")
+                        Image(systemName: showCalendarView ? "rectangle.grid.1x2.fill" : "circle.grid.3x3.fill")
                     }
                 }
             }
@@ -81,6 +72,10 @@ struct MonthCalendarView: View {
             .scrollTargetBehavior(.paging)
             .scrollPosition(id: $scrolledID)
             .environmentObject(viewModel)
+            .onAppear {
+                let monthData = viewModel.monthsData[scrolledID ?? 0]
+                navBarTitle = "\(monthData.month) \(monthData.year)"
+            }
             .onChange(of: scrolledID) { new, old in
                 if let _ = new {
                     UIApplication.triggerHapticFeedback()
@@ -92,7 +87,6 @@ struct MonthCalendarView: View {
             }
             .ignoresSafeArea(.container, edges: [.top, .bottom])
             .environmentObject(viewModel)
-            .background(Color("BackgroundColor"))
         }
     }
 }

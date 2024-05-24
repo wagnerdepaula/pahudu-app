@@ -20,7 +20,6 @@ struct DaysOfWeekView: View {
                 if case let .dayOfWeek(dayAbbreviation, _) = dayOfWeekItem {
                     Text(dayAbbreviation)
                         .callout()
-                        ///.foregroundColor(Color.white.opacity(0.5))
                         .frame(width: DaysOfWeekView.width, height: DaysOfWeekView.width)
                         .background(Color.red)
                         //.fixedSize()

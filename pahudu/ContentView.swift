@@ -9,51 +9,37 @@
 import SwiftUI
 import UIKit
 
-
-
-
 // Example usage in a SwiftUI view
 
 struct ContentView: View {
-    @State private var selectedTab: Int = 0
     
+    @State private var selectedTab: Int = 0
     
     var body: some View {
         TabView(selection: $selectedTab) {
             
             YearView()
                 .tabItem {
-                    Image(systemName: "circle.grid.3x3.fill")
+                    Image(systemName: "circle.grid.3x3")
                     Text("Calendar")
                 }
                 .tag(0)
             
             DiscoverView()
                 .tabItem {
-                    Image(systemName: "safari.fill")
+                    Image(systemName: "square.stack")
                     Text("Discover")
                 }
                 .tag(1)
             
-            SearchView()
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Search")
-                }
-                .tag(2)
-            
             SettingsView()
                 .tabItem {
-                    Image(systemName: "gearshape.fill")
+                    Image(systemName: "person.fill")
                     Text("Settings")
                 }
-                .tag(3)
-        }
-        .onChange(of: selectedTab) { new, old in
-            UIApplication.triggerHapticFeedback(style: .soft)
+                .tag(2)
         }
     }
-
 }
 
 

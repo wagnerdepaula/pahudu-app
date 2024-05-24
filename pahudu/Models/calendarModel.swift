@@ -48,6 +48,7 @@ struct MonthData {
 
 
 struct DateItem: Identifiable {
+    let date: Date
     let id: UUID = UUID()
     let day: Int
     let month: Int
@@ -107,7 +108,7 @@ enum CalendarItem: Identifiable {
 
 class CalendarUtils {
     private static var calendar: Calendar { Calendar.current }
-
+    
     static func precomputeCalendarItems(for monthIndex: Int) -> [CalendarItem] {
         let today = Date()
         let currentYear = calendar.component(.year, from: today)
@@ -132,18 +133,20 @@ class CalendarUtils {
         items += (1...daysInMonthRange.count).map { day in
             let date = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth)!
             let dayOfWeek = dateFormatter.string(from: date)
-            return .date(DateItem(day: day,
-                                  month: month,
-                                  monthString: monthString,
-                                  year: year,
-                                  isCurrentMonth: true,
-                                  isToday: calendar.isDateInToday(date),
-                                  dayOfWeek: dayOfWeek))
+            return .date(DateItem(
+                date: date,
+                day: day,
+                month: month,
+                monthString: monthString,
+                year: year,
+                isCurrentMonth: true,
+                isToday: calendar.isDateInToday(date),
+                dayOfWeek: dayOfWeek))
         }
         return items
     }
     
-
+    
     private static func calculateLeadingDays(for firstDayOfMonth: Date) -> Int {
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
         return (firstWeekday - calendar.firstWeekday + 7) % 7

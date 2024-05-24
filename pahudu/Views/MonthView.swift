@@ -37,29 +37,19 @@ struct CalendarView: View {
                 CalendarCellView(item: item, isSelected: selectedItemId == item.id)
                     .onTapGesture {
                         selectedIndex = index
-                        showDayView = true
-                        selectedItemId = selectedItemId == item.id ? nil : item.id
-                        UIApplication.triggerHapticFeedback()
                         selectedItem = item
+                        selectedItemId = selectedItemId == item.id ? nil : item.id
+                        showDayView = true
+                        UIApplication.triggerHapticFeedback()
                     }
             }
         }
         .sheet(isPresented: $showDayView) {
-            //DayView(monthIndex: monthIndex)
-            //DayView(monthIndex: monthIndex)
-            
-//            MonthListView()
-//                .presentationDetents([.large])
-//                .presentationCornerRadius(21)
-//
-            
-            
             if let selectedItem = selectedItem {
                 DayView(item: selectedItem)
                     .presentationDetents([.large])
-                    .presentationCornerRadius(21)
+                    .presentationCornerRadius(25)
             }
-            
         }
         
     }
@@ -83,7 +73,7 @@ struct CalendarCellView: View {
     private let width: CGFloat = CalendarView.width
     private var circleWidth: CGFloat { width - 14 }
     private var chartWidth: CGFloat { width - 20 }
-    //private let gradient: LinearGradient = LinearGradient(gradient: Gradient(colors: [.accent, .white.opacity(0.1)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    //private let gradient: LinearGradient = LinearGradient(gradient: Gradient(colors: [.accent, Color("ForegroundColor").opacity(0.1)]), startPoint: .topLeading, endPoint: .bottomTrailing)
     private let animation = Animation.timingCurve(0.8, 0.1, 0.5, 0.99, duration: 0.5)
     
     @State private var progress: CGFloat = 1.0
@@ -98,7 +88,7 @@ struct CalendarCellView: View {
                 
                 Text(day)
                     .caption()
-                    .foregroundColor(.gray)
+                    .foregroundColor(day == "S" ? Color("SecondaryColor") : Color("ForegroundColor"))
                     .frame(width: width, height: width)
                     .fixedSize()
                 
@@ -108,21 +98,19 @@ struct CalendarCellView: View {
                 ZStack {
                     
                     if dateItem.isToday {
-                        
                         Circle()
-                            .fill(.accent)
+                            .fill(Color("AccentColor"))
                             .frame(width: chartWidth, height: chartWidth)
                             .fixedSize()
                         
                     } else if let _ = CalendarCellView.images[dateItem.day] {
                         Circle()
                             .stroke(lineWidth: 2)
-                            .foregroundColor(.white)
                             .opacity(0.2)
                             .overlay(
                                 Circle()
                                     .trim(from: 0, to: progress)
-                                    .stroke(.accent, style: StrokeStyle(lineWidth: 2, lineCap: .square))
+                                    .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 2, lineCap: .square))
                                     .rotationEffect(Angle(degrees: -90))
                             )
                             .frame(width: chartWidth, height: chartWidth)
@@ -138,13 +126,13 @@ struct CalendarCellView: View {
                     }
                     
                     Text("\(dateItem.day)")
-                        .numberSmall()
-                        .foregroundColor(dateItem.isToday ? Color("BackgroundColor") : .white)
+                        .numberMedium()
+                        .foregroundColor(dateItem.isToday ? Color("BackgroundColor") : Color("ForegroundColor"))
                         .frame(width: width, height: width)
                         .fixedSize()
                     
                     Circle()
-                        .stroke(isSelected ? .white : .clear, lineWidth: 2)
+                        .stroke(isSelected ? Color("ForegroundColor") : .clear, lineWidth: 2)
                         .frame(width: circleWidth, height: circleWidth)
                         .fixedSize()
                     

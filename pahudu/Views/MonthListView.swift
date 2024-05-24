@@ -7,72 +7,48 @@
 
 import SwiftUI
 
-
 struct MonthListView: View {
     
     @StateObject private var viewModel = CalendarViewModel()
     @State private var navBarTitle = "Events"
-    @State private var showDetails: Bool = false
     @State private var showDayView = false
-    @State private var selectedShow: Show?
+    @State private var selectedItem: CalendarItem?
     
     var body: some View {
-        eventList
-            .navigationBarTitle(navBarTitle, displayMode: .inline)
-            .background(Color("BackgroundColor"))
-            .onChange(of: navBarTitle) { _, _ in
-                UIApplication.triggerHapticFeedback()
-            }
-    }
-    
-    private var eventList: some View {
         List {
             ForEach(viewModel.monthsData, id: \.monthIndex) { monthData in
                 itemListView(for: monthData)
-                    .background(Color("BackgroundColor"))
-                    .listRowBackground(Color("BackgroundColor"))
-                    .listRowSeparatorTint(Color("DividerColor"))
-                    .listRowInsets(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-                    .listSectionSeparator(.hidden, edges: .top)
                     .onAppear {
                         navBarTitle = "\(monthData.month) \(monthData.year)"
                     }
-                    .onTapGesture {
-                        showDayView = true
-                        UIApplication.triggerHapticFeedback()
-                    }
             }
+            .listRowInsets(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+            .listRowSeparator(.hidden)
         }
-        .background(Color("BackgroundColor"))
-        .listStyle(.plain)
+        .listStyle(PlainListStyle())
         .scrollIndicators(.hidden)
+        .navigationBarTitle(navBarTitle, displayMode: .inline)
+        .onChange(of: navBarTitle) { _, _ in
+            UIApplication.triggerHapticFeedback()
+        }
         .sheet(isPresented: $showDayView) {
-//            DayView(item: item)
-//                .presentationDetents([.large])
-//                .presentationCornerRadius(21)
-            
+            if let selectedItem = selectedItem {
+                DayView(item: selectedItem)
+                    .presentationDetents([.large])
+                    .presentationCornerRadius(25)
+            }
         }
     }
     
-    
     private func itemListView(for monthData: MonthData) -> some View {
-        //        ForEach(Array(monthData.items.enumerated()), id: \.element.id) { index, item in
-        //            DayCell(item: item, index: index, shows: item.shows) // Assumes `shows` are part of `item`
-        //                .onTapGesture {
-        //                    // Handle tap gestures
-        //                    print(item)
-        //                    UIApplication.triggerHapticFeedback()
-        //                }
-        //        }
-        
         ForEach(Array(monthData.items.enumerated()), id: \.element.id) { index, item in
             if case let .date(dateItem) = item {
-                
-                //let shows = viewModel.showsForDate(item.dateItem)  // Ensure this is a method call
-                
-                //let shows =
-                
                 DayCell(item: item, index: index)
+                    .onTapGesture {
+                        selectedItem = item
+                        showDayView = true
+                        UIApplication.triggerHapticFeedback()
+                    }
             }
         }
     }
@@ -80,11 +56,10 @@ struct MonthListView: View {
 
 
 
-// DayCell.swift
 struct DayCell: View {
+    
     let item: CalendarItem
     let index: Int
-    //let shows: [Show]
     
     var body: some View {
         switch item {
@@ -98,36 +73,24 @@ struct DayCell: View {
     private func dateItemView(_ dateItem: DateItem) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                Spacer(minLength: 20)
                 dateLabel(dateItem)
                 Spacer()
-                //showDetails
             }
-            //.background(dateItem.isToday ? Color.white : alternateBackground)
         }
-        //.padding(20)
     }
     
     private func dateLabel(_ dateItem: DateItem) -> some View {
         VStack(alignment: .center, spacing: 3) {
             Text(dateItem.dayOfWeek.description.uppercased())
                 .caption()
-                .foregroundColor(dateItem.isToday ? Color("BackgroundColor") : .primary)
             Text(dateItem.day.description)
                 .numberLarge()
-                .foregroundColor(dateItem.isToday ? Color("BackgroundColor") : .primary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-    
-    //    private var showDetails: some View {
-    //        ForEach(shows, id: \.id) { show in
-    //            Text(show.brand.name)
-    //            // Additional show details can be displayed here
-    //        }
-    //}
-    
-    private var alternateBackground: Color {
-        index % 2 == 0 ? Color.white.opacity(0.1) : Color.clear
+        .frame(width: 60, height: 60, alignment: .center)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color("AccentColor"))
+        )
+        .foregroundColor(Color("BackgroundColor"))
     }
 }

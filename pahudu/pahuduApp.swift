@@ -11,18 +11,17 @@ import SwiftUI
 struct PahuduApp: App {
     
     init() {
-        configureNavigationBarAppearance()
-        configureToolbarAppearance()
-        configureTableViewAppearance()
-        configureTabBarAppearance()
+        configureAppearance()
     }
+    
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .foregroundColor(Color("ForegroundColor"))
-                .background(Color("BackgroundColor"))
+                .preferredColorScheme(.dark)
                 .accentColor(Color("AccentColor"))
+            
+            
         }
     }
     
@@ -35,6 +34,13 @@ struct PahuduApp: App {
         }
     }
     
+    private func configureAppearance() {
+        configureNavigationBarAppearance()
+        configureToolbarAppearance()
+        configureTabBarAppearance()
+        configureButtonAppearance()
+    }
+    
     private func configureNavigationBarAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -43,12 +49,12 @@ struct PahuduApp: App {
         navigationBarAppearance.largeTitleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 34) ?? UIFont.systemFont(ofSize: 34),
             .kern: NSNumber(value: 0.3),
-            .foregroundColor: UIColor(Color("AccentColor"))
+            //.foregroundColor: UIColor(Color("AccentColor"))
         ]
         navigationBarAppearance.titleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18),
             .kern: NSNumber(value: 0.3),
-            .foregroundColor: UIColor(Color("AccentColor"))
+            //.foregroundColor: UIColor(Color("AccentColor"))
         ]
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
         UINavigationBar.appearance().compactAppearance = navigationBarAppearance
@@ -60,18 +66,12 @@ struct PahuduApp: App {
         toolbarAppearance.configureWithOpaqueBackground()
         toolbarAppearance.shadowColor = UIColor(Color.clear)
         let barButtonItemAppearance = UIBarButtonItemAppearance()
-        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color("AccentColor"))]
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         toolbarAppearance.buttonAppearance = barButtonItemAppearance
         toolbarAppearance.doneButtonAppearance = barButtonItemAppearance
         UIToolbar.appearance().standardAppearance = toolbarAppearance
         UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
-        UIToolbar.appearance().tintColor = UIColor(Color("AccentColor"))
-    }
-    
-    private func configureTableViewAppearance() {
-        let tableViewAppearance = UITableView.appearance()
-        tableViewAppearance.separatorColor = .blue
-        tableViewAppearance.separatorStyle = .singleLine
+        //UIToolbar.appearance().tintColor = UIColor(Color("AccentColor"))
     }
     
     private func configureTabBarAppearance() {
@@ -80,10 +80,14 @@ struct PahuduApp: App {
         tabBarAppearance.shadowColor = UIColor(Color.clear)
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Color("QuaternaryColor"))
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color("QuaternaryColor"))]
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color("AccentColor"))
-        tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color("AccentColor"))]
+        //tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color("AccentColor"))
+        //tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color("AccentColor"))]
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
-
+    
+    private func configureButtonAppearance() {
+        UIButton.appearance().tintColor = UIColor(Color("AccentColor"))
+    }
+    
 }

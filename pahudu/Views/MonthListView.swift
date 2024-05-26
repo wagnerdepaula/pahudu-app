@@ -89,7 +89,7 @@ struct DayCell: View {
         .frame(width: 60, height: 60, alignment: .center)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color("AccentColor"))
+                .fill(Color.accentColor)
         )
         .foregroundColor(Color("BackgroundColor"))
     }

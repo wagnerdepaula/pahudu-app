@@ -44,13 +44,20 @@ struct CalendarView: View {
                     }
             }
         }
-        .sheet(isPresented: $showDayView) {
+        .navigationDestination(isPresented: $showDayView, destination: {
             if let selectedItem = selectedItem {
                 DayView(item: selectedItem)
                     .presentationDetents([.large])
                     .presentationCornerRadius(25)
             }
-        }
+        })
+//        .sheet(isPresented: $showDayView) {
+//            if let selectedItem = selectedItem {
+//                DayView(item: selectedItem)
+//                    .presentationDetents([.large])
+//                    .presentationCornerRadius(25)
+//            }
+//        }
         
     }
     
@@ -99,7 +106,7 @@ struct CalendarCellView: View {
                     
                     if dateItem.isToday {
                         Circle()
-                            .fill(Color("AccentColor"))
+                            .fill(Color.accentColor)
                             .frame(width: chartWidth, height: chartWidth)
                             .fixedSize()
                         
@@ -110,7 +117,7 @@ struct CalendarCellView: View {
                             .overlay(
                                 Circle()
                                     .trim(from: 0, to: progress)
-                                    .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 2, lineCap: .square))
+                                    .stroke(Color("PrimaryTaupe"), style: StrokeStyle(lineWidth: 1.5, lineCap: .square))
                                     .rotationEffect(Angle(degrees: -90))
                             )
                             .frame(width: chartWidth, height: chartWidth)
@@ -132,7 +139,7 @@ struct CalendarCellView: View {
                         .fixedSize()
                     
                     Circle()
-                        .stroke(isSelected ? Color("ForegroundColor") : .clear, lineWidth: 2)
+                        .stroke(isSelected ? Color("ForegroundColor") : .clear, lineWidth: 1.5)
                         .frame(width: circleWidth, height: circleWidth)
                         .fixedSize()
                     

@@ -76,14 +76,16 @@ struct SettingsView: View {
                                         .button()
                                 } icon: {
                                     Image(systemName: option.iconName)
+                                        .fontWeight(.light)
                                 }
                             }
-                            .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                            .listRowSeparator(.hidden)
                         }
+                        .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                        .listRowSeparator(.hidden)
                     }
                 }
             }
+            .listStyle(.insetGrouped)
             .navigationBarTitle("Settings", displayMode: .inline)
         }
     }

@@ -33,7 +33,6 @@ struct DayView: View {
                             Image(systemName: "xmark")
                                 .frame(width: 30, height: 30)
                                 .font(.system(size: 10, weight: .bold))
-                                .tint(Color("AccentColor"))
                                 .background(Color("TertiaryColor"))
                                 .clipShape(Circle())
                                 .padding(.trailing, -8)

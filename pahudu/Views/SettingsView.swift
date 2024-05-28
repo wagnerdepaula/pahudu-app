@@ -28,7 +28,7 @@ enum SettingsOption: String, CaseIterable, Identifiable {
         case .welcome: return "hand.wave"
         case .whatsNew: return "star"
         case .search: return "magnifyingglass"
-        case .themes: return "paintbrush"
+        case .themes: return "circle.lefthalf.filled"
         case .preferences: return "gearshape"
         case .helpCenter: return "questionmark"
         case .termsOfUse: return "doc.text"
@@ -73,7 +73,7 @@ struct SettingsView: View {
                             }) {
                                 Label {
                                     Text(option.rawValue)
-                                        .button()
+                                        .font(.button)
                                 } icon: {
                                     Image(systemName: option.iconName)
                                         .fontWeight(.light)

@@ -29,10 +29,10 @@ struct DetailsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 
                 Text(show.brand.name)
-                    .headline()
+                    .font(.headline)
                 
                 Text(show.description)
-                    .body()
+                    .font(.body)
      
                 Text("\(show.venue.name),")
                     //.foregroundColor(.gray)

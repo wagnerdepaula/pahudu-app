@@ -70,7 +70,7 @@ struct SearchView: View {
                 VStack {
                     Spacer()
                     Text("SearchView")
-                        .headline()
+                        .font(.headline)
                         //.foregroundColor(.primary)
                     Spacer()
                 }
@@ -78,7 +78,6 @@ struct SearchView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //.background(Color("BackgroundColor"))
             .navigationBarTitle("Search", displayMode: .inline)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
             .scrollIndicators(.hidden)

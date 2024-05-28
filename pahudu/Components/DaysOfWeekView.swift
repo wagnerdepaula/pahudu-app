@@ -19,7 +19,7 @@ struct DaysOfWeekView: View {
             ForEach(viewModel.daysOfWeek) { dayOfWeekItem in
                 if case let .dayOfWeek(dayAbbreviation, _) = dayOfWeekItem {
                     Text(dayAbbreviation)
-                        .callout()
+                        .font(.callout)
                         .frame(width: DaysOfWeekView.width, height: DaysOfWeekView.width)
                         .background(Color.red)
                         //.fixedSize()

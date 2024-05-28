@@ -16,7 +16,7 @@ struct DiscoverView: View {
                 VStack {
                     Spacer()
                     Text("DiscoverView")
-                        .headline()
+                        .font(.headline)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

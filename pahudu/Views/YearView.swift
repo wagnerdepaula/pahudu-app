@@ -32,19 +32,17 @@ struct YearView: View {
                     Button {
                         withAnimation {
                             showCalendarView.toggle()
-                            selectedMenuOption = showCalendarView ? "rectangle.grid.1x2.fill" : "circle.grid.3x3.fill"
+                            selectedMenuOption = showCalendarView ? "calendar.day.timeline.left" : "calendar"
                         }
                         UIApplication.triggerHapticFeedback()
                     } label: {
-                        Image(systemName: showCalendarView ? "rectangle.grid.1x2.fill" : "circle.grid.3x3.fill")
+                        Image(systemName: showCalendarView ? "calendar.day.timeline.left" : "calendar")
                     }
                 }
             }
         }
     }
 }
-
-
 
 
 struct MonthCalendarView: View {
@@ -86,7 +84,41 @@ struct MonthCalendarView: View {
                 }
             }
             .ignoresSafeArea(.container, edges: [.top, .bottom])
-            .environmentObject(viewModel)
+            .overlay(
+                VStack {
+                    DayOfWeekHeaderView(width: CalendarView.width)
+                    Spacer()
+                }
+            )
+            
         }
     }
 }
+
+
+
+struct DayOfWeekHeaderView: View {
+    let width: CGFloat
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], id: \.self) { day in
+                Text(day)
+                    .font(.caption)
+                    .kerning(0.5)
+                    .foregroundColor(Color("PrimaryTaupe"))
+                    .frame(width: width, height: 44)
+                    .fixedSize()
+            }
+        }
+        .background(Color("PrimaryBackground"))
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color("PrimaryDivider")),
+            alignment: .bottom
+        )
+        .frame(maxWidth: .infinity, maxHeight: CalendarView.width, alignment: .top)
+    }
+}
+

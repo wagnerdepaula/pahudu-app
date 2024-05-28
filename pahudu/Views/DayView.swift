@@ -16,30 +16,13 @@ struct DayView: View {
     @State private var events: [pahudu.Event] = []
     
     var body: some View {
-        NavigationView {
-            eventList
-                .navigationBarTitle(item.dateItem != nil ? "\(item.dateItem!.monthString) \(item.dateItem!.day), \(item.dateItem!.year)" : "", displayMode: .inline)
-                .onAppear {
-                    if let item = item.dateItem {
-                        events = eventModel.eventsForDate(item.date)
-                    }
+        eventList
+            .navigationBarTitle(item.dateItem != nil ? "\(item.dateItem!.monthString) \(item.dateItem!.day), \(item.dateItem!.year)" : "", displayMode: .inline)
+            .onAppear {
+                if let item = item.dateItem {
+                    events = eventModel.eventsForDate(item.date)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                            UIApplication.triggerHapticFeedback()
-                        } label: {
-                            Image(systemName: "xmark")
-                                .frame(width: 30, height: 30)
-                                .font(.system(size: 10, weight: .bold))
-                                .background(Color("TertiaryColor"))
-                                .clipShape(Circle())
-                                .padding(.trailing, -8)
-                        }
-                    }
-                }
-        }
+            }
     }
     
     private var eventList: some View {
@@ -47,7 +30,7 @@ struct DayView: View {
             ForEach(0..<24, id: \.self) { hour in
                 itemListView(hour: hour)
             }
-            .listRowInsets(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
+            .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
             .onTapGesture {
                 UIApplication.triggerHapticFeedback()
@@ -58,36 +41,65 @@ struct DayView: View {
     }
     
     private func itemListView(hour: Int) -> some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top) {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top, spacing: 15) {
                 Text(getHourString(hour))
-                    .numberSmall()
-                    .foregroundColor(Color("QuaternaryColor"))
+                    .font(.numberSmall)
+                    .kerning(0.5)
+                    .foregroundColor(Color.accentColor)
+                    .frame(minWidth: 45, maxWidth: 45, maxHeight: .infinity, alignment: .topTrailing)
+                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 15))
+                    .overlay(
+                        Rectangle()
+                            .frame(width: 0.5)
+                            .foregroundColor(Color("PrimaryDivider")),
+                        alignment: .trailing
+                    )
+
                 ForEach(events.flatMap { $0.shows }.filter { $0.hour == hour }, id: \.id) { show in
                     if let event = events.first(where: { $0.shows.contains(where: { $0.id == show.id }) }) {
                         showView(show: show, event: event)
                     }
                 }
+                .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color("PrimaryDivider")),
+            alignment: .bottom
+        )
     }
-    
-    //    private func hourLabel(hour: Int) -> some View {
-    //        VStack(alignment: .center, spacing: 3) {
-    //
-    //        }
-    //        .frame(maxWidth: .infinity, alignment: .leading)
-    //    }
+
     
     private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text("\(event.acronym) \(event.name)")
-                .body()
+        VStack(alignment: .leading, spacing: 7) {
+            HStack {
+                Text(event.acronym)
+                    .foregroundColor(colorForAcronym(event.acronym))
+                    .font(.callout)
+                Text(" \(event.name)")
+                    .font(.callout)
+            }
+                
             Text(show.brand.name)
-                .body()
+                .font(.callout)
+                .foregroundColor(Color("SecondaryText"))
             if let url = show.ticketLink {
-                Link("Get Tickets", destination: URL(string: url.description)!)
-                    .foregroundColor(.blue)
+                Button(action: {
+                    if let url = URL(string: url.description) {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("Get Tickets")
+                        .font(.callout)
+                        .foregroundColor(Color("PrimaryText"))
+                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                        .background(Color("PrimaryBlue"))
+                        .cornerRadius(25)
+                }
             }
         }
     }

@@ -205,7 +205,7 @@ struct BubblesView: UIViewRepresentable {
             for _ in 0..<30 {
                 let size = CGFloat.random(in: 50...120)
                 let bubbleView = UIView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-                bubbleView.backgroundColor = .accent
+                bubbleView.backgroundColor = UIColor(Color.accentColor)
                 bubbleView.layer.cornerRadius = size / 2
                 bubbleContainerView.addSubview(bubbleView)
                 

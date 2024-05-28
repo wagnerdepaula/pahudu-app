@@ -22,7 +22,7 @@ struct MonthListView: View {
                         navBarTitle = "\(monthData.month) \(monthData.year)"
                     }
             }
-            .listRowInsets(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+            .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
         }
         .listStyle(PlainListStyle())
@@ -31,13 +31,12 @@ struct MonthListView: View {
         .onChange(of: navBarTitle) { _, _ in
             UIApplication.triggerHapticFeedback()
         }
-        .sheet(isPresented: $showDayView) {
+        .navigationDestination(isPresented: $showDayView, destination: {
             if let selectedItem = selectedItem {
                 DayView(item: selectedItem)
                     .presentationDetents([.large])
-                    .presentationCornerRadius(25)
             }
-        }
+        })
     }
     
     private func itemListView(for monthData: MonthData) -> some View {
@@ -51,6 +50,13 @@ struct MonthListView: View {
                     }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color("PrimaryDivider")),
+            alignment: .bottom
+        )
     }
 }
 
@@ -81,16 +87,24 @@ struct DayCell: View {
     
     private func dateLabel(_ dateItem: DateItem) -> some View {
         VStack(alignment: .center, spacing: 3) {
+            
             Text(dateItem.dayOfWeek.description.uppercased())
-                .caption()
+                .font(.caption)
+                .kerning(0.5)
+                .lineSpacing(0)
+            
             Text(dateItem.day.description)
-                .numberLarge()
+                .font(.numberLarge)
+                .lineSpacing(0)
         }
-        .frame(width: 60, height: 60, alignment: .center)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.accentColor)
+        .frame(minWidth: 60, maxWidth: 60, maxHeight: .infinity, alignment: .center)
+        .padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
+        .foregroundColor(Color.accentColor)
+        .overlay(
+            Rectangle()
+                .frame(width: 0.5)
+                .foregroundColor(Color("PrimaryDivider")),
+            alignment: .trailing
         )
-        .foregroundColor(Color("BackgroundColor"))
     }
 }

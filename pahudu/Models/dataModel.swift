@@ -30,7 +30,7 @@ struct Event {
     let logoURL: URL?
     let description: String
     let socialMediaLinks: [String: URL?]
-    var shows: [Show] // Events can contain multiple shows
+    var shows: [Show]
 }
 
 struct Brand {
@@ -73,6 +73,114 @@ class EventModel: ObservableObject {
         // Dummy data for Milan Fashion Week with two shows
         
         events = [
+            Event(
+                id: UUID(),
+                acronym: "NYFW",
+                name: "New York Fashion Week",
+                location: "New York, USA",
+                startDate: Date(), // Assume actual date values here
+                endDate: Date(), // Assume actual date values here
+                logoURL: URL(string: "https://example.com/nyfw_logo.png"),
+                description: "A premier event in the fashion world, New York Fashion Week features the latest collections from top designers and innovative newcomers, setting trends for the upcoming season.",
+                socialMediaLinks: [
+                    "Instagram": URL(string: "https://www.instagram.com/nyfw"),
+                    "Twitter": URL(string: "https://twitter.com/nyfw"),
+                    "Facebook": URL(string: "https://www.facebook.com/nyfw")
+                ],
+                shows: [
+                    Show(
+                        id: UUID(),
+                        hour: 12,
+                        brand: Brand(
+                            id: UUID(),
+                            name: "Tom Ford",
+                            history: "Founded by designer Tom Ford in 2006, the brand is known for its high-end fashion and accessories, blending timeless elegance with contemporary style.",
+                            logoURL: URL(string: "https://www.tomford.com/path/to/logo.png"),
+                            websiteURL: URL(string: "https://www.tomford.com"),
+                            socialMediaLinks: [
+                                "Instagram": URL(string: "https://www.instagram.com/tomford"),
+                                "Twitter": URL(string: "https://twitter.com/tomford"),
+                                "Facebook": URL(string: "https://www.facebook.com/tomford")
+                            ]
+                        ),
+                        designer: Designer(
+                            id: UUID(),
+                            name: "Tom Ford",
+                            bio: "An American designer known for his luxurious and sophisticated designs. He has revitalized the brand with a focus on glamorous and bold fashion.",
+                            profilePictureURL: URL(string: "https://example.com/path/to/tomford/profile.jpg"),
+                            signatureStyles: ["Glamorous", "Sophisticated", "Bold"],
+                            socialMediaLinks: [
+                                "Instagram": URL(string: "https://www.instagram.com/tomford")
+                            ]
+                        ),
+                        venue: Venue(
+                            id: UUID(),
+                            name: "Spring Studios",
+                            location: "New York, USA",
+                            mapLink: URL(string: "https://maps.google.com?q=Spring+Studios+New+York"),
+                            capacity: 600,
+                            amenities: ["VIP Lounge", "Catering Services", "High-Speed Wi-Fi"]
+                        ),
+                        date: Date(),
+                        description: "Tom Ford presents his latest collection, showcasing a blend of timeless elegance and modern luxury, with a focus on bold designs and glamorous styles.",
+                        ticketLink: URL(string: "https://fashionweektickets.com/tomford")
+                    )
+                ]
+            ),
+            Event(
+                id: UUID(),
+                acronym: "LFW",
+                name: "London Fashion Week",
+                location: "London, UK",
+                startDate: Date(), // Assume actual date values here
+                endDate: Date(), // Assume actual date values here
+                logoURL: URL(string: "https://example.com/lfw_logo.png"),
+                description: "London Fashion Week is a highlight in the global fashion calendar, featuring cutting-edge designs and trendsetting collections from both established and emerging designers.",
+                socialMediaLinks: [
+                    "Instagram": URL(string: "https://www.instagram.com/lfw"),
+                    "Twitter": URL(string: "https://twitter.com/lfw"),
+                    "Facebook": URL(string: "https://www.facebook.com/lfw")
+                ],
+                shows: [
+                    Show(
+                        id: UUID(),
+                        hour: 15,
+                        brand: Brand(
+                            id: UUID(),
+                            name: "Burberry",
+                            history: "Founded in 1856 by Thomas Burberry, Burberry is a British luxury fashion house known for its distinctive trench coats, tartan patterns, and high-quality craftsmanship.",
+                            logoURL: URL(string: "https://www.burberry.com/path/to/logo.png"),
+                            websiteURL: URL(string: "https://www.burberry.com"),
+                            socialMediaLinks: [
+                                "Instagram": URL(string: "https://www.instagram.com/burberry"),
+                                "Twitter": URL(string: "https://twitter.com/burberry"),
+                                "Facebook": URL(string: "https://www.facebook.com/burberry")
+                            ]
+                        ),
+                        designer: Designer(
+                            id: UUID(),
+                            name: "Riccardo Tisci",
+                            bio: "An Italian designer known for his modern and innovative approach to fashion, Riccardo Tisci has been the creative director of Burberry since 2018, infusing the brand with a contemporary edge.",
+                            profilePictureURL: URL(string: "https://example.com/path/to/riccardo/profile.jpg"),
+                            signatureStyles: ["Modern", "Innovative", "Edgy"],
+                            socialMediaLinks: [
+                                "Instagram": URL(string: "https://www.instagram.com/riccardotisci")
+                            ]
+                        ),
+                        venue: Venue(
+                            id: UUID(),
+                            name: "The Royal Exchange",
+                            location: "London, UK",
+                            mapLink: URL(string: "https://maps.google.com?q=The+Royal+Exchange+London"),
+                            capacity: 700,
+                            amenities: ["VIP Lounge", "Parking", "Catering Services"]
+                        ),
+                        date: Date(),
+                        description: "Burberry's latest collection is showcased, blending the brand's classic British heritage with Riccardo Tisci's modern and innovative designs.",
+                        ticketLink: URL(string: "https://fashionweektickets.com/burberry")
+                    )
+                ]
+            ),
             Event(
                 id: UUID(),
                 acronym: "MFW",
@@ -124,49 +232,62 @@ class EventModel: ObservableObject {
                         date: Date(),
                         description: "Dolce & Gabbana unveils their latest collection in a celebration of Italian craftsmanship, with a special focus on intricate designs and innovative fashion technology.",
                         ticketLink: URL(string: "https://fashionweektickets.com/dolcegabbana")
-                    ),
-                    
-                    
+                    )
+                ]
+            ),
+            Event(
+                id: UUID(),
+                acronym: "PFW",
+                name: "Paris Fashion Week",
+                location: "Paris, France",
+                startDate: Date(), // Assume actual date values here
+                endDate: Date(), // Assume actual date values here
+                logoURL: URL(string: "https://example.com/pfw_logo.png"),
+                description: "The grand finale of the global fashion month, Paris Fashion Week features the most prestigious and iconic fashion houses, presenting their latest collections in a showcase of elegance and creativity.",
+                socialMediaLinks: [
+                    "Instagram": URL(string: "https://www.instagram.com/pfw"),
+                    "Twitter": URL(string: "https://twitter.com/pfw"),
+                    "Facebook": URL(string: "https://www.facebook.com/pfw")
+                ],
+                shows: [
                     Show(
                         id: UUID(),
-                        hour: 14,
+                        hour: 17,
                         brand: Brand(
                             id: UUID(),
-                            name: "Prada",
-                            history: "Founded in 1913 by Mario Prada, Prada is an Italian luxury fashion house specializing in leather handbags, travel accessories, shoes, ready-to-wear, perfumes, and other fashion accessories.",
-                            logoURL: URL(string: "https://www.prada.com/path/to/logo.png"),
-                            websiteURL: URL(string: "https://www.prada.com"),
+                            name: "Chanel",
+                            history: "Founded in 1910 by Coco Chanel, Chanel is renowned for its timeless elegance, iconic designs, and luxury products, including haute couture, ready-to-wear, and accessories.",
+                            logoURL: URL(string: "https://www.chanel.com/path/to/logo.png"),
+                            websiteURL: URL(string: "https://www.chanel.com"),
                             socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/prada"),
-                                "Twitter": URL(string: "https://twitter.com/prada"),
-                                "Facebook": URL(string: "https://www.facebook.com/Prada")
+                                "Instagram": URL(string: "https://www.instagram.com/chanel"),
+                                "Twitter": URL(string: "https://twitter.com/chanel"),
+                                "Facebook": URL(string: "https://www.facebook.com/chanel")
                             ]
                         ),
                         designer: Designer(
                             id: UUID(),
-                            name: "Miuccia Prada",
-                            bio: "Miuccia Prada, granddaughter of Mario Prada, has led the company's creative direction since the late 1970s, transforming it into a brand synonymous with cutting-edge style and modern luxury.",
-                            profilePictureURL: URL(string: "https://example.com/path/to/miuccia/profile.jpg"),
-                            signatureStyles: ["Minimalist", "Sophisticated", "Innovative Textiles"],
+                            name: "Virginie Viard",
+                            bio: "Virginie Viard, the creative director of Chanel since 2019, continues the legacy of Coco Chanel with her elegant and sophisticated designs, infusing modern elements into classic styles.",
+                            profilePictureURL: URL(string: "https://example.com/path/to/virginie/profile.jpg"),
+                            signatureStyles: ["Elegant", "Timeless", "Sophisticated"],
                             socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/miuccia.prada")
+                                "Instagram": URL(string: "https://www.instagram.com/virginie.viard")
                             ]
                         ),
                         venue: Venue(
                             id: UUID(),
-                            name: "GALLERIA VITTORIO EMANUELE II",
-                            location: "Milan, Italy",
-                            mapLink: URL(string: "https://maps.google.com?q=GALLERIA+VITTORIO+EMANUELE+II+Milan"),
-                            capacity: 500,
-                            amenities: ["Exclusive Seating", "Champagne Service", "Private Showings"]
+                            name: "Grand Palais",
+                            location: "Paris, France",
+                            mapLink: URL(string: "https://maps.google.com?q=Grand+Palais+Paris"),
+                            capacity: 1200,
+                            amenities: ["Exclusive Seating", "VIP Lounge", "Catering Services", "Champagne Service"]
                         ),
                         date: Date(),
-                        description: "Prada presents its latest collection, showcasing a fusion of timeless elegance with modern innovation, emphasizing sustainability and forward-thinking fashion.",
-                        ticketLink: URL(string: "https://fashionweektickets.com/prada")
-                    ),
-                    
+                        description: "Chanel's show is a highlight of Paris Fashion Week, featuring Virginie Viard's latest collection that blends timeless elegance with modern sophistication.",
+                        ticketLink: URL(string: "https://fashionweektickets.com/chanel")
+                    )
                 ]
-                
             )
         ]
         
@@ -197,7 +318,7 @@ class EventModel: ObservableObject {
             }
         }
     }
-
+    
     
     func showsForDate(_ date: Date) -> [Show] {
         return events.flatMap { event in

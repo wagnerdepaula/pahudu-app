@@ -12,7 +12,7 @@ struct DiscoverView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack {
                     Spacer()
                     Text("DiscoverView")
@@ -22,9 +22,8 @@ struct DiscoverView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitle("Discover", displayMode: .inline)
-            .scrollIndicators(.hidden)
+            .background(Color("PrimaryBackground"))
         }
     }
     

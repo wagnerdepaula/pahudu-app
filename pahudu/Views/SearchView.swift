@@ -54,13 +54,6 @@ struct SearchBar: UIViewControllerRepresentable {
 }
 
 
-
-
-
-
-
-import SwiftUI
-
 struct SearchView: View {
     @State private var searchText = ""
 
@@ -81,6 +74,7 @@ struct SearchView: View {
             .navigationBarTitle("Search", displayMode: .inline)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
             .scrollIndicators(.hidden)
+            .background(Color("PrimaryBackground"))
         }
     }
 }

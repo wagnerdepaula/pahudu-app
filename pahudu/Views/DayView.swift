@@ -38,70 +38,86 @@ struct DayView: View {
         }
         .listStyle(.plain)
         .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
+        .background(Color("PrimaryBackground"))
     }
     
     private func itemListView(hour: Int) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top, spacing: 15) {
+            HStack(alignment: .top, spacing: 10) {
                 Text(getHourString(hour))
                     .font(.numberSmall)
+                    .lineSpacing(0)
                     .kerning(0.5)
-                    .foregroundColor(Color.accentColor)
-                    .frame(minWidth: 45, maxWidth: 45, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 15))
-                    .overlay(
-                        Rectangle()
-                            .frame(width: 0.5)
-                            .foregroundColor(Color("PrimaryDivider")),
-                        alignment: .trailing
-                    )
-
+                    .foregroundColor(Color("PrimaryText"))
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+                    .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)
+//                    .overlay(
+//                        Rectangle()
+//                            .frame(width: 0.5)
+//                            .foregroundColor(Color("PrimaryDivider")),
+//                        alignment: .trailing
+//                    )
+                
                 ForEach(events.flatMap { $0.shows }.filter { $0.hour == hour }, id: \.id) { show in
                     if let event = events.first(where: { $0.shows.contains(where: { $0.id == show.id }) }) {
                         showView(show: show, event: event)
                     }
                 }
-                .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
             }
+            
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .overlay(
             Rectangle()
                 .frame(height: 0.5)
                 .foregroundColor(Color("PrimaryDivider")),
             alignment: .bottom
         )
+        .background(Color("PrimaryBackground"))
+
     }
 
     
     private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
-        VStack(alignment: .leading, spacing: 7) {
-            HStack {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 5) {
                 Text(event.acronym)
-                    .foregroundColor(colorForAcronym(event.acronym))
                     .font(.callout)
+                    .fontWeight(.semibold)
+                    .foregroundColor(colorForAcronym(event.acronym))
+                
                 Text(" \(event.name)")
                     .font(.callout)
+                    .foregroundColor(Color("PrimaryText"))
             }
-                
             Text(show.brand.name)
                 .font(.callout)
-                .foregroundColor(Color("SecondaryText"))
-            if let url = show.ticketLink {
-                Button(action: {
-                    if let url = URL(string: url.description) {
-                        UIApplication.shared.open(url)
-                    }
-                }) {
-                    Text("Get Tickets")
-                        .font(.callout)
-                        .foregroundColor(Color("PrimaryText"))
-                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                        .background(Color("PrimaryBlue"))
-                        .cornerRadius(25)
-                }
-            }
+                .foregroundColor(Color("PrimaryText"))
+//            if let url = show.ticketLink {
+//                Button(action: {
+//                    if let url = URL(string: url.description) {
+//                        UIApplication.shared.open(url)
+//                    }
+//                }) {
+//                    Text("Get Tickets")
+//                        .font(.callout)
+//                        .foregroundColor(Color("PrimaryText"))
+//                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+//                        .background(Color("PrimaryBlue"))
+//                        .cornerRadius(25)
+//                }
+//            }
         }
+        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+//        .background(
+//            RoundedRectangle(cornerRadius: 5)
+//                .fill(Color("SecondaryDivider"))
+//                //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
+//        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        
     }
     
     func getHourString(_ hour: Int) -> String {

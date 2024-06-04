@@ -153,7 +153,7 @@ class CalendarUtils {
     }
     
     static func daysOfWeekItems() -> [CalendarItem] {
-        let dayOfWeekAbbreviations = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+        let dayOfWeekAbbreviations = ["S", "M", "T", "W", "T", "F", "S"]
         return dayOfWeekAbbreviations.map { CalendarItem.dayOfWeek($0, UUID()) }
     }
 }

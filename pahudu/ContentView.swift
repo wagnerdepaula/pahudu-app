@@ -9,37 +9,46 @@
 import SwiftUI
 import UIKit
 
-// Example usage in a SwiftUI view
-
-struct ContentView: View {
+enum Tab: String, CaseIterable {
     
-    @State private var selectedTab: Int = 0
+    case calendar = "circle.grid.3x3"
+    case discover = "globe.americas"
+    case settings = "gear"
     
-    var body: some View {
-        TabView(selection: $selectedTab) {
-            
-            YearView()
-                .tabItem {
-                    Image(systemName: "circle.grid.3x3")
-                    Text("Calendar")
-                }
-                .tag(0)
-            
-            DiscoverView()
-                .tabItem {
-                    Image(systemName: "square.stack")
-                    Text("Discover")
-                }
-                .tag(1)
-            
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("Settings")
-                }
-                .tag(2)
+    var title: String {
+        switch self {
+        case .calendar: return "Calendar"
+        case .discover: return "Discover"
+        case .settings: return "Settings"
         }
     }
 }
 
+
+struct ContentView: View {
+    @State private var selectedTab: Tab = .calendar
+    
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            YearView()
+                .tabItem {
+                    Label(Tab.calendar.title, systemImage: Tab.calendar.rawValue)
+                }
+                .tag(Tab.calendar)
+            
+            
+            DiscoverView()
+                .tabItem {
+                    Label(Tab.discover.title, systemImage: Tab.discover.rawValue)
+                }
+                .tag(Tab.discover)
+            
+            SettingsView()
+                .tabItem {
+                    Label(Tab.settings.title, systemImage: Tab.settings.rawValue)
+                }
+                .tag(Tab.settings)
+        }
+    }
+}
 

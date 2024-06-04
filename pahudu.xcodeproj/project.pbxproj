@@ -15,7 +15,6 @@
 		D00BD0D72C00E2DC00538158 /* GeistMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D32C00E2DC00538158 /* GeistMono-Medium.ttf */; };
 		D00BD0D82C00E2DC00538158 /* GeistMono-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D42C00E2DC00538158 /* GeistMono-SemiBold.ttf */; };
 		D00BD0D92C00E2DC00538158 /* GeistMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D52C00E2DC00538158 /* GeistMono-Bold.ttf */; };
-		D00BD0DB2C013BD400538158 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BD0DA2C013BD400538158 /* CalendarView.swift */; };
 		D03F7BB42B952B6A0096A540 /* pahuduApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03F7BB32B952B6A0096A540 /* pahuduApp.swift */; };
 		D03F7BB62B952B6A0096A540 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03F7BB52B952B6A0096A540 /* ContentView.swift */; };
 		D03F7BB82B952B6C0096A540 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D03F7BB72B952B6C0096A540 /* Assets.xcassets */; };
@@ -29,7 +28,7 @@
 		D080AA472B9DE77800FAC890 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D080AA462B9DE77800FAC890 /* DayView.swift */; };
 		D09196442B990D830095DFBF /* calendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09196432B990D830095DFBF /* calendarModel.swift */; };
 		D09196462B9913CA0095DFBF /* YearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09196452B9913CA0095DFBF /* YearView.swift */; };
-		D09196482B9920190095DFBF /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09196472B9920190095DFBF /* MonthView.swift */; };
+		D09196482B9920190095DFBF /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09196472B9920190095DFBF /* MonthCalendarView.swift */; };
 		D0A5FB8E2BB3796F001CC1EE /* dataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A5FB8D2BB3796F001CC1EE /* dataModel.swift */; };
 		D0A5FB9F2BB4AC0D001CC1EE /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A5FB9E2BB4AC0D001CC1EE /* SearchView.swift */; };
 		D0A9D4E72BAC9BE900C05C56 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A9D4E62BAC9BE900C05C56 /* BubbleView.swift */; };
@@ -46,7 +45,6 @@
 		D00BD0D32C00E2DC00538158 /* GeistMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-Medium.ttf"; sourceTree = "<group>"; };
 		D00BD0D42C00E2DC00538158 /* GeistMono-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-SemiBold.ttf"; sourceTree = "<group>"; };
 		D00BD0D52C00E2DC00538158 /* GeistMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-Bold.ttf"; sourceTree = "<group>"; };
-		D00BD0DA2C013BD400538158 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		D03F7BB02B952B6A0096A540 /* pahudu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pahudu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D03F7BB32B952B6A0096A540 /* pahuduApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pahuduApp.swift; sourceTree = "<group>"; };
 		D03F7BB52B952B6A0096A540 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,7 +60,7 @@
 		D080AA462B9DE77800FAC890 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		D09196432B990D830095DFBF /* calendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarModel.swift; sourceTree = "<group>"; };
 		D09196452B9913CA0095DFBF /* YearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearView.swift; sourceTree = "<group>"; };
-		D09196472B9920190095DFBF /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
+		D09196472B9920190095DFBF /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
 		D0A5FB8D2BB3796F001CC1EE /* dataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataModel.swift; sourceTree = "<group>"; };
 		D0A5FB9E2BB4AC0D001CC1EE /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		D0A9D4E52BAC924C00C05C56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -148,8 +146,7 @@
 				D080AA462B9DE77800FAC890 /* DayView.swift */,
 				D048D6A72BAE22A00034FF48 /* DetailsView.swift */,
 				D048D6B42BB0572C0034FF48 /* DiscoverView.swift */,
-				D00BD0DA2C013BD400538158 /* CalendarView.swift */,
-				D09196472B9920190095DFBF /* MonthView.swift */,
+				D09196472B9920190095DFBF /* MonthCalendarView.swift */,
 				D0426F7A2BB8B0F1001ADB0B /* MonthListView.swift */,
 				D048D6B22BB0570F0034FF48 /* SettingsView.swift */,
 				D0A5FB9E2BB4AC0D001CC1EE /* SearchView.swift */,
@@ -265,14 +262,13 @@
 				D0E7BD042C052461003F3795 /* Color.swift in Sources */,
 				D080AA472B9DE77800FAC890 /* DayView.swift in Sources */,
 				D048D6A82BAE22A00034FF48 /* DetailsView.swift in Sources */,
-				D00BD0DB2C013BD400538158 /* CalendarView.swift in Sources */,
 				D0A9D4E72BAC9BE900C05C56 /* BubbleView.swift in Sources */,
 				D09196462B9913CA0095DFBF /* YearView.swift in Sources */,
 				D0A5FB8E2BB3796F001CC1EE /* dataModel.swift in Sources */,
 				D048D6B12BB055040034FF48 /* Font.swift in Sources */,
 				D0426F7B2BB8B0F1001ADB0B /* MonthListView.swift in Sources */,
 				D0426F792BB5E17E001ADB0B /* DaysOfWeekView.swift in Sources */,
-				D09196482B9920190095DFBF /* MonthView.swift in Sources */,
+				D09196482B9920190095DFBF /* MonthCalendarView.swift in Sources */,
 				D03F7BB62B952B6A0096A540 /* ContentView.swift in Sources */,
 				D03F7BB42B952B6A0096A540 /* pahuduApp.swift in Sources */,
 				D0A5FB9F2BB4AC0D001CC1EE /* SearchView.swift in Sources */,

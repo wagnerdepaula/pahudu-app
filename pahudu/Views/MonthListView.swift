@@ -25,8 +25,10 @@ struct MonthListView: View {
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
         }
-        .listStyle(PlainListStyle())
+        .listStyle(.plain)
         .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
+        .background(Color("PrimaryBackground"))
         .navigationBarTitle(navBarTitle, displayMode: .inline)
         .onChange(of: navBarTitle) { _, _ in
             UIApplication.triggerHapticFeedback()
@@ -41,7 +43,7 @@ struct MonthListView: View {
     
     private func itemListView(for monthData: MonthData) -> some View {
         ForEach(Array(monthData.items.enumerated()), id: \.element.id) { index, item in
-            if case let .date(dateItem) = item {
+            if case .date(_) = item {
                 DayCell(item: item, index: index)
                     .onTapGesture {
                         selectedItem = item
@@ -51,12 +53,6 @@ struct MonthListView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(
-            Rectangle()
-                .frame(height: 0.5)
-                .foregroundColor(Color("PrimaryDivider")),
-            alignment: .bottom
-        )
     }
 }
 
@@ -83,28 +79,35 @@ struct DayCell: View {
                 Spacer()
             }
         }
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color("PrimaryDivider")),
+            alignment: .bottom
+        )
+        .background(Color("PrimaryBackground"))
     }
     
     private func dateLabel(_ dateItem: DateItem) -> some View {
         VStack(alignment: .center, spacing: 3) {
-            
             Text(dateItem.dayOfWeek.description.uppercased())
-                .font(.caption)
+                .font(.footnote)
                 .kerning(0.5)
                 .lineSpacing(0)
+                .foregroundColor(Color("PrimaryText"))
             
             Text(dateItem.day.description)
                 .font(.numberLarge)
                 .lineSpacing(0)
+                .foregroundColor(Color("PrimaryText"))
         }
+        .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
         .frame(minWidth: 60, maxWidth: 60, maxHeight: .infinity, alignment: .center)
-        .padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
-        .foregroundColor(Color.accentColor)
-        .overlay(
-            Rectangle()
-                .frame(width: 0.5)
-                .foregroundColor(Color("PrimaryDivider")),
-            alignment: .trailing
-        )
+//        .overlay(
+//            Rectangle()
+//                .frame(width: 0.5)
+//                .foregroundColor(Color("PrimaryDivider")),
+//            alignment: .trailing
+//        )
     }
 }

@@ -17,11 +17,11 @@ func colorForAcronym(_ acronym: String) -> Color {
         case "PFW":
             return Color("PrimaryTaupe")
         case "CFDA":
-            return Color("SecondaryBlue")
+            return Color("PrimaryBlue")
         case "MBFW":
-            return Color("SecondaryGreen")
+            return Color("PrimaryGreen")
         case "KFW":
-            return Color("SecondaryRed")
+            return Color("PrimaryRed")
         case "AFW":
             return Color("SecondaryTaupe")
         case "SFW":

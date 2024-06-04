@@ -29,7 +29,7 @@ enum SettingsOption: String, CaseIterable, Identifiable {
         case .whatsNew: return "star"
         case .search: return "magnifyingglass"
         case .themes: return "circle.lefthalf.filled"
-        case .preferences: return "gearshape"
+        case .preferences: return "gear"
         case .helpCenter: return "questionmark"
         case .termsOfUse: return "doc.text"
         case .privacyPolicy: return "lock.shield"
@@ -54,39 +54,44 @@ enum SettingsCategory: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
-
 struct SettingsView: View {
-    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(SettingsCategory.allCases) { category in
                     Section {
                         ForEach(SettingsOption.allCases.filter { $0.category == category }) { option in
-                            NavigationLink(destination: {
-                                switch option {
-                                case .search:
-                                    SearchView()
-                                default:
-                                    DefaultView(text: option.rawValue)
-                                }
-                            }) {
-                                Label {
+                            NavigationLink(destination: destinationView(for: option)) {
+                                HStack(spacing: 10) {
+                                    Image(systemName: option.iconName)
+                                        .font(.system(size: 20))
+                                        .frame(width: 35, height: 35)
+                                        .foregroundColor(Color("PrimaryAccent"))
                                     Text(option.rawValue)
                                         .font(.button)
-                                } icon: {
-                                    Image(systemName: option.iconName)
-                                        .fontWeight(.light)
+                                        .foregroundColor(Color("PrimaryText"))
                                 }
                             }
                         }
-                        .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                        .listRowSeparator(.hidden)
                     }
                 }
+                .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 15))
+                .listRowSeparator(.hidden)
             }
             .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
             .navigationBarTitle("Settings", displayMode: .inline)
+            .background(Color("PrimaryBackground"))
+        }
+    }
+    
+    @ViewBuilder
+    private func destinationView(for option: SettingsOption) -> some View {
+        switch option {
+        case .search:
+            SearchView()
+        default:
+            DefaultView(text: option.rawValue)
         }
     }
 }
@@ -95,7 +100,15 @@ struct DefaultView: View {
     let text: String
     
     var body: some View {
-        Text(text)
-            .navigationBarTitle(text, displayMode: .inline)
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                Text(text)
+                    .navigationTitle(text)
+
+            }
+            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+        }
+        .background(Color("PrimaryBackground"))
+        
     }
 }

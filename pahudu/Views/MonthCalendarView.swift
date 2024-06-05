@@ -32,7 +32,7 @@ struct MonthCalendarView: View {
         .onChange(of: scrolledID) { _ in
             updateNavBarTitle()
         }
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
     }
     
     private func updateNavBarTitle() {
@@ -59,15 +59,15 @@ struct CalendarView: View {
     
     var body: some View {
         
-        let month: String =  DateFormatter().monthSymbols[monthIndex % 12]
+        let month: String =  DateFormatter().shortMonthSymbols[monthIndex % 12]
         
         VStack(spacing: 0) {
+            
             Text(month)
                .font(.headline)
-               .foregroundColor(Color("PrimaryAccent"))
+               .foregroundColor(Colors.Primary.accent)
                .padding(EdgeInsets(top: 0, leading: 25, bottom: 0, trailing: 25))
                .frame(maxWidth: .infinity, minHeight: Self.width, alignment: .bottomLeading)
-            
             
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.width), spacing: 0), count: 7), spacing: 0) {
                 ForEach(items, id: \.id) { item in
@@ -121,7 +121,7 @@ struct CalendarCellView: View {
                 
                 Text(day)
                     .font(.callout)
-                    .foregroundColor(Color("TertiaryBackground"))
+                    .foregroundColor(Colors.Tertiary.background)
                     .frame(width: width, height: width)
                     
                 
@@ -134,19 +134,19 @@ struct CalendarCellView: View {
                             .frame(width: cellWidth, height: cellWidth)
                     } else if CalendarCellView.images[dateItem.day] != nil {
                         Circle()
-                            .stroke(Color("TertiaryBackground"), style: StrokeStyle(lineWidth: 1.5, lineCap: .square))
+                            .stroke(Colors.Tertiary.background, style: StrokeStyle(lineWidth: 1.5, lineCap: .square))
                             .frame(width: cellWidth, height: cellWidth)
                     }
                     Text("\(dateItem.day)")
                         .font(.numberMedium)
-                        .foregroundColor(dateItem.isToday ? Color("PrimaryBackground") : Color("PrimaryText"))
+                        .foregroundColor(dateItem.isToday ? Colors.Primary.background : Colors.Primary.foreground)
                         .frame(width: width, height: width)
                     Circle()
-                        .stroke(isSelected ? Color("PrimaryText") : .clear, lineWidth: 1.5)
+                        .stroke(isSelected ? Colors.Primary.foreground : .clear, lineWidth: 1.5)
                         .frame(width: circleWidth, height: circleWidth)
                 }
                 .frame(width: width, height: width)
-                .background(Color("PrimaryBackground"))
+                .background(Colors.Primary.background)
             }
         }
     }

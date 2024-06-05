@@ -74,7 +74,7 @@ struct SearchView: View {
             .navigationBarTitle("Search", displayMode: .inline)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
             .scrollIndicators(.hidden)
-            .background(Color("PrimaryBackground"))
+            .background(Colors.Primary.background)
         }
     }
 }

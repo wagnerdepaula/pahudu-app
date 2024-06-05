@@ -39,7 +39,7 @@ struct YearView: View {
                     }
                 }
             }
-            .background(Color("PrimaryBackground"))
+            .background(Colors.Primary.background)
         }
         
     }

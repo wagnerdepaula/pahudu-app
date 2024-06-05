@@ -34,11 +34,11 @@ extension Font {
     }
     
     static var caption: Font {
-        .custom("Geist-Medium", size: 13)
+        .custom("Geist-Regular", size: 13)
     }
     
     static var footnote: Font {
-        .custom("Geist-Medium", size: 11)
+        .custom("Geist-Regular", size: 11)
     }
     
     
@@ -56,7 +56,7 @@ extension Font {
     }
     
     static var numberSmall: Font {
-        .custom("GeistMono-Regular", size: 12)
+        .custom("GeistMono-Regular", size: 11)
     }
 }
 

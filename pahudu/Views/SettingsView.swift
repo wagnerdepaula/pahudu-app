@@ -66,10 +66,10 @@ struct SettingsView: View {
                                     Image(systemName: option.iconName)
                                         .font(.system(size: 20))
                                         .frame(width: 35, height: 35)
-                                        .foregroundColor(Color("PrimaryAccent"))
+                                        .foregroundColor(Colors.Primary.accent)
                                     Text(option.rawValue)
                                         .font(.button)
-                                        .foregroundColor(Color("PrimaryText"))
+                                        .foregroundColor(Colors.Primary.foreground)
                                 }
                             }
                         }
@@ -81,7 +81,7 @@ struct SettingsView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .navigationBarTitle("Settings", displayMode: .inline)
-            .background(Color("PrimaryBackground"))
+            .background(Colors.Primary.background)
         }
     }
     
@@ -108,7 +108,7 @@ struct DefaultView: View {
             }
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
         }
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
         
     }
 }

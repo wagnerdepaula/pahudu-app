@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0080C272C10B2E60053A2EB /* DesignersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0080C262C10B2E60053A2EB /* DesignersView.swift */; };
 		D00BD0CE2C00E2C500538158 /* Geist-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0CA2C00E2C500538158 /* Geist-Bold.ttf */; };
 		D00BD0CF2C00E2C500538158 /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0CB2C00E2C500538158 /* Geist-SemiBold.ttf */; };
 		D00BD0D02C00E2C500538158 /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0CC2C00E2C500538158 /* Geist-Regular.ttf */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D0080C262C10B2E60053A2EB /* DesignersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignersView.swift; sourceTree = "<group>"; };
 		D00BD0CA2C00E2C500538158 /* Geist-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Geist-Bold.ttf"; sourceTree = "<group>"; };
 		D00BD0CB2C00E2C500538158 /* Geist-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Geist-SemiBold.ttf"; sourceTree = "<group>"; };
 		D00BD0CC2C00E2C500538158 /* Geist-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Geist-Regular.ttf"; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				D080AA462B9DE77800FAC890 /* DayView.swift */,
 				D048D6A72BAE22A00034FF48 /* DetailsView.swift */,
 				D048D6B42BB0572C0034FF48 /* DiscoverView.swift */,
+				D0080C262C10B2E60053A2EB /* DesignersView.swift */,
 				D09196472B9920190095DFBF /* MonthCalendarView.swift */,
 				D0426F7A2BB8B0F1001ADB0B /* MonthListView.swift */,
 				D048D6B22BB0570F0034FF48 /* SettingsView.swift */,
@@ -275,6 +278,7 @@
 				D048D6B32BB0570F0034FF48 /* SettingsView.swift in Sources */,
 				D09196442B990D830095DFBF /* calendarModel.swift in Sources */,
 				D048D6B52BB0572C0034FF48 /* DiscoverView.swift in Sources */,
+				D0080C272C10B2E60053A2EB /* DesignersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

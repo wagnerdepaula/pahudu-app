@@ -39,7 +39,7 @@ struct DayView: View {
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
     }
     
     private func itemListView(hour: Int) -> some View {
@@ -48,14 +48,12 @@ struct DayView: View {
                 Text(getHourString(hour))
                     .font(.numberSmall)
                     .lineSpacing(0)
-                    .kerning(0.5)
-                    .foregroundColor(Color("PrimaryText"))
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+                    .foregroundColor(Colors.Primary.accent)
                     .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)
 //                    .overlay(
 //                        Rectangle()
 //                            .frame(width: 0.5)
-//                            .foregroundColor(Color("PrimaryDivider")),
+//                            .foregroundColor(Colors.Primary.divider),
 //                        alignment: .trailing
 //                    )
                 
@@ -64,7 +62,7 @@ struct DayView: View {
                         showView(show: show, event: event)
                     }
                 }
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
             }
             
         }
@@ -72,10 +70,11 @@ struct DayView: View {
         .overlay(
             Rectangle()
                 .frame(height: 0.5)
-                .foregroundColor(Color("PrimaryDivider")),
+                .foregroundColor(Colors.Primary.divider),
             alignment: .bottom
         )
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
+        
 
     }
 
@@ -86,15 +85,14 @@ struct DayView: View {
                 Text(event.acronym)
                     .font(.callout)
                     .fontWeight(.semibold)
-                    .foregroundColor(colorForAcronym(event.acronym))
                 
                 Text(" \(event.name)")
                     .font(.callout)
-                    .foregroundColor(Color("PrimaryText"))
+                    .foregroundColor(Colors.Primary.foreground)
             }
             Text(show.brand.name)
                 .font(.callout)
-                .foregroundColor(Color("PrimaryText"))
+                .foregroundColor(Colors.Primary.foreground)
 //            if let url = show.ticketLink {
 //                Button(action: {
 //                    if let url = URL(string: url.description) {
@@ -103,20 +101,21 @@ struct DayView: View {
 //                }) {
 //                    Text("Get Tickets")
 //                        .font(.callout)
-//                        .foregroundColor(Color("PrimaryText"))
+//                        .foregroundColor(Colors.Primary.foreground)
 //                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-//                        .background(Color("PrimaryBlue"))
+//                        .background(Colors.Primary.blue)
 //                        .cornerRadius(25)
 //                }
 //            }
         }
-        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-//        .background(
-//            RoundedRectangle(cornerRadius: 5)
-//                .fill(Color("SecondaryDivider"))
-//                //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
-//        )
+        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
         .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 5)
+                //.fill(colorForAcronym(event.acronym))
+                .stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
+        )
+        
         
     }
     

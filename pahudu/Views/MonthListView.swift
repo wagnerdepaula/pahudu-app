@@ -28,7 +28,7 @@ struct MonthListView: View {
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
         .navigationBarTitle(navBarTitle, displayMode: .inline)
         .onChange(of: navBarTitle) { _, _ in
             UIApplication.triggerHapticFeedback()
@@ -82,31 +82,30 @@ struct DayCell: View {
         .overlay(
             Rectangle()
                 .frame(height: 0.5)
-                .foregroundColor(Color("PrimaryDivider")),
+                .foregroundColor(Colors.Primary.divider),
             alignment: .bottom
         )
-        .background(Color("PrimaryBackground"))
+        .background(Colors.Primary.background)
     }
     
     private func dateLabel(_ dateItem: DateItem) -> some View {
         VStack(alignment: .center, spacing: 3) {
             Text(dateItem.dayOfWeek.description.uppercased())
                 .font(.footnote)
-                .kerning(0.5)
                 .lineSpacing(0)
-                .foregroundColor(Color("PrimaryText"))
+                .foregroundColor(Colors.Primary.accent)
             
             Text(dateItem.day.description)
                 .font(.numberLarge)
                 .lineSpacing(0)
-                .foregroundColor(Color("PrimaryText"))
+                .foregroundColor(Colors.Primary.accent)
         }
-        .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
+        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
         .frame(minWidth: 60, maxWidth: 60, maxHeight: .infinity, alignment: .center)
 //        .overlay(
 //            Rectangle()
 //                .frame(width: 0.5)
-//                .foregroundColor(Color("PrimaryDivider")),
+//                .foregroundColor(Colors.Primary.divider),
 //            alignment: .trailing
 //        )
     }

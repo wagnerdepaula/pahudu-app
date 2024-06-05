@@ -18,7 +18,7 @@ struct PahuduApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)
-                .accentColor(Color("PrimaryAccent"))
+                .accentColor(Colors.Primary.accent)
         }
     }
     
@@ -41,8 +41,8 @@ struct PahuduApp: App {
     private func configureNavigationBarAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithTransparentBackground()
-        navigationBarAppearance.backgroundColor = UIColor(Color("PrimaryBackground"))
-        navigationBarAppearance.shadowColor = UIColor(Color("PrimaryDivider"))
+        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        navigationBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
         //navigationBarAppearance.backgroundImage = Self.navigationBarBackground(size: CGSize(width: 100, height: 50))
 
         
@@ -52,13 +52,13 @@ struct PahuduApp: App {
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 35) ?? UIFont.systemFont(ofSize: 35),
-            .kern: NSNumber(value: 0.3),
-            .foregroundColor: UIColor(Color("PrimaryText"))
+            .kern: NSNumber(value: 0),
+            .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         navigationBarAppearance.titleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
-            .kern: NSNumber(value: 0.3),
-            .foregroundColor: UIColor(Color("PrimaryText"))
+            .kern: NSNumber(value: 0),
+            .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
@@ -68,8 +68,8 @@ struct PahuduApp: App {
     private func configureToolbarAppearance() {
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithOpaqueBackground()
-        toolbarAppearance.backgroundColor = UIColor(Color("PrimaryBackground"))
-        toolbarAppearance.shadowColor = UIColor(Color("PrimaryDivider"))
+        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        toolbarAppearance.shadowColor = UIColor(Colors.Primary.divider)
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
         barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
@@ -84,12 +84,12 @@ struct PahuduApp: App {
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithTransparentBackground()
-        tabBarAppearance.backgroundColor = UIColor(Color("PrimaryBackground"))
-        tabBarAppearance.shadowColor = UIColor(Color("PrimaryDivider"))
+        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        tabBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
         //tabBarAppearance.backgroundImage = Self.tabBarBackground(size: CGSize(width: 100, height: 50))
         
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Color("TertiaryBackground"))
-        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color("TertiaryBackground"))]
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.background)
+        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Tertiary.background)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         UITabBar.appearance().standardAppearance = tabBarAppearance
@@ -103,9 +103,9 @@ struct PahuduApp: App {
     
     static func navigationBarBackground(size: CGSize) -> UIImage {
         let colors: [CGColor] = [
-            UIColor(Color("PrimaryBackground")).cgColor,
-            UIColor(Color("PrimaryBackground")).cgColor,
-            UIColor(Color("PrimaryBackground")).withAlphaComponent(0).cgColor
+            UIColor(Colors.Primary.background).cgColor,
+            UIColor(Colors.Primary.background).cgColor,
+            UIColor(Colors.Primary.background).withAlphaComponent(0).cgColor
         ]
         let renderer = UIGraphicsImageRenderer(size: size)
         let gradient = CGGradient(
@@ -128,9 +128,9 @@ struct PahuduApp: App {
     
     static func tabBarBackground(size: CGSize) -> UIImage {
         let colors: [CGColor] = [
-            UIColor(Color("PrimaryBackground")).withAlphaComponent(0).cgColor,
-            UIColor(Color("PrimaryBackground")).cgColor,
-            UIColor(Color("PrimaryBackground")).cgColor
+            UIColor(Colors.Primary.background).withAlphaComponent(0).cgColor,
+            UIColor(Colors.Primary.background).cgColor,
+            UIColor(Colors.Primary.background).cgColor
         ]
         let renderer = UIGraphicsImageRenderer(size: size)
         let gradient = CGGradient(

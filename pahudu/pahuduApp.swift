@@ -39,12 +39,11 @@ struct PahuduApp: App {
     }
     
     private func configureNavigationBarAppearance() {
+        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithTransparentBackground()
         navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         navigationBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
-        //navigationBarAppearance.backgroundImage = Self.navigationBarBackground(size: CGSize(width: 100, height: 50))
-
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
@@ -62,7 +61,7 @@ struct PahuduApp: App {
         ]
         
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        //UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
     }
     
     private func configureToolbarAppearance() {
@@ -78,7 +77,7 @@ struct PahuduApp: App {
         
         UIToolbar.appearance().tintColor = UIColor(Color.accentColor)
         UIToolbar.appearance().standardAppearance = toolbarAppearance
-        UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
+        //UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
     }
     
     private func configureTabBarAppearance() {
@@ -86,71 +85,18 @@ struct PahuduApp: App {
         tabBarAppearance.configureWithTransparentBackground()
         tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         tabBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
-        //tabBarAppearance.backgroundImage = Self.tabBarBackground(size: CGSize(width: 100, height: 50))
         
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.background)
-        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Tertiary.background)]
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
+        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Secondary.foreground)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        //UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     private func configureButtonAppearance() {
         UIButton.appearance().tintColor = UIColor(Color.accentColor)
     }
-    
-    
-    static func navigationBarBackground(size: CGSize) -> UIImage {
-        let colors: [CGColor] = [
-            UIColor(Colors.Primary.background).cgColor,
-            UIColor(Colors.Primary.background).cgColor,
-            UIColor(Colors.Primary.background).withAlphaComponent(0).cgColor
-        ]
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let gradient = CGGradient(
-            colorsSpace: CGColorSpaceCreateDeviceRGB(),
-            colors: colors as CFArray,
-            locations: [0, 0.5, 1]
-        )
-        
-        return renderer.image { context in
-            if let gradient = gradient {
-                context.cgContext.drawLinearGradient(
-                    gradient,
-                    start: CGPoint(x: 0, y: 0),
-                    end: CGPoint(x: 0, y: size.height),
-                    options: []
-                )
-            }
-        }
-    }
-    
-    static func tabBarBackground(size: CGSize) -> UIImage {
-        let colors: [CGColor] = [
-            UIColor(Colors.Primary.background).withAlphaComponent(0).cgColor,
-            UIColor(Colors.Primary.background).cgColor,
-            UIColor(Colors.Primary.background).cgColor
-        ]
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let gradient = CGGradient(
-            colorsSpace: CGColorSpaceCreateDeviceRGB(),
-            colors: colors as CFArray,
-            locations: [0, 0.5, 1]
-        )
-        
-        return renderer.image { context in
-            if let gradient = gradient {
-                context.cgContext.drawLinearGradient(
-                    gradient,
-                    start: CGPoint(x: 0, y: 0),
-                    end: CGPoint(x: 0, y: size.height),
-                    options: []
-                )
-            }
-        }
-    }
-    
     
     
 }

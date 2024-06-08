@@ -76,7 +76,8 @@ struct SettingsView: View {
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 15))
-                .listRowSeparator(.hidden)
+//                .listRowSeparator(.hidden)
+                .listRowSeparatorTint(Colors.Primary.divider)
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)

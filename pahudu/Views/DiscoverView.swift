@@ -8,77 +8,264 @@
 import SwiftUI
 
 
-struct DiscoverItemView: View {
+
+struct DesignerItemView: View {
     
-    let item: DesignerItem
-    @Binding var showList: Bool
+    let designer: DesignerItem
+    let width: CGFloat = 110
+    let color: Color = getRandomColor()
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDesignersDetails: Bool
     
     var body: some View {
         VStack(spacing: 10) {
-            Image(item.imageName)
+            Image(designer.imageName)
                 .resizable()
-                .frame(width: 110, height: 110)
-                .background(Colors.Tertiary.background)
+                .frame(width: width, height: width)
+                .background(Colors.Secondary.foreground)
                 .clipShape(Circle())
                 .overlay(
                     Circle()
-                        .stroke(Colors.Primary.accent, lineWidth: 1)
+                        .stroke(Colors.Primary.background, lineWidth: 0.5)
                 )
-            Text(item.title)
+            Text(designer.title.components(separatedBy: " ").first ?? "")
                 .font(.caption)
-                .foregroundColor(Colors.Secondary.foreground)
+                .foregroundColor(Colors.Primary.foreground)
+                .frame(maxWidth: width, alignment: .center)
+                .truncationMode(.tail)
         }
         .onTapGesture {
-            showList = true
+            showDesignersDetails = true
+            eventModel.selectedDesigner = designer
             UIApplication.triggerHapticFeedback()
         }
     }
 }
 
-struct DiscoverView: View {
-    @State private var showList = false
+
+
+
+
+struct ShowItemView: View {
     
-    let items: [DesignerItem] = [
-        DesignerItem(imageName: "Caroline Zimbalist", title: "Caroline Zimbalist", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Colleen Allen", title: "Colleen Allen", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Jacques Agbobly", title: "Jacques Agbobly", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Kate Barton", title: "Kate Barton", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Nigel Xavier", title: "Nigel Xavier", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Paolo Carzana", title: "Paolo Carzana", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Jane Wade", title: "Jane Wade", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Ludovic de Saint Sernin", title: "Ludovic de Saint Sernin", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Bishme Cromartie", title: "Bishme Cromartie", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Meruert Tolegen", title: "Meruert Tolegen", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Yitao Li", title: "Yitao Li", subtitle: "Fashion Designer"),
-    ]
+    let show: ShowItem
+    let width: CGFloat = 110
+    let color: Color = Colors.Primary.divider
+    @Binding var showShowsList: Bool
     
     var body: some View {
-        NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 20) {
-                            ForEach(items) { item in
-                                DiscoverItemView(item: item, showList: $showList)
-                            }
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 20)
-                    }
-                    Spacer()
-                }
-                .padding(.vertical, 10)
+        VStack(spacing: 10) {
+            Image(show.imageName)
+                .resizable()
+                .frame(width: width, height: width)
+                .foregroundColor(Colors.Primary.foreground)
+                .background(Colors.Secondary.background)
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(color, lineWidth: 0.5)
+                )
+            
+            Text(show.title)
+                .font(.caption)
+                .foregroundColor(Colors.Primary.foreground)
+                .frame(maxWidth: width, alignment: .leading)
+                .truncationMode(.tail)
+        }
+        .onTapGesture {
+            showShowsList = true
+            UIApplication.triggerHapticFeedback()
+        }
+    }
+}
+
+
+
+struct BrandItemView: View {
+    
+    let brand: BrandItem
+    let width: CGFloat = 110
+    let color: Color = Colors.Primary.divider
+    @Binding var showBrandsList: Bool
+    
+    var body: some View {
+        VStack(spacing: 10) {
+            Image(brand.imageName)
+                .resizable()
+                .frame(width: width, height: width)
+                .foregroundColor(Colors.Primary.foreground)
+                .background(Colors.Secondary.background)
+                .clipShape(Rectangle())
                 .overlay(
                     Rectangle()
-                        .frame(height: 0.5)
-                        .foregroundColor(Colors.Primary.divider),
-                    alignment: .bottom
+                        .stroke(color, lineWidth: 0.5)
                 )
+            
+            Text(brand.title)
+                .font(.caption)
+                .foregroundColor(Colors.Primary.foreground)
+                .frame(maxWidth: width, alignment: .leading)
+                .truncationMode(.tail)
+        }
+        .onTapGesture {
+            showBrandsList = true
+            UIApplication.triggerHapticFeedback()
+        }
+    }
+}
+
+
+
+
+
+struct DiscoverView: View {
+    
+    @StateObject private var eventModel = EventModel()
+    
+    @State private var showDesignersList = false
+    @State private var showBrandsList = false
+    @State private var showShowsList = false
+    
+    @State private var showDesignersDetails = false
+    @State private var showBrandsDetails = false
+    @State private var showShowsDetails = false
+    
+    var body: some View {
+        
+        NavigationStack {
+            ScrollView(showsIndicators: false) {
+                
+                VStack(spacing: 0) {
+                    
+                    
+                    // Designers
+                    VStack(spacing: 5) {
+                        
+                        HStack {
+                            Button(action: {
+                                showDesignersList = true
+                            }, label: {
+                                HStack {
+                                    Text("Designers")
+                                    Image(systemName: "chevron.forward")
+                                }
+                                .font(.button)
+                            })
+                        }
+                        .padding(.horizontal, 20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(GlobalData.designers) { designer in
+                                    DesignerItemView(designer: designer, eventModel: eventModel, showDesignersDetails: $showDesignersDetails)
+                                }
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
+                        }
+                    }
+                    .padding(.vertical, 20)
+                    .overlay(
+                        Divider(),
+                        alignment: .bottom
+                    )
+                    
+                    
+                    
+                    // Brands
+                    VStack(spacing: 5) {
+                        
+                        HStack {
+                            Button(action: {
+                                showBrandsList = true
+                            }, label: {
+                                HStack {
+                                    Text("Brands")
+                                    Image(systemName: "chevron.forward")
+                                }
+                                .font(.button)
+                            })
+                        }
+                        .padding(.horizontal, 20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(GlobalData.brands) { brand in
+                                    BrandItemView(brand: brand, showBrandsList: $showBrandsList)
+                                }
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
+                        }
+                    }
+                    .padding(.vertical, 20)
+                    .overlay(
+                        Divider(),
+                        alignment: .bottom
+                    )
+                    
+                    
+                    
+                    
+                    // Shows
+                    VStack(spacing: 5) {
+                        
+                        HStack{
+                            Button(action: {
+                                showShowsList = true
+                            }, label: {
+                                HStack {
+                                    Text("Shows")
+                                    Image(systemName: "chevron.forward")
+                                }
+                                .font(.button)
+                            })
+                        }
+                        .padding(.horizontal, 20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(GlobalData.shows) { show in
+                                    ShowItemView(show: show, showShowsList: $showShowsList)
+                                }
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
+                        }
+                    }
+                    .padding(.vertical, 20)
+                    .overlay(
+                        Divider(),
+                        alignment: .bottom
+                    )
+                    
+                }
+                
+                
+                
             }
             .navigationBarTitle("Discover", displayMode: .inline)
             .background(Colors.Primary.background)
-            .navigationDestination(isPresented: $showList) {
-                DesignersView()
+            .navigationDestination(isPresented: $showDesignersList) {
+                DesignersListView()
+            }
+            .navigationDestination(isPresented: $showShowsList) {
+                ShowsGridView()
+            }
+            .navigationDestination(isPresented: $showBrandsList) {
+                BrandsListView()
+            }
+            .navigationDestination(isPresented: $showDesignersDetails) {
+                if let designer = eventModel.selectedDesigner {
+                    DesignerDetailsView(item: designer)
+                }
             }
         }
     }

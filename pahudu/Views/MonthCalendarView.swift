@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-
 struct MonthCalendarView: View {
     
     @Environment(\.presentationMode) var presentationMode
@@ -121,7 +119,7 @@ struct CalendarCellView: View {
                 
                 Text(day)
                     .font(.callout)
-                    .foregroundColor(Colors.Tertiary.background)
+                    .foregroundColor(Colors.Tertiary.foreground)
                     .frame(width: width, height: width)
                     
                 

@@ -62,6 +62,7 @@ struct Venue {
 
 class EventModel: ObservableObject {
     
+    @Published var selectedDesigner: DesignerItem?
     @Published var events: [Event] = []
     
     init() {

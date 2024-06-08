@@ -80,9 +80,7 @@ struct DayCell: View {
             }
         }
         .overlay(
-            Rectangle()
-                .frame(height: 0.5)
-                .foregroundColor(Colors.Primary.divider),
+            Divider(),
             alignment: .bottom
         )
         .background(Colors.Primary.background)
@@ -92,21 +90,22 @@ struct DayCell: View {
         VStack(alignment: .center, spacing: 3) {
             Text(dateItem.dayOfWeek.description.uppercased())
                 .font(.footnote)
+                .kerning(0.5)
                 .lineSpacing(0)
-                .foregroundColor(Colors.Primary.accent)
+                .foregroundColor(Colors.Tertiary.foreground)
             
             Text(dateItem.day.description)
                 .font(.numberLarge)
                 .lineSpacing(0)
-                .foregroundColor(Colors.Primary.accent)
+                .foregroundColor(Colors.Tertiary.foreground)
         }
         .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
         .frame(minWidth: 60, maxWidth: 60, maxHeight: .infinity, alignment: .center)
-//        .overlay(
-//            Rectangle()
-//                .frame(width: 0.5)
-//                .foregroundColor(Colors.Primary.divider),
-//            alignment: .trailing
-//        )
+        //        .overlay(
+        //            Rectangle()
+        //                .frame(width: 0.5)
+        //                .foregroundColor(Colors.Primary.divider),
+        //            alignment: .trailing
+        //        )
     }
 }

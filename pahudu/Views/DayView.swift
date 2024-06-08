@@ -47,8 +47,9 @@ struct DayView: View {
             HStack(alignment: .top, spacing: 10) {
                 Text(getHourString(hour))
                     .font(.numberSmall)
+                    .kerning(0.5)
                     .lineSpacing(0)
-                    .foregroundColor(Colors.Primary.accent)
+                    .foregroundColor(Colors.Tertiary.foreground)
                     .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)
 //                    .overlay(
 //                        Rectangle()
@@ -68,9 +69,7 @@ struct DayView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .overlay(
-            Rectangle()
-                .frame(height: 0.5)
-                .foregroundColor(Colors.Primary.divider),
+            Divider(),
             alignment: .bottom
         )
         .background(Colors.Primary.background)
@@ -82,9 +81,10 @@ struct DayView: View {
     private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(spacing: 5) {
+                
                 Text(event.acronym)
                     .font(.callout)
-                    .fontWeight(.semibold)
+                    .foregroundColor(Colors.Primary.foreground)
                 
                 Text(" \(event.name)")
                     .font(.callout)
@@ -92,7 +92,7 @@ struct DayView: View {
             }
             Text(show.brand.name)
                 .font(.callout)
-                .foregroundColor(Colors.Primary.foreground)
+                .foregroundColor(Colors.Primary.foreground.opacity(0.7))
 //            if let url = show.ticketLink {
 //                Button(action: {
 //                    if let url = URL(string: url.description) {
@@ -112,8 +112,8 @@ struct DayView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 5)
-                //.fill(colorForAcronym(event.acronym))
-                .stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
+                .fill(colorForAcronym(event.acronym))
+                //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
         )
         
         

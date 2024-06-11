@@ -64,24 +64,23 @@ func getRandomColor() -> Color {
 
 
 
-
 func colorForAcronym(_ acronym: String) -> Color {
     switch acronym {
     case "NYFW":
-        return Colors.Primary.navy
+        return Colors.Primary.blue
     case "LFW":
         return Colors.Primary.green
     case "MFW":
         return Colors.Primary.pink
-    case "PFW":
+    case "TFW":
         return Colors.Primary.mint
-    case "CFDA":
+    case "BFW":
         return Colors.Primary.orange
-    case "MBFW":
+    case "SPFW":
         return Colors.Primary.purple
     case "KFW":
         return Colors.Primary.blue
-    case "AFW":
+    case "PFW":
         return Colors.Primary.yellow
     case "SFW":
         return Colors.Primary.babyBlue

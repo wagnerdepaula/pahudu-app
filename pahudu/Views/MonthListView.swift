@@ -88,19 +88,21 @@ struct DayCell: View {
     
     private func dateLabel(_ dateItem: DateItem) -> some View {
         VStack(alignment: .center, spacing: 3) {
+            
             Text(dateItem.dayOfWeek.description.uppercased())
                 .font(.footnote)
                 .kerning(0.5)
                 .lineSpacing(0)
-                .foregroundColor(Colors.Tertiary.foreground)
+                .foregroundColor(Colors.Secondary.foreground)
             
             Text(dateItem.day.description)
                 .font(.numberLarge)
                 .lineSpacing(0)
-                .foregroundColor(Colors.Tertiary.foreground)
+                .foregroundColor(Colors.Secondary.foreground)
+            
         }
         .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
-        .frame(minWidth: 60, maxWidth: 60, maxHeight: .infinity, alignment: .center)
+        .frame(minWidth: 80, maxWidth: 80, maxHeight: .infinity, alignment: .center)
         //        .overlay(
         //            Rectangle()
         //                .frame(width: 0.5)

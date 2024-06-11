@@ -34,6 +34,7 @@ struct GlobalData {
         DesignerItem(imageName: "Caroline Zimbalist", title: "Caroline Zimbalist", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Colleen Allen", title: "Colleen Allen", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Jacques Agbobly", title: "Jacques Agbobly", subtitle: "Fashion Designer"),
+        DesignerItem(imageName: "Hedi Slimane", title: "Hedi Slimane", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Kate Barton", title: "Kate Barton", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Nigel Xavier", title: "Nigel Xavier", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Paolo Carzana", title: "Paolo Carzana", subtitle: "Fashion Designer"),

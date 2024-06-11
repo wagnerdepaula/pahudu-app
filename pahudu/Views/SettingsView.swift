@@ -10,7 +10,6 @@ import SwiftUI
 // Define an enum for your options
 enum SettingsOption: String, CaseIterable, Identifiable {
     case myAccount = "My Account"
-    case search = "Search"
     case themes = "Themes"
     case preferences = "Preferences"
     case whatsNew = "What’s New"
@@ -27,7 +26,6 @@ enum SettingsOption: String, CaseIterable, Identifiable {
         case .myAccount: return "person"
         case .welcome: return "hand.wave"
         case .whatsNew: return "star"
-        case .search: return "magnifyingglass"
         case .themes: return "circle.lefthalf.filled"
         case .preferences: return "gear"
         case .helpCenter: return "questionmark"
@@ -39,7 +37,7 @@ enum SettingsOption: String, CaseIterable, Identifiable {
     // Associated category for each option
     var category: SettingsCategory {
         switch self {
-        case .myAccount, .welcome, .whatsNew, .search: return .accountGeneral
+        case .myAccount, .welcome, .whatsNew: return .accountGeneral
         case .themes, .preferences: return .appearanceCustomization
         case .helpCenter, .termsOfUse, .privacyPolicy: return .supportLegal
         }
@@ -89,8 +87,6 @@ struct SettingsView: View {
     @ViewBuilder
     private func destinationView(for option: SettingsOption) -> some View {
         switch option {
-        case .search:
-            SearchView()
         default:
             DefaultView(text: option.rawValue)
         }

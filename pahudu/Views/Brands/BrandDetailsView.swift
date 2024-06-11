@@ -1,16 +1,16 @@
 //
-//  DesignerDetailsView.swift
+//  BrandDetailsView.swift
 //  pahudu
 //
-//  Created by Wagner De Paula on 6/7/24.
+//  Created by Wagner De Paula on 6/8/24.
 //
 
 import SwiftUI
 
 
-struct DesignerDetailsView: View {
+struct BrandDetailsView: View {
     
-    let item: DesignerItem
+    let item: BrandItem
     @ObservedObject var motionManager = MotionManager()
     
     var body: some View {
@@ -24,15 +24,18 @@ struct DesignerDetailsView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 300, maxHeight: 300)
                         .offset(x: motionManager.roll * 15, y: 0)
+                        .foregroundColor(Colors.Primary.foreground)
                 }
                 .frame(maxWidth: .infinity, minHeight: 350, alignment: .bottom)
                 .padding(0)
-                .background(Colors.Secondary.foreground)
+                .background(Colors.Secondary.background)
                 
-                DesignerInfoView(title: item.title, subtitle: item.subtitle)
+                
+                BrandInfoView(title: item.title, subtitle: item.subtitle)
                     .padding(.horizontal, 20)
                 
                 Spacer()
+                
             }
             .padding(.vertical, 0)
             .padding(.horizontal, 0)
@@ -50,12 +53,14 @@ struct DesignerDetailsView: View {
             motionManager.stopMonitoringMotionUpdates()
         }
     }
+    
+ 
+    
 }
 
 
 
-struct DesignerInfoView: View {
-    
+struct BrandInfoView: View {
     let title: String
     let subtitle: String
     

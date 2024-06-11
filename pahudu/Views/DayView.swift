@@ -51,19 +51,19 @@ struct DayView: View {
                     .lineSpacing(0)
                     .foregroundColor(Colors.Tertiary.foreground)
                     .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)
-//                    .overlay(
-//                        Rectangle()
-//                            .frame(width: 0.5)
-//                            .foregroundColor(Colors.Primary.divider),
-//                        alignment: .trailing
-//                    )
+                //                    .overlay(
+                //                        Rectangle()
+                //                            .frame(width: 0.5)
+                //                            .foregroundColor(Colors.Primary.divider),
+                //                        alignment: .trailing
+                //                    )
                 
                 ForEach(events.flatMap { $0.shows }.filter { $0.hour == hour }, id: \.id) { show in
                     if let event = events.first(where: { $0.shows.contains(where: { $0.id == show.id }) }) {
                         showView(show: show, event: event)
                     }
                 }
-                .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                .padding(EdgeInsets(top: 0.5, leading: 0, bottom: 0.5, trailing: 0))
             }
             
         }
@@ -74,46 +74,41 @@ struct DayView: View {
         )
         .background(Colors.Primary.background)
         
-
+        
     }
-
+    
     
     private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
         VStack(alignment: .leading, spacing: 5) {
-            HStack(spacing: 5) {
-                
-                Text(event.acronym)
-                    .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-                
-                Text(" \(event.name)")
-                    .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-            }
+            
             Text(show.brand.name)
                 .font(.callout)
-                .foregroundColor(Colors.Primary.foreground.opacity(0.7))
-//            if let url = show.ticketLink {
-//                Button(action: {
-//                    if let url = URL(string: url.description) {
-//                        UIApplication.shared.open(url)
-//                    }
-//                }) {
-//                    Text("Get Tickets")
-//                        .font(.callout)
-//                        .foregroundColor(Colors.Primary.foreground)
-//                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-//                        .background(Colors.Primary.blue)
-//                        .cornerRadius(25)
-//                }
-//            }
+                .foregroundColor(Colors.Primary.foreground)
+            
+            Text("\(event.name) (\(event.acronym))")
+                .font(.callout)
+                .foregroundColor(Colors.Primary.foreground.opacity(0.5))
+            //            if let url = show.ticketLink {
+            //                Button(action: {
+            //                    if let url = URL(string: url.description) {
+            //                        UIApplication.shared.open(url)
+            //                    }
+            //                }) {
+            //                    Text("Get Tickets")
+            //                        .font(.callout)
+            //                        .foregroundColor(Colors.Primary.foreground)
+            //                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+            //                        .background(Colors.Primary.blue)
+            //                        .cornerRadius(25)
+            //                }
+            //            }
         }
         .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 5)
-                .fill(colorForAcronym(event.acronym))
-                //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
+            RoundedRectangle(cornerRadius: 7)
+                .fill(colorForAcronym(event.acronym).opacity(0.3))
+            //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
         )
         
         

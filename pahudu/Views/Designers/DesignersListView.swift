@@ -10,19 +10,21 @@ import SwiftUI
 struct DesignerRowView: View {
     
     let item: DesignerItem
-    let color: Color = Colors.Primary.divider
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    
     
     var body: some View {
         
         HStack(spacing: 10) {
             Image(item.imageName)
                 .resizable()
-                .frame(width: 60, height: 60)
+                .frame(width: 55, height: 55)
                 .background(Colors.Secondary.foreground)
                 .clipShape(Circle())
                 .overlay(
                     Circle()
-                        .stroke(color, lineWidth: 0.5)
+                        .stroke(Colors.Primary.divider, lineWidth: 0.5)
                 )
             
             VStack(alignment: .leading, spacing: 5) {
@@ -37,12 +39,18 @@ struct DesignerRowView: View {
             
             Spacer()
         }
+        .background(Colors.Primary.background)
         .padding(.vertical, 10)
         .padding(.horizontal, 20)
         .overlay(
             Divider(),
             alignment: .bottom
         )
+        .onTapGesture {
+            showDetails = true
+            eventModel.selectedDesigner = item
+            UIApplication.triggerHapticFeedback()
+        }
     }
 }
 
@@ -52,18 +60,29 @@ struct DesignerRowView: View {
 
 struct DesignersListView: View {
     
+    @ObservedObject var eventModel: EventModel = EventModel()
+    @State var showDetails: Bool = false
+    @State private var searchText = ""
+    
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 0) {
                     ForEach(GlobalData.designers) { item in
-                        DesignerRowView(item: item)
+                        DesignerRowView(item: item, eventModel: eventModel, showDetails: $showDetails)
                             .frame(maxWidth: .infinity)
                     }
                 }
             }
             .navigationBarTitle("Designers", displayMode: .inline)
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
             .background(Colors.Primary.background)
+        }
+        .navigationDestination(isPresented: $showDetails) {
+            if let designer = eventModel.selectedDesigner {
+                DesignerDetailsView(item: designer)
+            }
         }
     }
 }
+

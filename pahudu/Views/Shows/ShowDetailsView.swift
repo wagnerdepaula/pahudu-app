@@ -1,16 +1,16 @@
 //
-//  DesignerDetailsView.swift
+//  ShowDetailsView.swift
 //  pahudu
 //
-//  Created by Wagner De Paula on 6/7/24.
+//  Created by Wagner De Paula on 6/10/24.
 //
 
 import SwiftUI
 
 
-struct DesignerDetailsView: View {
+struct ShowDetailsView: View {
     
-    let item: DesignerItem
+    let item: ShowItem
     @ObservedObject var motionManager = MotionManager()
     
     var body: some View {
@@ -24,15 +24,18 @@ struct DesignerDetailsView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 300, maxHeight: 300)
                         .offset(x: motionManager.roll * 15, y: 0)
+                        .foregroundColor(Colors.Primary.foreground)
                 }
                 .frame(maxWidth: .infinity, minHeight: 350, alignment: .bottom)
                 .padding(0)
-                .background(Colors.Secondary.foreground)
+                .background(Colors.Secondary.background)
                 
-                DesignerInfoView(title: item.title, subtitle: item.subtitle)
+                
+                ShowInfoView(title: item.title, subtitle: item.subtitle)
                     .padding(.horizontal, 20)
                 
                 Spacer()
+                
             }
             .padding(.vertical, 0)
             .padding(.horizontal, 0)
@@ -49,13 +52,24 @@ struct DesignerDetailsView: View {
         .onDisappear {
             motionManager.stopMonitoringMotionUpdates()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    UIApplication.triggerHapticFeedback()
+                } label: {
+                    Image(systemName: "bell")
+                }
+            }
+        }
     }
+    
+ 
+    
 }
 
 
 
-struct DesignerInfoView: View {
-    
+struct ShowInfoView: View {
     let title: String
     let subtitle: String
     
@@ -69,9 +83,9 @@ struct DesignerInfoView: View {
             Text(subtitle)
                 .foregroundColor(Colors.Tertiary.foreground)
                 .font(.headline)
+                .kerning(0.5)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         
     }
 }
-

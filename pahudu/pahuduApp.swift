@@ -41,16 +41,18 @@ struct PahuduApp: App {
     private func configureNavigationBarAppearance() {
         
         let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithTransparentBackground()
-        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
-        navigationBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        //navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        navigationBarAppearance.shadowColor = .clear
+        //UIColor(Colors.Primary.divider)
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: UIFont(name: "Geist-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .foregroundColor: UIColor.clear
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "Geist-Regular", size: 35) ?? UIFont.systemFont(ofSize: 35),
+            .font: UIFont(name: "Geist-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
@@ -77,21 +79,22 @@ struct PahuduApp: App {
         
         UIToolbar.appearance().tintColor = UIColor(Color.accentColor)
         UIToolbar.appearance().standardAppearance = toolbarAppearance
-        //UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
+        UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
     }
     
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithTransparentBackground()
         tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
-        tabBarAppearance.shadowColor = UIColor(Colors.Primary.divider)
+        tabBarAppearance.shadowColor = .clear
+        //UIColor(Colors.Primary.divider)
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Secondary.foreground)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         UITabBar.appearance().standardAppearance = tabBarAppearance
-        //UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     private func configureButtonAppearance() {

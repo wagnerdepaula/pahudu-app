@@ -13,7 +13,6 @@ struct MonthCalendarView: View {
     @StateObject var viewModel: CalendarViewModel = CalendarViewModel()
     @State private var scrolledID: Int?
     @State var navBarTitle: String = "Pahudu"
-    static let height = floor(UIScreen.main.bounds.width / 7) - 1
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -27,7 +26,7 @@ struct MonthCalendarView: View {
         .onAppear {
             updateNavBarTitle()
         }
-        .onChange(of: scrolledID) { _ in
+        .onChange(of: scrolledID) { _, _ in
             updateNavBarTitle()
         }
         .background(Colors.Primary.background)

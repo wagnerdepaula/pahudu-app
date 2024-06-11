@@ -60,10 +60,14 @@ struct Venue {
     let amenities: [String]
 }
 
+
 class EventModel: ObservableObject {
     
     @Published var selectedDesigner: DesignerItem?
+    @Published var selectedBrand: BrandItem?
+    @Published var selectedShow: ShowItem?
     @Published var events: [Event] = []
+    
     
     init() {
         loadEvents()

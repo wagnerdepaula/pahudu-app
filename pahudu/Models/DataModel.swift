@@ -28,7 +28,7 @@ struct BrandItem: Identifiable {
     let subtitle: String
 }
 
-struct GlobalData {
+struct DataModel {
     
     static let designers: [DesignerItem] = [
         DesignerItem(imageName: "Caroline Zimbalist", title: "Caroline Zimbalist", subtitle: "Fashion Designer"),
@@ -40,6 +40,10 @@ struct GlobalData {
         DesignerItem(imageName: "Paolo Carzana", title: "Paolo Carzana", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Ludovic de Saint Sernin", title: "Ludovic de Saint Sernin", subtitle: "Fashion Designer"),
         DesignerItem(imageName: "Bishme Cromartie", title: "Bishme Cromartie", subtitle: "Fashion Designer"),
+        DesignerItem(imageName: "Simon Porte Jacquemus", title: "Simon Porte Jacquemus", subtitle: "Fashion Designer"),
+        DesignerItem(imageName: "Virginie Viard", title: "Virginie Viard", subtitle: "Fashion Designer"),
+        
+        
     ]
     
     static let shows: [ShowItem] = [

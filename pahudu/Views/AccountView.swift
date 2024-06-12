@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  AccountView.swift
 //  pahudu
 //
 //  Created by Wagner De Paula on 3/24/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 // Define an enum for your options
-enum SettingsOption: String, CaseIterable, Identifiable {
+enum AccountOptions: String, CaseIterable, Identifiable {
     case myAccount = "My Account"
     case themes = "Themes"
     case preferences = "Preferences"
@@ -35,7 +35,7 @@ enum SettingsOption: String, CaseIterable, Identifiable {
     }
     
     // Associated category for each option
-    var category: SettingsCategory {
+    var category: AccountCategory {
         switch self {
         case .myAccount, .welcome, .whatsNew: return .accountGeneral
         case .themes, .preferences: return .appearanceCustomization
@@ -45,20 +45,20 @@ enum SettingsOption: String, CaseIterable, Identifiable {
 }
 
 // Define an enum for your categories
-enum SettingsCategory: String, CaseIterable, Identifiable {
+enum AccountCategory: String, CaseIterable, Identifiable {
     case accountGeneral = "Account & General"
     case appearanceCustomization = "Appearance & Customization"
     case supportLegal = "Support & Legal"
     var id: String { self.rawValue }
 }
 
-struct SettingsView: View {
+struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(SettingsCategory.allCases) { category in
+                ForEach(AccountCategory.allCases) { category in
                     Section {
-                        ForEach(SettingsOption.allCases.filter { $0.category == category }) { option in
+                        ForEach(AccountOptions.allCases.filter { $0.category == category }) { option in
                             NavigationLink(destination: destinationView(for: option)) {
                                 HStack(spacing: 10) {
                                     Image(systemName: option.iconName)
@@ -79,13 +79,13 @@ struct SettingsView: View {
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
-            .navigationBarTitle("Settings", displayMode: .inline)
+            .navigationBarTitle("Account", displayMode: .inline)
             .background(Colors.Primary.background)
         }
     }
     
     @ViewBuilder
-    private func destinationView(for option: SettingsOption) -> some View {
+    private func destinationView(for option: AccountOptions) -> some View {
         switch option {
         default:
             DefaultView(text: option.rawValue)

@@ -35,7 +35,7 @@ struct MonthListView: View {
         }
         .navigationDestination(isPresented: $showDayView, destination: {
             if let selectedItem = selectedItem {
-                DayView(item: selectedItem)
+                DayView()
                     .presentationDetents([.large])
             }
         })

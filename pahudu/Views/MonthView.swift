@@ -10,12 +10,16 @@ import SwiftUI
 
 struct MonthView: View {
     
+    @EnvironmentObject var globalData: GlobalData
+    
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = CalendarViewModel()
+    
     @State private var navBarTitle = "2024"
     @State private var showCalendarView = true
     @State private var selectedMenuOption: String = "calendar"
     
+     
     var body: some View {
         NavigationStack {
             Group {
@@ -40,6 +44,9 @@ struct MonthView: View {
                 }
             }
             .background(Colors.Primary.background)
+        }
+        .navigationDestination(isPresented: $globalData.showDayView) {
+            DayView()
         }
         
     }

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Divider: View {
     
-    var leading: CGFloat = 20
+    var leading: CGFloat = 0
     
     var body: some View {
         Rectangle()

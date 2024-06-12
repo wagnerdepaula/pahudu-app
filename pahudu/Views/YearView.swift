@@ -9,19 +9,13 @@ import SwiftUI
 
 struct YearView: View {
     
+    @EnvironmentObject var globalData: GlobalData
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel = CalendarViewModel()
-    @State private var navBarTitle = "Pahudu"
-    @State private var showCalendarView = true
-    @State private var selectedMenuOption: String = "calendar"
     
     var body: some View {
-        NavigationStack {
+        NavigationStack() {
             YearCalendarGridView()
-                .navigationBarTitle(navBarTitle, displayMode: .inline)
-                .background(Colors.Primary.background)
         }
-        
     }
 }
 
@@ -51,18 +45,22 @@ struct YearCalendarGridView: View {
             VStack(spacing: 0) {
                 LazyVGrid(columns: columns, spacing: 25) {
                     ForEach(viewModel.monthsData.indices, id: \.self) { monthIndex in
-                        MonthCalendarSmallView(items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
-                            .id(viewModel.monthsData[monthIndex].monthIndex)
-                            .onTapGesture {
-                                showDayView = true
-                                UIApplication.triggerHapticFeedback(style: .light)
-                            }
+                        
+                        Button {
+                            showDayView = true
+                        } label: {
+                            MonthCalendarSmallView(items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
+                                .id(viewModel.monthsData[monthIndex].monthIndex)
+                        }
+
+                    
                     }
                 }
                 .padding(MonthCalendarSmallView.width)
             }
         }
         .background(Colors.Primary.background)
+        .navigationBarTitle(navBarTitle, displayMode: .inline)
         .navigationDestination(isPresented: $showDayView) {
             MonthView()
                 .presentationDetents([.large])
@@ -84,20 +82,22 @@ struct YearCalendarGridView: View {
 struct MonthCalendarSmallView: View {
     
     
-    static let width = floor(UIScreen.main.bounds.width / 25)
+    static let width = floor(UIScreen.main.bounds.width / 23)
     let items: [CalendarItem]
     let monthIndex: Int
+    let currentMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
     
     
     var body: some View {
         
         let month: String =  DateFormatter().shortMonthSymbols[monthIndex % 12]
+    
         
         VStack(spacing: 0) {
             
             Text(month)
-                .font(.callout)
-                .foregroundColor(Colors.Primary.accent)
+                .font(.headline)
+                .foregroundColor((currentMonthIndex ==  monthIndex) ? Colors.Primary.accent : Colors.Primary.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.width), spacing: 0), count: 7), spacing: 0) {
@@ -122,6 +122,7 @@ struct MonthCalendarCellSmallView: View {
     
     let item: CalendarItem
     private let width: CGFloat = MonthCalendarSmallView.width
+    private let circleWidth: CGFloat = MonthCalendarSmallView.width - 2
     
     var body: some View {
         Group {
@@ -134,15 +135,10 @@ struct MonthCalendarCellSmallView: View {
             case .date(let dateItem):
                 ZStack {
                     
-                    if dateItem.isToday {
-                        Circle()
-                            .fill(Color.accentColor)
-                            .frame(width: width, height: width)
-                    }
-                    
                     Text("\(dateItem.day)")
                         .font(.footnote)
-                        .foregroundColor(Colors.Primary.foreground)
+                        .kerning(0.3)
+                        .foregroundColor(dateItem.isToday ? Colors.Primary.accent : Colors.Primary.foreground)
                         .frame(width: width, height: width)
 
                 }

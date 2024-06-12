@@ -10,6 +10,8 @@ import SwiftUI
 @main
 struct PahuduApp: App {
     
+    @StateObject private var globalData = GlobalData()
+
     init() {
         configureAppearance()
     }
@@ -19,6 +21,8 @@ struct PahuduApp: App {
             ContentView()
                 .preferredColorScheme(.dark)
                 .accentColor(Colors.Primary.accent)
+                .environmentObject(globalData)
+            
         }
     }
     
@@ -90,7 +94,7 @@ struct PahuduApp: App {
         //UIColor(Colors.Primary.divider)
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
-        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Secondary.foreground)]
+        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Tertiary.foreground)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         UITabBar.appearance().standardAppearance = tabBarAppearance

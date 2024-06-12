@@ -9,17 +9,26 @@ import SwiftUI
 
 struct DayView: View {
     
+    @EnvironmentObject var globalData: GlobalData
+    
     @Environment(\.presentationMode) var presentationMode
+    
     @StateObject private var eventModel = EventModel()
-    @State var item: CalendarItem
+    
+    
     
     @State private var events: [pahudu.Event] = []
     
+    
+    
     var body: some View {
+        
+        let item = globalData.selectedCalendarItem
+        
         eventList
-            .navigationBarTitle(item.dateItem != nil ? "\(item.dateItem!.monthString) \(item.dateItem!.day), \(item.dateItem!.year)" : "", displayMode: .inline)
+//            .navigationBarTitle(globalData.selectedCalendarItem?.dateItem != nil ? "\(item.dateItem!.monthString) \(item.dateItem!.day), \(item.dateItem!.year)" : "", displayMode: .inline)
             .onAppear {
-                if let item = item.dateItem {
+                if let item = item?.dateItem {
                     events = eventModel.eventsForDate(item.date)
                 }
             }

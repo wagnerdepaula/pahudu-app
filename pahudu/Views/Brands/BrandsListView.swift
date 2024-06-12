@@ -16,42 +16,46 @@ struct BrandRowView: View {
     
     var body: some View {
         
-        HStack(spacing: 10) {
-            Image(item.imageName)
-                .resizable()
-                .frame(width: 55, height: 55)
-                .background(Colors.Secondary.background)
-                .foregroundColor(Colors.Primary.foreground)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Colors.Primary.divider, lineWidth: 0.5)
-                )
+        
+        Button {
             
-            VStack(alignment: .leading, spacing: 5) {
-                Text(item.title)
+            showDetails = true
+            eventModel.selectedBrand = item
+            
+        } label: {
+            HStack(spacing: 15) {
+                Image(item.imageName)
+                    .resizable()
+                    .frame(width: 55, height: 55)
+                    .background(Colors.Secondary.background)
                     .foregroundColor(Colors.Primary.foreground)
-                    .font(.body)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 
-                Text(item.subtitle)
-                    .foregroundColor(Colors.Tertiary.foreground)
-                    .font(.caption)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(item.title)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                    
+                    Text(item.subtitle)
+                        .foregroundColor(Colors.Tertiary.foreground)
+                        .font(.caption)
+                }
+                
+                Spacer()
             }
+            .background(Colors.Primary.background)
+            .padding(.vertical, 10)
+            .padding(.horizontal, 20)
             
-            Spacer()
         }
-        .background(Colors.Primary.background)
-        .padding(.vertical, 10)
-        .padding(.horizontal, 20)
         .overlay(
             Divider(),
             alignment: .bottom
         )
-        .onTapGesture {
-            showDetails = true
-            eventModel.selectedBrand = item
-            UIApplication.triggerHapticFeedback()
-        }
+        
+        
+        
+        
     }
 }
 
@@ -68,7 +72,7 @@ struct BrandsListView: View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 0) {
-                    ForEach(GlobalData.brands) { item in
+                    ForEach(DataModel.brands) { item in
                         BrandRowView(item: item, eventModel: eventModel, showDetails: $showDetails)
                             .frame(maxWidth: .infinity)
                     }

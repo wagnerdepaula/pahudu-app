@@ -101,12 +101,15 @@ enum CalendarItem: Identifiable {
             return nil
         }
     }
+    
+    
 }
 
 
 
 
 class CalendarUtils {
+    
     private static var calendar: Calendar { Calendar.current }
     
     static func precomputeCalendarItems(for monthIndex: Int) -> [CalendarItem] {

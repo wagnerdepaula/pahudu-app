@@ -9,27 +9,26 @@ import SwiftUI
 
 struct MonthCalendarView: View {
     
+    @EnvironmentObject var globalData: GlobalData
+    
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel: CalendarViewModel = CalendarViewModel()
-    @State private var scrolledID: Int?
     @State var navBarTitle: String = "Pahudu"
+    
+//    @State var showDayView: Bool = false
+//    @State private var selectedItem: CalendarItem?
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 ForEach(viewModel.monthsData.indices, id: \.self) { monthIndex in
-                    CalendarView(items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
+                    CalendarView(showDayView: $globalData.showDayView, items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
                         .id(viewModel.monthsData[monthIndex].monthIndex)
                 }
             }
         }
-        .onAppear {
-            updateNavBarTitle()
-        }
-        .onChange(of: scrolledID) { _, _ in
-            updateNavBarTitle()
-        }
         .background(Colors.Primary.background)
+        
     }
     
     private func updateNavBarTitle() {
@@ -45,7 +44,7 @@ struct MonthCalendarView: View {
 
 struct CalendarView: View {
     
-    @State private var showDayView = false
+    @Binding var showDayView: Bool
     @State private var selectedItemId: UUID?
     @State private var selectedItem: CalendarItem?
     
@@ -57,38 +56,37 @@ struct CalendarView: View {
     var body: some View {
         
         let month: String =  DateFormatter().shortMonthSymbols[monthIndex % 12]
+        let currentMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
         
         VStack(spacing: 0) {
             
             Text(month)
                .font(.headline)
-               .foregroundColor(Colors.Primary.accent)
+               .foregroundColor((currentMonthIndex ==  monthIndex) ? Colors.Primary.accent : Colors.Primary.foreground)
                .padding(EdgeInsets(top: 0, leading: 25, bottom: 0, trailing: 25))
                .frame(maxWidth: .infinity, minHeight: Self.width, alignment: .bottomLeading)
             
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.width), spacing: 0), count: 7), spacing: 0) {
                 ForEach(items, id: \.id) { item in
-                    CalendarCellView(item: item, isSelected: selectedItemId == item.id)
-                        .onTapGesture {
-                            if selectedItemId == item.id {
-                                showDayView = true
-                            } else {
-                                selectedItemId = item.id
-                                selectedItem = item
-                                showDayView = true
-                                UIApplication.triggerHapticFeedback()
-                            }
+                    
+                    Button {
+                        if selectedItemId == item.id {
+                            showDayView = true
+                        } else {
+                            selectedItemId = item.id
+                            selectedItem = item
+                            showDayView = true
+                            UIApplication.triggerHapticFeedback()
                         }
+                    } label: {
+                        CalendarCellView(item: item, isSelected: selectedItemId == item.id)
+                    }
+                    
                 }
             }
             .fixedSize()
         }
-        .navigationDestination(isPresented: $showDayView) {
-            if let selectedItem = selectedItem {
-                DayView(item: selectedItem)
-                    .presentationDetents([.large])
-            }
-        }
+        
     }
 }
 
@@ -122,7 +120,6 @@ struct CalendarCellView: View {
                     .frame(width: width, height: width)
                     
                 
-                
             case .date(let dateItem):
                 ZStack {
                     if dateItem.isToday {
@@ -131,7 +128,7 @@ struct CalendarCellView: View {
                             .frame(width: cellWidth, height: cellWidth)
                     } else if CalendarCellView.images[dateItem.day] != nil {
                         Circle()
-                            .stroke(Colors.Tertiary.background, style: StrokeStyle(lineWidth: 1.5, lineCap: .square))
+                            .stroke(Colors.Primary.divider, style: StrokeStyle(lineWidth: 1.5, lineCap: .square))
                             .frame(width: cellWidth, height: cellWidth)
                     }
                     Text("\(dateItem.day)")

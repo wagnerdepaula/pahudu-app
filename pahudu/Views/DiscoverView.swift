@@ -19,30 +19,31 @@ struct ShowItemView: View {
     @Binding var showShowDetails: Bool
     
     var body: some View {
-        VStack(spacing: 10) {
+        
+        Button {
             
-            Image(show.imageName)
-                .resizable()
-                .frame(width: width, height: width)
-                .foregroundColor(Colors.Primary.foreground)
-                .background(Colors.Secondary.background)
-                .clipShape(Rectangle())
-                .overlay(
-                    Rectangle()
-                        .stroke(Colors.Primary.divider, lineWidth: 0.5)
-                )
-            
-            Text(show.title)
-                .font(.caption)
-                .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: width, alignment: .leading)
-                .truncationMode(.tail)
-        }
-        .onTapGesture {
             eventModel.selectedShow = show
             showShowDetails = true
-            UIApplication.triggerHapticFeedback()
+            
+        } label: {
+            VStack(spacing: 10) {
+                
+                Image(show.imageName)
+                    .resizable()
+                    .frame(width: width, height: width)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .background(Colors.Secondary.background)
+                    .clipShape(Rectangle())
+
+                Text(show.title)
+                    .font(.caption)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: width, alignment: .leading)
+                    .truncationMode(.tail)
+            }
+            
         }
+        
     }
 }
 
@@ -58,29 +59,27 @@ struct BrandItemView: View {
     @Binding var showBrandDetails: Bool
     
     var body: some View {
-        VStack(spacing: 10) {
-            Image(brand.imageName)
-                .resizable()
-                .frame(width: width, height: width)
-                .foregroundColor(Colors.Primary.foreground)
-                .background(Colors.Secondary.background)
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Colors.Primary.divider, lineWidth: 0.5)
-                )
-            
-            Text(brand.title)
-                .font(.caption)
-                .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: width, alignment: .leading)
-                .truncationMode(.tail)
-        }
-        .onTapGesture {
+        
+        Button {
             eventModel.selectedBrand = brand
             showBrandDetails = true
-            UIApplication.triggerHapticFeedback()
+        } label: {
+            VStack(spacing: 10) {
+                Image(brand.imageName)
+                    .resizable()
+                    .frame(width: width, height: width)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .background(Colors.Secondary.background)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                
+                Text(brand.title)
+                    .font(.caption)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: width, alignment: .leading)
+                    .truncationMode(.tail)
+            }
         }
+        
     }
 }
 
@@ -98,26 +97,29 @@ struct DesignerItemView: View {
     @Binding var showDesignerDetails: Bool
     
     var body: some View {
-        VStack(spacing: 10) {
-            Image(designer.imageName)
-                .resizable()
-                .frame(width: width, height: width)
-                .background(Colors.Secondary.foreground)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Colors.Primary.background, lineWidth: 0.5)
-                )
-            Text(designer.title.components(separatedBy: " ").first ?? "")
-                .font(.caption)
-                .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: width, alignment: .center)
-                .truncationMode(.tail)
-        }
-        .onTapGesture {
+        
+        Button {
+            
             eventModel.selectedDesigner = designer
             showDesignerDetails = true
-            UIApplication.triggerHapticFeedback()
+            
+        } label: {
+            
+            VStack(spacing: 10) {
+                Image(designer.imageName)
+                    .resizable()
+                    .frame(width: width, height: width)
+                    //.background(Colors.Secondary.foreground)
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
+                    )
+                    .clipShape(Circle())
+                Text(designer.title.components(separatedBy: " ").first ?? "")
+                    .font(.caption)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: width, alignment: .center)
+                    .truncationMode(.tail)
+            }
         }
     }
 }
@@ -133,6 +135,7 @@ struct DesignerItemView: View {
 
 struct DiscoverView: View {
     
+    @EnvironmentObject var globalData: GlobalData
     @StateObject private var eventModel = EventModel()
     
     @State private var showDesignersList = false
@@ -145,7 +148,8 @@ struct DiscoverView: View {
     
     var body: some View {
         
-        NavigationStack {
+        NavigationStack() {
+            
             ScrollView(showsIndicators: false) {
                 
                 VStack(spacing: 0) {
@@ -171,7 +175,7 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(GlobalData.shows) { show in
+                                ForEach(DataModel.shows) { show in
                                     ShowItemView(show: show, eventModel: eventModel, showShowDetails: $showShowDetails)
                                 }
                             }
@@ -206,7 +210,7 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(GlobalData.brands) { brand in
+                                ForEach(DataModel.brands) { brand in
                                     BrandItemView(brand: brand, eventModel: eventModel, showBrandDetails: $showBrandDetails)
                                 }
                             }
@@ -241,7 +245,7 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(GlobalData.designers) { designer in
+                                ForEach(DataModel.designers) { designer in
                                     DesignerItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
                                 }
                             }
@@ -255,13 +259,7 @@ struct DiscoverView: View {
                         alignment: .bottom
                     )
                     
-                    
-                    
-                    
                 }
-                
-                
-                
             }
             .navigationBarTitle("Discover", displayMode: .inline)
             .background(Colors.Primary.background)

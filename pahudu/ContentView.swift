@@ -35,26 +35,26 @@ struct ContentView: View {
     @EnvironmentObject var globalData: GlobalData
     @State private var selectedTab: Tab = .calendar
     
-    var tabSelection: Binding<Tab> {
-        Binding(get: {
-            selectedTab
-        }, set: { newValue in
-            if newValue == selectedTab {
-                switch newValue {
-                case .calendar: globalData.calendarStack = .init()
-                case .discover: globalData.discoverStack = .init()
-                case .search: globalData.searchStack = .init()
-                case .account: globalData.accountStack = .init()
-                }
-            }
-            selectedTab = newValue
-        })
-    }
+//    var tabSelection: Binding<Tab> {
+//        Binding(get: {
+//            selectedTab
+//        }, set: { newValue in
+//            if newValue == selectedTab {
+//                switch newValue {
+//                case .calendar: globalData.calendarStack = .init()
+//                case .discover: globalData.discoverStack = .init()
+//                case .search: globalData.searchStack = .init()
+//                case .account: globalData.accountStack = .init()
+//                }
+//            }
+//            selectedTab = newValue
+//        })
+//    }
     
     
     var body: some View {
         
-        TabView(selection: tabSelection) {
+        TabView(selection: $selectedTab) {
             
             YearView()
                 .tag(Tab.calendar)
@@ -67,9 +67,6 @@ struct ContentView: View {
                 .tag(Tab.discover)
                 .tabItem {
                     Label(Tab.discover.title, systemImage: Tab.discover.rawValue)
-                }
-                .onTapGesture {
-                    print(tabSelection)
                 }
             
             

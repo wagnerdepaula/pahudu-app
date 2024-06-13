@@ -19,7 +19,7 @@ struct MonthView: View {
     @State private var showCalendarView = true
     @State private var selectedMenuOption: String = "calendar"
     
-     
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -29,20 +29,41 @@ struct MonthView: View {
                     MonthListView()
                 }
             }
-            .navigationBarTitle(navBarTitle, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        withAnimation {
-                            showCalendarView.toggle()
-                            selectedMenuOption = showCalendarView ? "calendar.day.timeline.left" : "calendar"
+                    Menu {
+                        Button(action: {
+                            showCalendarView = true
+                            selectedMenuOption = "calendar"
+                            UIApplication.triggerHapticFeedback()
+                        }) {
+                            HStack {
+                                Text("Calendar")
+                                Spacer()
+                                Image(systemName: "calendar")
+                            }
                         }
-                        UIApplication.triggerHapticFeedback()
+                        Button(action: {
+                            showCalendarView = false
+                            selectedMenuOption = "calendar.day.timeline.left"
+                            UIApplication.triggerHapticFeedback()
+                        }) {
+                            HStack {
+                                Text("Schedule")
+                                Spacer()
+                                Image(systemName: "calendar.day.timeline.left")
+                            }
+                        }
                     } label: {
-                        Image(systemName: showCalendarView ? "calendar.day.timeline.left" : "calendar")
+                        Image(systemName: selectedMenuOption)
+                            .imageScale(.large)
+                            .foregroundColor(Colors.Primary.accent)
                     }
                 }
             }
+            
+            
+            .navigationBarTitle(navBarTitle, displayMode: .inline)
             .background(Colors.Primary.background)
         }
         .navigationDestination(isPresented: $globalData.showDayView) {

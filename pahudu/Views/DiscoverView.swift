@@ -13,7 +13,7 @@ import SwiftUI
 struct ShowItemView: View {
     
     let show: ShowItem
-    let width: CGFloat = 110
+    let width: CGFloat = 100
     
     @ObservedObject var eventModel: EventModel
     @Binding var showShowDetails: Bool
@@ -34,7 +34,7 @@ struct ShowItemView: View {
                     .foregroundColor(Colors.Primary.foreground)
                     .background(Colors.Secondary.background)
                     .clipShape(Rectangle())
-
+                
                 Text(show.title)
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
@@ -43,7 +43,6 @@ struct ShowItemView: View {
             }
             
         }
-        
     }
 }
 
@@ -53,7 +52,7 @@ struct ShowItemView: View {
 struct BrandItemView: View {
     
     let brand: BrandItem
-    let width: CGFloat = 110
+    let width: CGFloat = 100
     
     @ObservedObject var eventModel: EventModel
     @Binding var showBrandDetails: Bool
@@ -91,7 +90,7 @@ struct BrandItemView: View {
 struct DesignerItemView: View {
     
     let designer: DesignerItem
-    let width: CGFloat = 110
+    let width: CGFloat = 100
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDesignerDetails: Bool
@@ -109,10 +108,8 @@ struct DesignerItemView: View {
                 Image(designer.imageName)
                     .resizable()
                     .frame(width: width, height: width)
-                    //.background(Colors.Secondary.foreground)
-                    .background(
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
-                    )
+                //.background(Colors.Secondary.foreground)
+                    .background(Colors.Secondary.background)
                     .clipShape(Circle())
                 Text(designer.title.components(separatedBy: " ").first ?? "")
                     .font(.caption)

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DesignerDetailsView: View {
     
-    @ObservedObject var motionManager = MotionManager()
     let item: DesignerItem
+    let width: CGFloat = UIScreen.main.bounds.width
     
     var body: some View {
         ScrollView {
@@ -24,15 +24,15 @@ struct DesignerDetailsView: View {
                         Image(item.imageName)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 260, height: max(260, 260 + offsetY))
-                            .offset(x: motionManager.roll * 15, y: 0)
+                            .frame(width: width, height: max(width, width + offsetY))
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 350, alignment: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: width, alignment: .bottom)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
                     )
+
                 }
-                .frame(height: 350)
+                .frame(height: width)
                 
                 
                 VStack(alignment: .leading, spacing: 5) {
@@ -57,11 +57,5 @@ struct DesignerDetailsView: View {
         .edgesIgnoringSafeArea(.all)
         .scrollContentBackground(.hidden)
         .background(Colors.Primary.background)
-        .onAppear {
-            motionManager.startMonitoringMotionUpdates()
-        }
-        .onDisappear {
-            motionManager.stopMonitoringMotionUpdates()
-        }
     }
 }

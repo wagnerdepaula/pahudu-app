@@ -27,7 +27,7 @@ struct YearCalendarGridView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel: CalendarViewModel = CalendarViewModel()
     @State private var scrolledID: Int?
-    @State var navBarTitle: String = "Pahudu"
+    @State var navBarTitle: String = "2024"
     
     @State private var showDayView = false
     @State private var selectedItemId: UUID?

@@ -4,8 +4,9 @@
 //
 //  Created by Wagner De Paula on 5/27/24.
 //
-import SwiftUI
 
+import SwiftUI
+import CoreImage
 
 enum Colors {
     
@@ -90,3 +91,5 @@ func colorForAcronym(_ acronym: String) -> Color {
         return Colors.Primary.accent
     }
 }
+
+

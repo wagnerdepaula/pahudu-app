@@ -100,11 +100,11 @@ struct DesignerGridView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Colors.Secondary.background)
+                                .background(Colors.Secondary.foreground)
                                 .clipShape(Circle())
                             
                             Text(item.title.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Tertiary.foreground)
+                                .foregroundColor(Colors.Primary.foreground)
                                 .font(.caption)
                         }
                     }
@@ -136,7 +136,7 @@ struct DesignerRowView: View {
                 Image(item.imageName)
                     .resizable()
                     .frame(width: 55, height: 55)
-                    .background(Colors.Secondary.background)
+                    .background(Colors.Secondary.foreground)
                     .clipShape(Circle())
                 
                 VStack(alignment: .leading, spacing: 5) {

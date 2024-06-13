@@ -106,7 +106,7 @@ struct BrandGridView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                             
                             Text(item.title.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Tertiary.foreground)
+                                .foregroundColor(Colors.Primary.foreground)
                                 .font(.caption)
                         }
                     }

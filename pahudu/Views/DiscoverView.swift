@@ -109,7 +109,7 @@ struct DesignerItemView: View {
                     .resizable()
                     .frame(width: width, height: width)
                 //.background(Colors.Secondary.foreground)
-                    .background(Colors.Secondary.background)
+                    .background(Colors.Secondary.foreground)
                     .clipShape(Circle())
                 Text(designer.title.components(separatedBy: " ").first ?? "")
                     .font(.caption)

@@ -32,7 +32,7 @@ struct DetailsView: View {
                     .font(.headline)
                 
                 Text(show.description)
-                    .font(.body)
+                    .font(.headline)
      
                 Text("\(show.venue.name),")
                     //.foregroundColor(.gray)

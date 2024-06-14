@@ -10,7 +10,8 @@ import SwiftUI
 struct ShowDetailsView: View {
     
     let item: ShowItem
-    @ObservedObject var motionManager = MotionManager()
+    let width: CGFloat = 300
+    let height: CGFloat = 300
     
     var body: some View {
         ScrollView {
@@ -26,14 +27,13 @@ struct ShowDetailsView: View {
                             .aspectRatio(contentMode: .fill)
                             .foregroundColor(Colors.Primary.foreground)
                             .frame(width: 260, height: max(260, 260 + offsetY))
-                            .offset(x: motionManager.roll * 15, y: 0)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 350, alignment: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
                     )
                 }
-                .frame(height: 350)
+                .frame(height: height)
                 
                 
                 VStack(alignment: .leading, spacing: 5) {
@@ -47,9 +47,9 @@ struct ShowDetailsView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
-                    
+                
                 Spacer()
-   
+                
                 
             }
             .padding(0)
@@ -58,19 +58,22 @@ struct ShowDetailsView: View {
         .edgesIgnoringSafeArea(.all)
         .scrollContentBackground(.hidden)
         .background(Colors.Primary.background)
-        .onAppear {
-            motionManager.startMonitoringMotionUpdates()
-        }
-        .onDisappear {
-            motionManager.stopMonitoringMotionUpdates()
-        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     UIApplication.triggerHapticFeedback()
                 } label: {
-                    Image(systemName: "bell")
+                    ZStack {
+                        Circle()
+                            .fill(Colors.Tertiary.background)
+                            .frame(width: 30, height: 30)
+                        Image(systemName: "plus")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Colors.Primary.accent)
+                    }
                 }
+                
+                
             }
         }
     }

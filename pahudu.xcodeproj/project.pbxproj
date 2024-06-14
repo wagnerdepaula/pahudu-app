@@ -14,9 +14,6 @@
 		D00BD0D02C00E2C500538158 /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0CC2C00E2C500538158 /* Geist-Regular.ttf */; };
 		D00BD0D12C00E2C500538158 /* Geist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0CD2C00E2C500538158 /* Geist-Medium.ttf */; };
 		D00BD0D62C00E2DC00538158 /* GeistMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D22C00E2DC00538158 /* GeistMono-Regular.ttf */; };
-		D00BD0D72C00E2DC00538158 /* GeistMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D32C00E2DC00538158 /* GeistMono-Medium.ttf */; };
-		D00BD0D82C00E2DC00538158 /* GeistMono-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D42C00E2DC00538158 /* GeistMono-SemiBold.ttf */; };
-		D00BD0D92C00E2DC00538158 /* GeistMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00BD0D52C00E2DC00538158 /* GeistMono-Bold.ttf */; };
 		D03F7BB42B952B6A0096A540 /* pahuduApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03F7BB32B952B6A0096A540 /* pahuduApp.swift */; };
 		D03F7BB62B952B6A0096A540 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03F7BB52B952B6A0096A540 /* ContentView.swift */; };
 		D03F7BB82B952B6C0096A540 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D03F7BB72B952B6C0096A540 /* Assets.xcassets */; };
@@ -55,9 +52,6 @@
 		D00BD0CC2C00E2C500538158 /* Geist-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Geist-Regular.ttf"; sourceTree = "<group>"; };
 		D00BD0CD2C00E2C500538158 /* Geist-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Geist-Medium.ttf"; sourceTree = "<group>"; };
 		D00BD0D22C00E2DC00538158 /* GeistMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-Regular.ttf"; sourceTree = "<group>"; };
-		D00BD0D32C00E2DC00538158 /* GeistMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-Medium.ttf"; sourceTree = "<group>"; };
-		D00BD0D42C00E2DC00538158 /* GeistMono-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-SemiBold.ttf"; sourceTree = "<group>"; };
-		D00BD0D52C00E2DC00538158 /* GeistMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistMono-Bold.ttf"; sourceTree = "<group>"; };
 		D03F7BB02B952B6A0096A540 /* pahudu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pahudu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D03F7BB32B952B6A0096A540 /* pahuduApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pahuduApp.swift; sourceTree = "<group>"; };
 		D03F7BB52B952B6A0096A540 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -187,10 +181,7 @@
 		D0A9D4DE2BAC921B00C05C56 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				D00BD0D52C00E2DC00538158 /* GeistMono-Bold.ttf */,
-				D00BD0D32C00E2DC00538158 /* GeistMono-Medium.ttf */,
 				D00BD0D22C00E2DC00538158 /* GeistMono-Regular.ttf */,
-				D00BD0D42C00E2DC00538158 /* GeistMono-SemiBold.ttf */,
 				D00BD0CA2C00E2C500538158 /* Geist-Bold.ttf */,
 				D00BD0CD2C00E2C500538158 /* Geist-Medium.ttf */,
 				D00BD0CC2C00E2C500538158 /* Geist-Regular.ttf */,
@@ -303,14 +294,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00BD0D82C00E2DC00538158 /* GeistMono-SemiBold.ttf in Resources */,
 				D00BD0D12C00E2C500538158 /* Geist-Medium.ttf in Resources */,
 				D03F7BBC2B952B6C0096A540 /* Preview Assets.xcassets in Resources */,
 				D00BD0CE2C00E2C500538158 /* Geist-Bold.ttf in Resources */,
-				D00BD0D72C00E2DC00538158 /* GeistMono-Medium.ttf in Resources */,
 				D00BD0CF2C00E2C500538158 /* Geist-SemiBold.ttf in Resources */,
 				D03F7BB82B952B6C0096A540 /* Assets.xcassets in Resources */,
-				D00BD0D92C00E2DC00538158 /* GeistMono-Bold.ttf in Resources */,
 				D00BD0D02C00E2C500538158 /* Geist-Regular.ttf in Resources */,
 				D00BD0D62C00E2DC00538158 /* GeistMono-Regular.ttf in Resources */,
 			);

@@ -40,6 +40,7 @@ struct PahuduApp: App {
         configureToolbarAppearance()
         configureTabBarAppearance()
         configureButtonAppearance()
+        // listFonts()
     }
     
     private func configureNavigationBarAppearance() {

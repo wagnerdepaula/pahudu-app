@@ -11,6 +11,7 @@ extension Font {
     
     static var largeTitle: Font {
         .custom("Geist-Regular", size: 32)
+        
     }
     
     static var title: Font {
@@ -22,7 +23,7 @@ extension Font {
     }
     
     static var body: Font {
-        .custom("Geist-Regular", size: 17)
+        .custom("Geist-Regular", size: 16)
     }
     
     static var subheadline: Font {
@@ -53,7 +54,7 @@ extension Font {
     }
     
     static var numberMedium: Font {
-        .custom("Geist-Regular", size: 16)
+        .custom("Geist-Regular", size: 17)
     }
     
     static var numberSmall: Font {

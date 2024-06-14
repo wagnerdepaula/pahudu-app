@@ -94,7 +94,7 @@ struct DesignerGridView: View {
                         showDetails = true
                         eventModel.selectedDesigner = item
                     } label: {
-                        VStack(alignment: .center, spacing: 10) {
+                        VStack(alignment: .center, spacing: 7) {
                             
                             Image(item.imageName)
                                 .resizable()
@@ -142,7 +142,7 @@ struct DesignerRowView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(item.title)
                         .foregroundColor(Colors.Primary.foreground)
-                        .font(.body)
+                        .font(.headline)
                     
                     Text(item.subtitle)
                         .foregroundColor(Colors.Tertiary.foreground)

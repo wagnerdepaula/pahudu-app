@@ -48,23 +48,23 @@ struct CalendarView: View {
     @State private var selectedItemId: UUID?
     @State private var selectedItem: CalendarItem?
     
-    static let width = floor(UIScreen.main.bounds.width / 7) - 1
+    static let width = floor(UIScreen.main.bounds.width / 7.5) - 1
     let items: [CalendarItem]
     let monthIndex: Int
     
     
     var body: some View {
         
-        let month: String =  DateFormatter().shortMonthSymbols[monthIndex % 12]
+        let month: String =  DateFormatter().monthSymbols[monthIndex % 12]
         let currentMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
         
         VStack(spacing: 0) {
             
-            Text(month)
+            Text("\(month)")
                .font(.headline)
                .foregroundColor((currentMonthIndex ==  monthIndex) ? Colors.Primary.accent : Colors.Primary.foreground)
-               .padding(EdgeInsets(top: 0, leading: 25, bottom: 0, trailing: 25))
-               .frame(maxWidth: .infinity, minHeight: Self.width, alignment: .bottomLeading)
+               .padding(EdgeInsets(top: 0, leading: 25, bottom: 5, trailing: 25))
+               .frame(maxWidth: .infinity, minHeight: Self.width, alignment: .bottom)
             
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.width), spacing: 0), count: 7), spacing: 0) {
                 ForEach(items, id: \.id) { item in
@@ -87,6 +87,7 @@ struct CalendarView: View {
             .fixedSize()
         }
         
+        
     }
 }
 
@@ -106,8 +107,8 @@ struct CalendarCellView: View {
         25: "Marine Serre"
     ]
     private let width: CGFloat = CalendarView.width
-    private var circleWidth: CGFloat { width - 14 }
-    private var cellWidth: CGFloat { width - 20 }
+    private var circleWidth: CGFloat { width - 12 }
+    private var cellWidth: CGFloat { width - 18 }
     
     var body: some View {
         Group {
@@ -124,7 +125,7 @@ struct CalendarCellView: View {
                 ZStack {
                     if dateItem.isToday {
                         Circle()
-                            .fill(Color.accentColor)
+                            .fill(Color.accentColor.opacity(0.3))
                             .frame(width: cellWidth, height: cellWidth)
                     } else if CalendarCellView.images[dateItem.day] != nil {
                         Circle()
@@ -133,7 +134,7 @@ struct CalendarCellView: View {
                     }
                     Text("\(dateItem.day)")
                         .font(.numberMedium)
-                        .foregroundColor(dateItem.isToday ? Colors.Primary.background : Colors.Primary.foreground)
+                        .foregroundColor(dateItem.isToday ? Colors.Primary.accent : Colors.Primary.foreground)
                         .frame(width: width, height: width)
                     Circle()
                         .stroke(isSelected ? Colors.Primary.foreground : .clear, lineWidth: 1.5)

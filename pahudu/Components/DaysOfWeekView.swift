@@ -22,7 +22,6 @@ struct DaysOfWeekView: View {
                         .font(.callout)
                         .frame(width: DaysOfWeekView.width, height: DaysOfWeekView.width)
                         .background(Color.red)
-                        //.fixedSize()
                 }
             }
         }

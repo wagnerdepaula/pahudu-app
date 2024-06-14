@@ -10,7 +10,6 @@ import SwiftUI
 import UIKit
 
 
-
 enum Tab: String, CaseIterable {
     case calendar = "circle.grid.3x3"
     case discover = "globe.americas"
@@ -27,41 +26,17 @@ enum Tab: String, CaseIterable {
     }
 }
 
-
-
-
 struct ContentView: View {
-    
     @EnvironmentObject var globalData: GlobalData
     @State private var selectedTab: Tab = .calendar
     
-//    var tabSelection: Binding<Tab> {
-//        Binding(get: {
-//            selectedTab
-//        }, set: { newValue in
-//            if newValue == selectedTab {
-//                switch newValue {
-//                case .calendar: globalData.calendarStack = .init()
-//                case .discover: globalData.discoverStack = .init()
-//                case .search: globalData.searchStack = .init()
-//                case .account: globalData.accountStack = .init()
-//                }
-//            }
-//            selectedTab = newValue
-//        })
-//    }
-    
-    
     var body: some View {
-        
         TabView(selection: $selectedTab) {
-            
             YearView()
                 .tag(Tab.calendar)
                 .tabItem {
                     Label(Tab.calendar.title, systemImage: Tab.calendar.rawValue)
                 }
-            
             
             DiscoverView()
                 .tag(Tab.discover)
@@ -69,26 +44,18 @@ struct ContentView: View {
                     Label(Tab.discover.title, systemImage: Tab.discover.rawValue)
                 }
             
-            
-            
             SearchView()
                 .tag(Tab.search)
                 .tabItem {
                     Label(Tab.search.title, systemImage: Tab.search.rawValue)
                 }
             
-            
-            
             AccountView()
                 .tag(Tab.account)
                 .tabItem {
                     Label(Tab.account.title, systemImage: Tab.account.rawValue)
                 }
-            
         }
     }
-    
-    
-    
-    
 }
+

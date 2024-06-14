@@ -11,6 +11,7 @@ struct DesignerDetailsView: View {
     
     let item: DesignerItem
     let width: CGFloat = UIScreen.main.bounds.width
+    let height: CGFloat = UIScreen.main.bounds.width
     
     var body: some View {
         ScrollView {
@@ -26,13 +27,13 @@ struct DesignerDetailsView: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: width, height: max(width, width + offsetY))
                     }
-                    .frame(maxWidth: .infinity, maxHeight: width, alignment: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
                     )
-
+                    
                 }
-                .frame(height: width)
+                .frame(height: height)
                 
                 
                 VStack(alignment: .leading, spacing: 5) {
@@ -43,12 +44,19 @@ struct DesignerDetailsView: View {
                     Text(item.subtitle)
                         .foregroundColor(Colors.Tertiary.foreground)
                         .font(.headline)
+                    
+                    Spacer(minLength: 10)
+                    
+                    TypedText(text: "Simon Porte Jacquemus is a French fashion designer and the founder of the Jacquemus fashion label. Jacquemus was born in Salon-de-Provence, France into a family of farmers; his father occasionally sang in metal bands and his mother raised him. He grew up in the small town of Mallemort in southern France.")
+                        .foregroundColor(Colors.Secondary.foreground)
+                        .font(.body)
+                        .lineSpacing(6)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
-                    
+                
                 Spacer()
-   
+                
                 
             }
             .padding(0)

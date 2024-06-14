@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 class CalendarViewModel: ObservableObject {
     
     @Published var monthsData: [MonthData] = []

@@ -29,31 +29,37 @@ struct YearCalendarGridView: View {
     @State private var scrolledID: Int?
     @State var navBarTitle: String = "2024"
     
+    
     @State private var showDayView = false
     @State private var selectedItemId: UUID?
     @State private var selectedItem: CalendarItem?
     
+    static let width = floor(UIScreen.main.bounds.width / 23)
+    
     let columns = [
-        GridItem(.flexible(), spacing: MonthCalendarSmallView.width, alignment: .top),
-        GridItem(.flexible(), spacing: MonthCalendarSmallView.width, alignment: .top),
-        GridItem(.flexible(), spacing: MonthCalendarSmallView.width, alignment: .top)
+        GridItem(.flexible(), spacing: width, alignment: .top),
+        GridItem(.flexible(), spacing: width, alignment: .top),
+        GridItem(.flexible(), spacing: width, alignment: .top)
     ]
     
+
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 LazyVGrid(columns: columns, spacing: 25) {
                     ForEach(viewModel.monthsData.indices, id: \.self) { monthIndex in
-                        
+//                        if monthIndex % 12 == 0 {
+//                            Text(viewModel.monthsData[monthIndex].year)
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+//                        }
+
                         Button {
                             showDayView = true
                         } label: {
                             MonthCalendarSmallView(items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
                                 .id(viewModel.monthsData[monthIndex].monthIndex)
                         }
-
-                    
                     }
                 }
                 .padding(MonthCalendarSmallView.width)
@@ -66,6 +72,7 @@ struct YearCalendarGridView: View {
                 .presentationDetents([.large])
         }
     }
+
 
 
 
@@ -107,7 +114,6 @@ struct MonthCalendarSmallView: View {
                 
             }
             
-            //.fixedSize()
         }
 
     }

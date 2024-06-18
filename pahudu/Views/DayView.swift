@@ -56,7 +56,6 @@ struct DayView: View {
             HStack(alignment: .top, spacing: 10) {
                 Text(getHourString(hour))
                     .font(.numberSmall)
-                    .kerning(0.5)
                     .lineSpacing(0)
                     .foregroundColor(Colors.Tertiary.foreground)
                     .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)

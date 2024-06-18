@@ -39,8 +39,8 @@ enum Colors {
         static let green = Color("SecondaryGreen")
         static let yellow = Color("SecondaryYellow")
         static let pink = Color("SecondaryPink")
-        static let purple = Color("SecondaryPurple")
-        static let mint = Color("SecondaryMint")
+        //static let purple = Color("SecondaryPurple")
+        //static let mint = Color("SecondaryMint")
     }
     
     enum Tertiary {
@@ -51,6 +51,17 @@ enum Colors {
 
 func getRandomColor() -> Color {
     let colors: [Color] = [
+        Colors.Primary.accent,
+        Colors.Primary.foreground,
+        Colors.Primary.babyBlue,
+        Colors.Primary.blue,
+        Colors.Primary.green,
+        Colors.Primary.yellow,
+        Colors.Primary.pink,
+        Colors.Primary.mint,
+        Colors.Primary.orange,
+        Colors.Primary.purple,
+        
         Colors.Secondary.accent,
         Colors.Secondary.foreground,
         Colors.Secondary.babyBlue,

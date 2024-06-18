@@ -9,13 +9,13 @@ import SwiftUI
 
 
 struct Divider: View {
-    var leading: CGFloat = 0
+    var padding: CGFloat = 20
     
     var body: some View {
         Rectangle()
             .frame(height: 0.5)
             .foregroundColor(Colors.Primary.divider)
-            .padding(EdgeInsets(top: 0, leading: leading, bottom: 0, trailing: 0))
+            .padding(EdgeInsets(top: 0, leading: padding, bottom: 0, trailing: padding))
     }
 }
 
@@ -41,7 +41,7 @@ struct TypedText: View {
                     wordIndex += 1
                     
                     if (wordIndex % 4 == 0) {
-                        UIApplication.triggerHapticFeedback(style: .soft)
+                        UIApplication.triggerHapticFeedback()
                     }
                 }
             }

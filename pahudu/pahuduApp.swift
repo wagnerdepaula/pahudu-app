@@ -50,19 +50,19 @@ struct PahuduApp: App {
         navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
         //navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         navigationBarAppearance.shadowColor = .clear
-        //UIColor(Colors.Primary.divider)
+        
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
-            .font: UIFont(name: "Geist-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .foregroundColor: UIColor.clear
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "Geist-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32),
+            .font: UIFont(name: "Inter-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         navigationBarAppearance.titleTextAttributes = [
-            .font: UIFont(name: "Geist-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
@@ -73,9 +73,10 @@ struct PahuduApp: App {
     
     private func configureToolbarAppearance() {
         let toolbarAppearance = UIToolbarAppearance()
-        toolbarAppearance.configureWithOpaqueBackground()
-        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background)
-        toolbarAppearance.shadowColor = UIColor(Colors.Primary.divider)
+        toolbarAppearance.configureWithDefaultBackground()
+        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        //toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        toolbarAppearance.shadowColor = .clear
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
         barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
@@ -84,22 +85,22 @@ struct PahuduApp: App {
         
         UIToolbar.appearance().tintColor = UIColor(Color.accentColor)
         UIToolbar.appearance().standardAppearance = toolbarAppearance
-        UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
+        //UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
     }
     
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithTransparentBackground()
-        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        tabBarAppearance.configureWithDefaultBackground()
+        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        //tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         tabBarAppearance.shadowColor = .clear
-        //UIColor(Colors.Primary.divider)
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Tertiary.foreground)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
         UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        //UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
     }
     

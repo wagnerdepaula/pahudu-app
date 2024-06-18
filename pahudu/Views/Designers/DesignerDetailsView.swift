@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DesignerDetailsView: View {
     
-    let item: DesignerItem
+    let item: Designer
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.width
     
@@ -22,40 +22,137 @@ struct DesignerDetailsView: View {
                     let offsetY = geometry.frame(in: .global).minY
                     
                     ZStack {
-                        Image(item.imageName)
+                        
+                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.foreground]), startPoint: .top, endPoint: .bottom)
+                        
+                        Image(item.name)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: width, height: max(width, width + offsetY))
                     }
                     .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
-                    .background(
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
-                    )
+                    
                     
                 }
                 .frame(height: height)
                 
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(item.title)
+                    
+                    Text(item.name)
                         .foregroundColor(Colors.Primary.foreground)
                         .font(.largeTitle)
                     
-                    Text(item.subtitle)
+                    Text("\(item.nationality) \(item.title.lowercased())")
                         .foregroundColor(Colors.Tertiary.foreground)
-                        .font(.headline)
+                        .font(.subheadline)
+                    
+                    Spacer(minLength: 5)
+                    
+                    TypedText(text: item.about)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                        .lineSpacing(6)
+                    
                     
                     Spacer(minLength: 10)
                     
-                    TypedText(text: "Simon Porte Jacquemus is a French fashion designer and the founder of the Jacquemus fashion label. Jacquemus was born in Salon-de-Provence, France into a family of farmers; his father occasionally sang in metal bands and his mother raised him. He grew up in the small town of Mallemort in southern France.")
-                        .foregroundColor(Colors.Secondary.foreground)
-                        .font(.body)
-                        .lineSpacing(6)
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        
+                        HStack(alignment: .top) {
+                            Text("Born")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.dateOfBirth)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Founder")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.founder)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Education")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.education)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Years Active")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.yearsActive)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Spouse")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.spouse)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Nationality")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            Text(item.nationality)
+                                .foregroundColor(Colors.Secondary.foreground)
+                                .lineSpacing(4)
+                        }
+                        
+                        HStack(alignment: .top) {
+                            
+                            Text("Website")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .frame(maxWidth: 100, alignment: .leading)
+                            
+                            if (item.website != "N/A") {
+                                Link(cleanURL(item.website), destination: URL(string: item.website)!)
+                                    .foregroundColor(Colors.Primary.accent)
+                                    .lineSpacing(4)
+                            } else {
+                                Text(item.nationality)
+                                    .foregroundColor(Colors.Secondary.foreground)
+                                    .lineSpacing(4)
+                            }
+                
+                        }
+                        
+                        
+                        
+                        
+                    }
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(15)
+                    .background(Colors.Secondary.background)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                    
+                   
+                    
+                    Spacer(minLength: 60)
+                    
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
                 
-                Spacer()
+                Spacer(minLength: 100)
                 
                 
             }
@@ -64,6 +161,7 @@ struct DesignerDetailsView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
     }
 }

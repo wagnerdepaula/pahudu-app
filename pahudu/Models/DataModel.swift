@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-struct DesignerItem: Identifiable {
-    let id = UUID()
-    let imageName: String
-    let title: String
-    let subtitle: String
-}
 
 struct ShowItem: Identifiable {
     let id = UUID()
@@ -29,23 +23,7 @@ struct BrandItem: Identifiable {
 }
 
 struct DataModel {
-    
-    static let designers: [DesignerItem] = [
-        DesignerItem(imageName: "Caroline Zimbalist", title: "Caroline Zimbalist", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Colleen Allen", title: "Colleen Allen", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Jacques Agbobly", title: "Jacques Agbobly", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Hedi Slimane", title: "Hedi Slimane", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Kate Barton", title: "Kate Barton", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Nigel Xavier", title: "Nigel Xavier", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Paolo Carzana", title: "Paolo Carzana", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Ludovic de Saint Sernin", title: "Ludovic de Saint Sernin", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Bishme Cromartie", title: "Bishme Cromartie", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Simon Porte Jacquemus", title: "Simon Porte Jacquemus", subtitle: "Fashion Designer"),
-        DesignerItem(imageName: "Virginie Viard", title: "Virginie Viard", subtitle: "Fashion Designer"),
-        
-        
-    ]
-    
+ 
     static let shows: [ShowItem] = [
         ShowItem(imageName: "Berlin Fashion Week", title: "Berlin Fashion Week", subtitle: "BFW"),
         ShowItem(imageName: "London Fashion Week", title: "London Fashion Week", subtitle: "LFW"),
@@ -74,6 +52,12 @@ struct DataModel {
         BrandItem(imageName: "Jil Sander", title: "Jil Sander", subtitle: "Jil Sander"),
         BrandItem(imageName: "Marine Serre", title: "Marine Serre", subtitle: "Marine Serre"),
         BrandItem(imageName: "Missoni", title: "Missoni", subtitle: "Missoni"),
-        BrandItem(imageName: "Miu Miu", title: "Miu Miu", subtitle: "Miu Miu")
+        BrandItem(imageName: "Miu Miu", title: "Miu Miu", subtitle: "Miu Miu"),
+        BrandItem(imageName: "Lanvin", title: "Lanvin", subtitle: "Lanvin"),
+        BrandItem(imageName: "Loewe", title: "Loewe", subtitle: "Loewe"),
+        BrandItem(imageName: "Sandro", title: "Sandro", subtitle: "Sandro"),
+        BrandItem(imageName: "Schiaparelli", title: "Schiaparelli", subtitle: "Schiaparelli"),
+        BrandItem(imageName: "Sézane", title: "Sézane", subtitle: "Sézane")
     ]
+
 }

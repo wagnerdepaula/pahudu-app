@@ -107,8 +107,8 @@ struct CalendarCellView: View {
         25: "Marine Serre"
     ]
     private let width: CGFloat = CalendarView.width
-    private var circleWidth: CGFloat { width - 12 }
-    private var cellWidth: CGFloat { width - 18 }
+    private var circleWidth: CGFloat { width - 10 }
+    private var cellWidth: CGFloat { width - 16 }
     
     var body: some View {
         Group {
@@ -125,7 +125,7 @@ struct CalendarCellView: View {
                 ZStack {
                     if dateItem.isToday {
                         Circle()
-                            .fill(Color.accentColor.opacity(0.3))
+                            .fill(Color.accentColor.opacity(0.2))
                             .frame(width: cellWidth, height: cellWidth)
                     } else if CalendarCellView.images[dateItem.day] != nil {
                         Circle()

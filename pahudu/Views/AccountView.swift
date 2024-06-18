@@ -23,14 +23,14 @@ enum AccountOptions: String, CaseIterable, Identifiable {
     // Associated icon names for each option
     var iconName: String {
         switch self {
-        case .myAccount: return "person"
-        case .welcome: return "hand.wave"
-        case .whatsNew: return "star"
+        case .myAccount: return "person.fill"
+        case .welcome: return "hand.wave.fill"
+        case .whatsNew: return "star.fill"
         case .themes: return "circle.lefthalf.filled"
-        case .preferences: return "gear"
+        case .preferences: return "gearshape.fill"
         case .helpCenter: return "questionmark"
-        case .termsOfUse: return "doc.text"
-        case .privacyPolicy: return "lock.shield"
+        case .termsOfUse: return "doc.text.fill"
+        case .privacyPolicy: return "lock.shield.fill"
         }
     }
     
@@ -62,7 +62,7 @@ struct AccountView: View {
                             NavigationLink(destination: destinationView(for: option)) {
                                 HStack(spacing: 10) {
                                     Image(systemName: option.iconName)
-                                        .font(.system(size: 20))
+                                        .font(.system(size: 21))
                                         .frame(width: 35, height: 35)
                                         .foregroundColor(Colors.Primary.accent)
                                     Text(option.rawValue)
@@ -74,7 +74,7 @@ struct AccountView: View {
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 15))
-//                .listRowSeparator(.hidden)
+                //                .listRowSeparator(.hidden)
                 .listRowSeparatorTint(Colors.Primary.divider)
             }
             .listStyle(.insetGrouped)
@@ -101,7 +101,7 @@ struct DefaultView: View {
             VStack(spacing: 0) {
                 Text(text)
                     .navigationTitle(text)
-
+                
             }
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
         }

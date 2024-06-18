@@ -1,5 +1,5 @@
 //
-//  BrandsListView.swift
+//  BrandsView.swift
 //  pahudu
 //
 //  Created by Wagner De Paula on 6/7/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BrandsListView: View {
+struct BrandsView: View {
     
     @ObservedObject var eventModel: EventModel = EventModel()
     @State private var showDetails: Bool = false
@@ -18,9 +18,9 @@ struct BrandsListView: View {
         NavigationStack {
             Group {
                 if showGridView {
-                    BrandGridView(eventModel: eventModel, showDetails: $showDetails)
+                    BrandsGridView(eventModel: eventModel, showDetails: $showDetails)
                 } else {
-                    BrandListView(eventModel: eventModel, showDetails: $showDetails)
+                    BrandsListView(eventModel: eventModel, showDetails: $showDetails)
                 }
             }
             .navigationBarTitle("Brands", displayMode: .inline)
@@ -31,18 +31,25 @@ struct BrandsListView: View {
                     Menu {
                         Button(action: {
                             showGridView = true
+                            UIApplication.triggerHapticFeedback()
                         }) {
                             Label("Grid", systemImage: "square.grid.2x2")
                         }
                         Button(action: {
                             showGridView = false
+                            UIApplication.triggerHapticFeedback()
                         }) {
                             Label("List", systemImage: "list.dash")
                         }
                     } label: {
-                        Image(systemName: "ellipsis.circle")
-                            .imageScale(.large)
-                            .foregroundColor(Colors.Primary.accent)
+                        ZStack {
+                            Circle()
+                                .fill(Colors.Tertiary.background)
+                                .frame(width: 30, height: 30)
+                            Image(systemName: "ellipsis")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(Colors.Primary.accent)
+                        }
                     }
                 }
             }
@@ -55,17 +62,51 @@ struct BrandsListView: View {
     }
 }
 
-struct BrandListView: View {
+
+
+struct BrandsListView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
+    let width: CGFloat = 60
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
                 ForEach(DataModel.brands) { item in
-                    BrandRowView(item: item, eventModel: eventModel, showDetails: $showDetails)
-                        .frame(maxWidth: .infinity)
+                    Button {
+                        showDetails = true
+                        eventModel.selectedBrand = item
+                    } label: {
+                        HStack(spacing: 15) {
+                            
+                            Image(item.imageName)
+                                .resizable()
+                                .frame(width: width, height: width)
+                                .background(Colors.Secondary.background)
+                                .foregroundColor(Colors.Primary.foreground)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(item.title)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.button)
+                                
+                                Text(item.subtitle)
+                                    .foregroundColor(Colors.Tertiary.foreground)
+                                    .font(.caption)
+                            }
+                            
+                            Spacer()
+                        }
+                        .background(Colors.Primary.background)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                    }
+                    .overlay(
+                        Divider(),
+                        alignment: .bottom
+                    )
                 }
             }
         }
@@ -74,7 +115,8 @@ struct BrandListView: View {
 
 
 
-struct BrandGridView: View {
+
+struct BrandsGridView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
@@ -91,6 +133,7 @@ struct BrandGridView: View {
             
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(DataModel.brands) { item in
+                    
                     Button {
                         showDetails = true
                         eventModel.selectedBrand = item
@@ -113,7 +156,8 @@ struct BrandGridView: View {
                     
                 }
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
         }
         .background(Colors.Primary.background)
     }
@@ -121,46 +165,3 @@ struct BrandGridView: View {
 
 
 
-
-struct BrandRowView: View {
-    
-    let item: BrandItem
-    @ObservedObject var eventModel: EventModel
-    @Binding var showDetails: Bool
-    
-    var body: some View {
-        Button {
-            showDetails = true
-            eventModel.selectedBrand = item
-        } label: {
-            HStack(spacing: 15) {
-                
-                Image(item.imageName)
-                    .resizable()
-                    .frame(width: 55, height: 55)
-                    .background(Colors.Secondary.background)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(item.title)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.headline)
-                    
-                    Text(item.subtitle)
-                        .foregroundColor(Colors.Tertiary.foreground)
-                        .font(.caption)
-                }
-                
-                Spacer()
-            }
-            .background(Colors.Primary.background)
-            .padding(.vertical, 10)
-            .padding(.horizontal, 20)
-        }
-        .overlay(
-            Divider(),
-            alignment: .bottom
-        )
-    }
-}

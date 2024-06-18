@@ -10,11 +10,10 @@ import UIKit
 
 
 
-
 struct SearchView: View {
     
     @State private var searchText = ""
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -22,7 +21,6 @@ struct SearchView: View {
                     Spacer()
                     Text("SearchView")
                         .font(.headline)
-                        //.foregroundColor(.primary)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -13,7 +13,6 @@ struct Show {
     let id: UUID
     let hour: Int
     let brand: Brand
-    let designer: Designer
     let venue: Venue
     let date: Date
     let description: String
@@ -42,15 +41,6 @@ struct Brand {
     let socialMediaLinks: [String: URL?]
 }
 
-struct Designer {
-    let id: UUID
-    let name: String
-    let bio: String
-    let profilePictureURL: URL?
-    let signatureStyles: [String]
-    let socialMediaLinks: [String: URL?]
-}
-
 struct Venue {
     let id: UUID
     let name: String
@@ -63,7 +53,7 @@ struct Venue {
 
 class EventModel: ObservableObject {
     
-    @Published var selectedDesigner: DesignerItem?
+    @Published var selectedDesigner: Designer?
     @Published var selectedBrand: BrandItem?
     @Published var selectedShow: ShowItem?
     @Published var events: [Event] = []
@@ -106,16 +96,6 @@ class EventModel: ObservableObject {
                                 "Instagram": URL(string: "https://www.instagram.com/tomford"),
                                 "Twitter": URL(string: "https://twitter.com/tomford"),
                                 "Facebook": URL(string: "https://www.facebook.com/tomford")
-                            ]
-                        ),
-                        designer: Designer(
-                            id: UUID(),
-                            name: "Tom Ford",
-                            bio: "An American designer known for his luxurious and sophisticated designs. He has revitalized the brand with a focus on glamorous and bold fashion.",
-                            profilePictureURL: URL(string: "https://example.com/path/to/tomford/profile.jpg"),
-                            signatureStyles: ["Glamorous", "Sophisticated", "Bold"],
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/tomford")
                             ]
                         ),
                         venue: Venue(
@@ -162,16 +142,6 @@ class EventModel: ObservableObject {
                                 "Facebook": URL(string: "https://www.facebook.com/burberry")
                             ]
                         ),
-                        designer: Designer(
-                            id: UUID(),
-                            name: "Riccardo Tisci",
-                            bio: "An Italian designer known for his modern and innovative approach to fashion, Riccardo Tisci has been the creative director of Burberry since 2018, infusing the brand with a contemporary edge.",
-                            profilePictureURL: URL(string: "https://example.com/path/to/riccardo/profile.jpg"),
-                            signatureStyles: ["Modern", "Innovative", "Edgy"],
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/riccardotisci")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "The Royal Exchange",
@@ -216,16 +186,6 @@ class EventModel: ObservableObject {
                                 "Facebook": URL(string: "https://www.facebook.com/DolceGabbana")
                             ]
                         ),
-                        designer: Designer(
-                            id: UUID(),
-                            name: "Domenico Dolce & Stefano Gabbana",
-                            bio: "Italian designers who founded the Dolce & Gabbana brand. They are known for their glamorous styles, with a strong emphasis on luxury and detailed craftsmanship.",
-                            profilePictureURL: URL(string: "https://example.com/path/to/designer/profile.jpg"),
-                            signatureStyles: ["Baroque", "Animal Print", "Floral Patterns"],
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/domenico.dolce")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "VIALE PIAVE, 24",
@@ -268,16 +228,6 @@ class EventModel: ObservableObject {
                                 "Instagram": URL(string: "https://www.instagram.com/chanel"),
                                 "Twitter": URL(string: "https://twitter.com/chanel"),
                                 "Facebook": URL(string: "https://www.facebook.com/chanel")
-                            ]
-                        ),
-                        designer: Designer(
-                            id: UUID(),
-                            name: "Virginie Viard",
-                            bio: "Virginie Viard, the creative director of Chanel since 2019, continues the legacy of Coco Chanel with her elegant and sophisticated designs, infusing modern elements into classic styles.",
-                            profilePictureURL: URL(string: "https://example.com/path/to/virginie/profile.jpg"),
-                            signatureStyles: ["Elegant", "Timeless", "Sophisticated"],
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/virginie.viard")
                             ]
                         ),
                         venue: Venue(

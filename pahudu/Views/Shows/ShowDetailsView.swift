@@ -43,7 +43,14 @@ struct ShowDetailsView: View {
                     
                     Text(item.subtitle)
                         .foregroundColor(Colors.Tertiary.foreground)
-                        .font(.headline)
+                        .font(.body)
+                    
+                    Spacer(minLength: 10)
+                    
+                    TypedText(text: "New York Fashion Week, held in February and September of each year, is a semi-annual series of events in Manhattan typically spanning seven to nine days when international fashion collections are shown to buyers, the press, and the general public.")
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                        .lineSpacing(6)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
@@ -72,8 +79,6 @@ struct ShowDetailsView: View {
                             .foregroundColor(Colors.Primary.accent)
                     }
                 }
-                
-                
             }
         }
     }

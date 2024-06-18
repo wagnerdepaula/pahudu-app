@@ -8,12 +8,11 @@
 import SwiftUI
 
 
-
-
 struct ShowItemView: View {
     
     let show: ShowItem
-    let width: CGFloat = 100
+    let width: CGFloat = 230
+    let height: CGFloat = 140
     
     @ObservedObject var eventModel: EventModel
     @Binding var showShowDetails: Bool
@@ -26,14 +25,17 @@ struct ShowItemView: View {
             showShowDetails = true
             
         } label: {
-            VStack(spacing: 10) {
+            VStack(spacing: 7) {
                 
                 Image(show.imageName)
                     .resizable()
-                    .frame(width: width, height: width)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: width, height: height)
                     .foregroundColor(Colors.Primary.foreground)
                     .background(Colors.Secondary.background)
-                    .clipShape(Rectangle())
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 15)
+                    )
                 
                 Text(show.title)
                     .font(.caption)
@@ -52,7 +54,7 @@ struct ShowItemView: View {
 struct BrandItemView: View {
     
     let brand: BrandItem
-    let width: CGFloat = 100
+    let width: CGFloat = 115
     
     @ObservedObject var eventModel: EventModel
     @Binding var showBrandDetails: Bool
@@ -63,7 +65,7 @@ struct BrandItemView: View {
             eventModel.selectedBrand = brand
             showBrandDetails = true
         } label: {
-            VStack(spacing: 10) {
+            VStack(spacing: 7) {
                 Image(brand.imageName)
                     .resizable()
                     .frame(width: width, height: width)
@@ -89,11 +91,12 @@ struct BrandItemView: View {
 
 struct DesignerItemView: View {
     
-    let designer: DesignerItem
-    let width: CGFloat = 100
+    let designer: Designer
+    let width: CGFloat = 115
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDesignerDetails: Bool
+    @State private var imageOpacity: Double = 0.0
     
     var body: some View {
         
@@ -104,19 +107,30 @@ struct DesignerItemView: View {
             
         } label: {
             
-            VStack(spacing: 10) {
-                Image(designer.imageName)
-                    .resizable()
-                    .frame(width: width, height: width)
-                //.background(Colors.Secondary.foreground)
-                    .background(Colors.Secondary.foreground)
-                    .clipShape(Circle())
-                Text(designer.title.components(separatedBy: " ").first ?? "")
+            VStack(spacing: 7) {
+                
+                ZStack{
+                    Image(designer.name)
+                        .resizable()
+                        .opacity(imageOpacity)
+                        .onAppear {
+                            withAnimation(.easeIn(duration: 0.3)) {
+                                imageOpacity = 1.0
+                            }
+                        }
+                }
+                .frame(width: width, height: width)
+                .background(Colors.Secondary.background)
+                .clipShape(Circle())
+                
+                
+                Text(designer.name.components(separatedBy: " ").first ?? "")
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .center)
                     .truncationMode(.tail)
             }
+            
         }
     }
 }
@@ -131,6 +145,8 @@ struct DesignerItemView: View {
 
 
 struct DiscoverView: View {
+    
+    @State private var designers: [Designer] = []
     
     @EnvironmentObject var globalData: GlobalData
     @StateObject private var eventModel = EventModel()
@@ -156,6 +172,7 @@ struct DiscoverView: View {
                     VStack(spacing: 5) {
                         
                         HStack{
+                            
                             Button(action: {
                                 showShowsList = true
                             }, label: {
@@ -191,6 +208,7 @@ struct DiscoverView: View {
                     VStack(spacing: 5) {
                         
                         HStack {
+                            
                             Button(action: {
                                 showBrandsList = true
                             }, label: {
@@ -226,6 +244,7 @@ struct DiscoverView: View {
                     VStack(spacing: 5) {
                         
                         HStack {
+                            
                             Button(action: {
                                 showDesignersList = true
                             }, label: {
@@ -242,7 +261,7 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(DataModel.designers) { designer in
+                                ForEach(designers) { designer in
                                     DesignerItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
                                 }
                             }
@@ -261,13 +280,13 @@ struct DiscoverView: View {
             .navigationBarTitle("Discover", displayMode: .inline)
             .background(Colors.Primary.background)
             .navigationDestination(isPresented: $showDesignersList) {
-                DesignersListView()
+                DesignersView()
             }
             .navigationDestination(isPresented: $showShowsList) {
-                ShowsGridView()
+                ShowsView()
             }
             .navigationDestination(isPresented: $showBrandsList) {
-                BrandsListView()
+                BrandsView()
             }
             .navigationDestination(isPresented: $showShowDetails) {
                 if let show = eventModel.selectedShow {
@@ -282,6 +301,11 @@ struct DiscoverView: View {
             .navigationDestination(isPresented: $showDesignerDetails) {
                 if let designer = eventModel.selectedDesigner {
                     DesignerDetailsView(item: designer)
+                }
+            }
+            .onAppear {
+                fetchDesigners { designers in
+                    self.designers = designers
                 }
             }
         }

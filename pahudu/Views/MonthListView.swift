@@ -91,7 +91,6 @@ struct DayCell: View {
             
             Text(dateItem.dayOfWeek.description.uppercased())
                 .font(.footnote)
-                .kerning(0.5)
                 .lineSpacing(0)
                 .foregroundColor(Colors.Secondary.foreground)
             

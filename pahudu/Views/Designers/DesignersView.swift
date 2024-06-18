@@ -73,6 +73,7 @@ struct DesignersListView: View {
     @State var designers: [Designer] = []
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
+    @State private var imageOpacity: Double = 0.0
     
     let width: CGFloat = 60
     
@@ -86,15 +87,20 @@ struct DesignersListView: View {
                     } label: {
                         HStack(spacing: 15) {
                             
-                            Image(item.name)
-                                .resizable()
-                                .frame(width: width, height: width)
-                                .background(Colors.Secondary.background)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(Colors.Secondary.background, lineWidth: 1)
-                                }
+                            ZStack{
+                                Image(item.name)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .opacity(imageOpacity)
+                                    .frame(width: width, height: width)
+                                    .onAppear {
+                                        withAnimation(.easeIn(duration: 0.3)) {
+                                            imageOpacity = 1.0
+                                        }
+                                    }
+                            }
+                            .background(Colors.Secondary.background)
+                            .clipShape(Circle())
                             
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(item.name)
@@ -119,10 +125,8 @@ struct DesignersListView: View {
                 }
             }
         }
-        .onAppear {
-            fetchDesigners { designers in
-                self.designers = designers
-            }
+        .task {
+            designers = await fetchDesigners()
         }
     }
 }
@@ -137,7 +141,7 @@ struct DesignersGridView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
-    
+    @State private var imageOpacity: Double = 0.0
     
     let columns = [
         GridItem(.flexible(), spacing: 15, alignment: .top),
@@ -157,17 +161,21 @@ struct DesignersGridView: View {
                     } label: {
                         VStack(alignment: .center, spacing: 7) {
                             
-                            Image(item.name)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Colors.Secondary.background)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(Colors.Secondary.background, lineWidth: 1)
-                                }
+                            ZStack{
+                                Image(item.name)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .opacity(imageOpacity)
+                                    .onAppear {
+                                        withAnimation(.easeIn(duration: 0.3)) {
+                                            imageOpacity = 1.0
+                                        }
+                                    }
+                            }
+                            .background(Colors.Secondary.background)
+                            .clipShape(Circle())
                             
+                        
                             Text(item.name.components(separatedBy: " ").first ?? "")
                                 .foregroundColor(Colors.Primary.foreground)
                                 .font(.caption)
@@ -180,10 +188,8 @@ struct DesignersGridView: View {
             .padding(.vertical, 10)
         }
         .background(Colors.Primary.background)
-        .onAppear {
-            fetchDesigners { designers in
-                self.designers = designers
-            }
+        .task {
+            designers = await fetchDesigners()
         }
     }
 }

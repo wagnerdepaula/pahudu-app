@@ -28,24 +28,15 @@ struct Designer: Codable, Identifiable {
 
 
 
-func fetchDesigners(completion: @escaping ([Designer]) -> Void) {
+func fetchDesigners() async -> [Designer] {
     let url = URL(string: "https://api.pahudu.com/v1/designers")!
-
-    let task = URLSession.shared.dataTask(with: url) { data, response, error in
-        guard let data = data, error == nil else {
-            print("Error fetching data: \(String(describing: error))")
-            completion([])
-            return
-        }
-
-        do {
-            let designerResponse = try JSONDecoder().decode(DesignerResponse.self, from: data)
-            completion(designerResponse.designers)
-        } catch {
-            print("Error decoding data: \(error)")
-            completion([])
-        }
+    
+    do {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let designerResponse = try JSONDecoder().decode(DesignerResponse.self, from: data)
+        return designerResponse.designers
+    } catch {
+        print("Error fetching data: \(error)")
+        return []
     }
-
-    task.resume()
 }

@@ -303,10 +303,8 @@ struct DiscoverView: View {
                     DesignerDetailsView(item: designer)
                 }
             }
-            .onAppear {
-                fetchDesigners { designers in
-                    self.designers = designers
-                }
+            .task {
+                designers = await fetchDesigners()
             }
         }
     }

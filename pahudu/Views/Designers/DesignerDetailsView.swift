@@ -21,14 +21,25 @@ struct DesignerDetailsView: View {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
                     
-                    ZStack {
+                    ZStack (alignment: .bottomLeading) {
                         
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.foreground]), startPoint: .top, endPoint: .bottom)
+//                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.foreground]), startPoint: .top, endPoint: .bottom)
                         
                         Image(item.name)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: width, height: max(width, width + offsetY))
+                            
+                        
+                        
+                        LinearGradient(gradient: Gradient(colors: [.clear, Colors.Secondary.background.opacity(0.9)]), startPoint: .top, endPoint: .bottom)
+                        
+                        Text(item.name)
+                            .foregroundColor(Colors.Primary.foreground)
+                            .font(.largeTitle)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
+                        
                     }
                     .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
                     
@@ -39,15 +50,8 @@ struct DesignerDetailsView: View {
                 
                 VStack(alignment: .leading, spacing: 5) {
                     
-                    Text(item.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.largeTitle)
-                    
-                    Text("\(item.nationality) \(item.title.lowercased())")
-                        .foregroundColor(Colors.Tertiary.foreground)
-                        .font(.subheadline)
-                    
-                    Spacer(minLength: 5)
+                   
+
                     
                     TypedText(text: item.about)
                         .foregroundColor(Colors.Primary.foreground)
@@ -57,8 +61,8 @@ struct DesignerDetailsView: View {
                     
                     Spacer(minLength: 10)
                     
-                    
-                    VStack(alignment: .leading, spacing: 10) {
+                                        
+                    VStack(alignment: .leading, spacing: 12) {
                         
                         HStack(alignment: .top) {
                             Text("Born")
@@ -132,18 +136,14 @@ struct DesignerDetailsView: View {
                 
                         }
                         
-                        
-                        
-                        
                     }
-                    .font(.caption)
+                    .font(.callout)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(15)
+                    .padding(.vertical, 15)
+                    .padding(.horizontal, 20)
                     .background(Colors.Secondary.background)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
-                    
-                   
                     
                     Spacer(minLength: 60)
                     

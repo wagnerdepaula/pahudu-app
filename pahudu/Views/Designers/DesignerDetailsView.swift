@@ -12,31 +12,29 @@ struct DesignerDetailsView: View {
     let item: Designer
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.width
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
-
+                    
                     
                     ZStack(alignment: .bottom) {
-                        Image(item.name)
-                            .resizable()
-                            .background(
-                                LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
-                            )
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: width, height: max(width, width + offsetY))
-                            .clipped()
-
-                       
-
+                        
+//                        AsyncImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/lg/\(item.name).png")!)
+//                            .background(
+//                                LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
+//                            )
+//                            .frame(width: width, height: max(width, width + offsetY))
+//                            .clipped()
+                        
+                        
                     }
                     .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
                 }
                 .frame(height: height)
-
+                
                 Text(item.name)
                     .foregroundColor(Colors.Primary.foreground)
                     .font(.largeTitle)
@@ -48,7 +46,7 @@ struct DesignerDetailsView: View {
                     .font(.body)
                     .lineSpacing(6)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-
+                
                 
                 // Table
                 VStack(alignment: .leading, spacing: 0) {
@@ -85,7 +83,7 @@ struct DesignerDetailsView: View {
 struct DetailsSectionView: View {
     let title: String
     let detail: String
-
+    
     var body: some View {
         HStack(alignment: .top) {
             Text(title)
@@ -106,7 +104,7 @@ struct DetailsLinkSectionView: View {
     
     let title: String
     let link: String
-
+    
     var body: some View {
         HStack(alignment: .top) {
             Text(title)

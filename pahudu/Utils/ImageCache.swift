@@ -8,92 +8,96 @@
 import SwiftUI
 import Combine
 
-
-class AsyncImageLoader: ObservableObject {
-    @Published var image: UIImage?
-    private var cancellable: AnyCancellable?
+actor ImageCache {
+    static let shared = ImageCache()
+    private let cache = NSCache<NSURL, UIImage>()
     
-    func loadImage(from url: URL, cacheKey: String) {
-        if let cachedImage = ImageCache.shared.getImage(forKey: cacheKey) {
-            self.image = cachedImage
-            return
-        }
-        
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .subscribe(on: DispatchQueue.global(qos: .background))
-            .map { data, response in
-                UIImage(data: data)?.resized(toWidth: 300) // Resize image for better performance
-            }
-            .receive(on: DispatchQueue.main)
-            .replaceError(with: nil)
-            .sink { [weak self] image in
-                guard let self = self, let image = image else { return }
-                ImageCache.shared.setImage(image, forKey: cacheKey)
-                self.image = image
-            }
+    func image(for url: URL) -> UIImage? {
+        cache.object(forKey: url as NSURL)
     }
     
-    deinit {
-        cancellable?.cancel()
+    func insertImage(_ image: UIImage, for url: URL) {
+        cache.setObject(image, forKey: url as NSURL)
     }
 }
 
-struct AsyncImageView: View {
-    @StateObject private var loader: AsyncImageLoader
-    private let placeholder: Color
-    private let url: URL
+@MainActor
+struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
+    var url: URL?
+    @ViewBuilder var content: (Image) -> ImageView
+    @ViewBuilder var placeholder: () -> PlaceholderView
     
-    init(url: URL, placeholder: Color = Colors.Secondary.background) {
-        _loader = StateObject(wrappedValue: AsyncImageLoader())
-        self.placeholder = placeholder
+    @State private var image: UIImage?
+    @State private var cancellable: AnyCancellable?
+    
+    private let imageCache = ImageCache.shared
+    
+    init(
+        url: URL?,
+        @ViewBuilder content: @escaping (Image) -> ImageView,
+        @ViewBuilder placeholder: @escaping () -> PlaceholderView
+    ) {
         self.url = url
+        self.content = content
+        self.placeholder = placeholder
     }
     
     var body: some View {
-        image
-            .onAppear {
-                loader.loadImage(from: url, cacheKey: url.absoluteString)
+        Group {
+            if let uiImage = image {
+                content(Image(uiImage: uiImage))
+            } else {
+                placeholder()
             }
+        }
+        .onAppear(perform: loadImage)
+        .onDisappear(perform: cancelDownload)
+        .onChange(of: url) { _ in
+            cancelDownload()
+            loadImage()
+        }
     }
     
-    private var image: some View {
-        Group {
-            if let uiImage = loader.image {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .transition(.identity)
-            } else {
-                placeholder
+    private func loadImage() {
+        guard let url = url else { return }
+        
+        Task {
+            if let cachedImage = await imageCache.image(for: url) {
+                self.image = cachedImage
+                return
+            }
+            
+            await downloadImage(from: url)
+        }
+    }
+    
+    private func downloadImage(from url: URL) async {
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard let uiImage = UIImage(data: data) else { return }
+            
+            let resizedImage = await resizeImage(uiImage, to: CGSize(width: 300, height: 300))
+            await imageCache.insertImage(resizedImage, for: url)
+            
+            self.image = resizedImage
+        } catch {
+            print("Error downloading image: \(error)")
+        }
+    }
+    
+    private func resizeImage(_ image: UIImage, to size: CGSize) async -> UIImage {
+        return await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let renderer = UIGraphicsImageRenderer(size: size)
+                let resizedImage = renderer.image { _ in
+                    image.draw(in: CGRect(origin: .zero, size: size))
+                }
+                continuation.resume(returning: resizedImage)
             }
         }
     }
-}
-
-
-class ImageCache {
-    static let shared = ImageCache()
-    private init() {}
     
-    private let cache = NSCache<NSString, UIImage>()
-    
-    func getImage(forKey key: String) -> UIImage? {
-        return cache.object(forKey: key as NSString)
-    }
-    
-    func setImage(_ image: UIImage, forKey key: String) {
-        cache.setObject(image, forKey: key as NSString)
-    }
-}
-
-
-extension UIImage {
-    func resized(toWidth width: CGFloat) -> UIImage? {
-        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        UIGraphicsBeginImageContextWithOptions(canvasSize, false, 0.0)
-        draw(in: CGRect(origin: .zero, size: canvasSize))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return resizedImage
+    private func cancelDownload() {
+        cancellable?.cancel()
     }
 }

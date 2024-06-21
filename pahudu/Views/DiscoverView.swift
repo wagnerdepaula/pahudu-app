@@ -91,6 +91,7 @@ struct BrandItemView: View {
 
 struct DesignerItemView: View {
     
+    let imageURL: URL
     let designer: Designer
     let width: CGFloat = 115
     
@@ -108,9 +109,12 @@ struct DesignerItemView: View {
             
             VStack(spacing: 7) {
                 
-                ZStack{
-                    Image(designer.name)
+                AsyncCachedImage(url: imageURL) { image in
+                    image
                         .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ProgressView()
                 }
                 .frame(width: width, height: width)
                 .background(Colors.Secondary.background)
@@ -120,14 +124,17 @@ struct DesignerItemView: View {
                         .stroke(Colors.Primary.background, lineWidth: 1)
                 }
                 
+                
                 Text(designer.name.components(separatedBy: " ").first ?? "")
                     .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .frame(maxWidth: width, alignment: .center)
+                    .lineLimit(1)
                     .truncationMode(.tail)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(width: width, alignment: .center)
             }
             
         }
+        
     }
 }
 
@@ -147,6 +154,8 @@ struct DiscoverView: View {
     
     @EnvironmentObject var globalData: GlobalData
     @StateObject private var eventModel = EventModel()
+    @StateObject private var viewModel = DesignerViewModel()
+    
     
     @State private var showDesignersList = false
     @State private var showBrandsList = false
@@ -156,7 +165,6 @@ struct DiscoverView: View {
     @State private var showBrandDetails = false
     @State private var showShowDetails = false
     
-    @State private var itemOpacity: Double = 0.0
     
     
     var body: some View {
@@ -166,7 +174,6 @@ struct DiscoverView: View {
             ScrollView(showsIndicators: false) {
                 
                 VStack(spacing: 0) {
-                    
                     
                     // Shows
                     VStack(spacing: 5) {
@@ -186,7 +193,6 @@ struct DiscoverView: View {
                         .padding(.horizontal, 20)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(DataModel.shows) { show in
@@ -198,7 +204,7 @@ struct DiscoverView: View {
                         }
                     }
                     .padding(.vertical, 20)
-        
+                    
                     
                     
                     // Brands
@@ -229,11 +235,11 @@ struct DiscoverView: View {
                             .padding(.vertical, 10)
                             .padding(.horizontal, 20)
                         }
-                        .opacity(itemOpacity)
                         
                         
                     }
                     .padding(.vertical, 20)
+                    
                     
                     
                     // Designers
@@ -252,20 +258,24 @@ struct DiscoverView: View {
                         .padding(.horizontal, 20)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(designers) { designer in
-                                    DesignerItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                ForEach(
+                                    viewModel.designersWithImageURLs.indices, id: \.self
+                                ) { index in
+                                    
+                                    DesignerItemView(imageURL: viewModel.designersWithImageURLs[index].imageURL, designer: viewModel.designersWithImageURLs[index].designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                    
                                 }
                             }
                             .padding(.vertical, 10)
                             .padding(.horizontal, 20)
                         }
-                        .opacity(itemOpacity)
                         
                     }
                     .padding(.vertical, 20)
+                    
+                    
                     
                     
                 }
@@ -298,10 +308,6 @@ struct DiscoverView: View {
             }
             .task {
                 designers = await fetchDesigners()
-                brands = await fetchBrands()
-                withAnimation(.easeOut(duration: 0.3)) {
-                    itemOpacity = 1.0
-                }
             }
         }
     }

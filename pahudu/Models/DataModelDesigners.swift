@@ -4,10 +4,8 @@
 //
 //  Created by Wagner De Paula on 6/18/24.
 //
-
 import SwiftUI
 import Combine
-
 
 struct DesignerResponse: Codable {
     let version: String
@@ -44,9 +42,12 @@ class DesignerViewModel: ObservableObject {
     }
     
     private func fetchAndPopulateDesigners() async {
-        let designers = await fetchDesigners()
+        if let designers = try? await fetchDesigners() {
+            designersWithImageURLs = designers.map { DesignerWithImageURL(id: $0.id, designer: $0, imageURL: URL(string: "https://storage.googleapis.com/pahudu.com/designers/sm/\($0.name).png")!) }
+        } else {
+            // Handle error or set designersWithImageURLs to empty array
+        }
     }
-    
 }
 
 @MainActor
@@ -61,22 +62,5 @@ func fetchDesigners() async -> [Designer] {
     } catch {
         print("Error fetching data: \(error)")
         return []
-    }
-}
-
-
-extension DesignerViewModel {
-    func preloadImages(for url: URL) {
-        guard let index = designersWithImageURLs.firstIndex(where: { $0.imageURL == url }) else { return }
-        
-        // Preload next images
-        let preloadCount = 2
-        let startIndex = max(0, index - preloadCount)
-        let endIndex = min(designersWithImageURLs.count - 1, index + preloadCount)
-        
-        for i in startIndex...endIndex {
-            let preloadUrl = designersWithImageURLs[i].imageURL
-            AsyncImageLoader().loadImage(from: preloadUrl, cacheKey: preloadUrl.absoluteString)
-        }
     }
 }

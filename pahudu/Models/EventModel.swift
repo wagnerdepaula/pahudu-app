@@ -54,16 +54,11 @@ class EventModel: ObservableObject {
     init() {
         loadEvents()
         
-        Task {
-            await loadDesigners()
-        }
+       
     }
     
     
-    
-    private func loadDesigners() async {
-        designers = await fetchDesigners()
-    }
+
     
     
     private func loadEvents() {

@@ -10,7 +10,6 @@ import SwiftUI
 struct DesignersView: View {
     
     
-    
     @StateObject var eventModel: EventModel = EventModel()
     @State private var showDetails: Bool = false
     @State private var searchText = ""
@@ -82,7 +81,6 @@ struct DesignersView: View {
 struct DesignersListView: View {
     
     @StateObject private var viewModel = DesignerViewModel()
-    
     @StateObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var designers: [Designer]
@@ -90,34 +88,37 @@ struct DesignersListView: View {
     
     
     
-    
-    
     var body: some View {
         
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                
                 ForEach(
-                    Array(designers.enumerated()), id: \.offset
-                ) { index, item in
+                    viewModel.designersWithImageURLs.indices, id: \.self
+                ) { index in
                     Button {
                         showDetails = true
-                        eventModel.selectedDesigner = item
+                        eventModel.selectedDesigner = viewModel.designersWithImageURLs[index].designer
                     } label: {
                         HStack(spacing: 15) {
                             
-                            AsyncImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/\(item.name).png")!)
-                                .frame(width: width, height: width)
-                                .background(Colors.Secondary.background)
-                                .clipShape(Circle())
-                                .overlay{
-                                    Circle()
-                                        .stroke(Colors.Secondary.background, lineWidth: 1)
-                                }
+                            //URL(string: "https://storage.googleapis.com/pahudu.com/designers/\(item.name).png")!
                             
+                            AsyncCachedImage(url: viewModel.designersWithImageURLs[index].imageURL) { image in
+                                        image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: width, height: width)
+                                    .background(Colors.Secondary.background)
+                                    .clipShape(Circle())
+                                    .overlay {
+                                        Circle()
+                                            .stroke(Colors.Primary.background, lineWidth: 1)
+                                    }
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
                             
-                            
-                            Text(item.name)
+                            Text(viewModel.designersWithImageURLs[index].designer.name)
                                 .foregroundColor(Colors.Primary.foreground)
                                 .font(.body)
                                 .lineLimit(1)
@@ -144,6 +145,7 @@ struct DesignersListView: View {
 
 struct DesignersGridView: View {
     
+    @StateObject private var viewModel = DesignerViewModel()
     @StateObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var designers: [Designer]
@@ -156,53 +158,50 @@ struct DesignersGridView: View {
     ]
     
     var body: some View {
+        
         ScrollView {
+            
             LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(designers) { item in
+                ForEach(
+                    viewModel.designersWithImageURLs.indices, id: \.self
+                ) { index in
                     Button {
                         showDetails = true
-                        eventModel.selectedDesigner = item
+                        eventModel.selectedDesigner = viewModel.designersWithImageURLs[index].designer
                     } label: {
                         VStack(alignment: .center, spacing: 5) {
-                            ZStack {
-                                GeometryReader { geometry in
-                                    ZStack {
-                                        //                                        if let url = URL(string: "https://storage.googleapis.com/pahudu.com/designers/\(item.name).png") {
-                                        //                                            AsyncImage(url: url) { image in
-                                        //                                                image
-                                        //                                                    .resizable()
-                                        //                                                    .aspectRatio(contentMode: .fit)
-                                        //                                                    .frame(width: geometry.size.width, height: geometry.size.height)
-                                        //                                            } placeholder: {
-                                        //                                                ProgressView()
-                                        //                                            }
-                                        //                                        }
-                                    }
-                                    .frame(width: geometry.size.width, height: geometry.size.width) // Make it square
-                                    .background(Colors.Secondary.background)
-                                    .clipShape(Circle())
-                                    .overlay {
-                                        Circle()
-                                            .stroke(Colors.Primary.background, lineWidth: 1)
-                                    }
-                                }
-                                .aspectRatio(1, contentMode: .fit)
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(Colors.Secondary.background)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle()
-                                    .stroke(Colors.Primary.background, lineWidth: 1)
-                            }
                             
-                            Text(item.name.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Tertiary.foreground)
-                                .font(.callout)
+                            GeometryReader { geometry in
+                                
+                                AsyncCachedImage(url: viewModel.designersWithImageURLs[index].imageURL) { image in
+                                            image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: geometry.size.width, height: geometry.size.width)
+                                        .background(Colors.Secondary.background)
+                                        .clipShape(Circle())
+                                        .overlay {
+                                            Circle()
+                                                .stroke(Colors.Primary.background, lineWidth: 1)
+                                        }
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                
+                                
+                    
+                            }
+                            .aspectRatio(1, contentMode: .fit)
+                            
+                            
+                            Text(viewModel.designersWithImageURLs[index].designer.name.components(separatedBy: " ").first ?? "")
+                                .foregroundColor(Colors.Primary.foreground)
+                                .font(.caption)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                         }
                     }
+                    .drawingGroup()
                 }
             }
             .padding(.vertical, 5)

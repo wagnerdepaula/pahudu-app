@@ -9,11 +9,13 @@ import SwiftUI
 
 
 struct Divider: View {
+    
     var padding: CGFloat = 20
+    var height: CGFloat = 0.5
     
     var body: some View {
         Rectangle()
-            .frame(height: 0.5)
+            .frame(height: height)
             .foregroundColor(Colors.Primary.divider)
             .padding(EdgeInsets(top: 0, leading: padding, bottom: 0, trailing: padding))
     }
@@ -34,6 +36,7 @@ struct TypedText: View {
 
     var body: some View {
         Text(displayedText)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .onReceive(Timer.publish(every: typingSpeed, on: .main, in: .common).autoconnect()) { _ in
                 if wordIndex < words.count {

@@ -11,8 +11,8 @@ import SwiftUI
 struct ShowItemView: View {
     
     let show: ShowItem
-    let width: CGFloat = 230
-    let height: CGFloat = 140
+    let width: CGFloat = 245
+    let height: CGFloat = 150
     
     @ObservedObject var eventModel: EventModel
     @Binding var showShowDetails: Bool
@@ -38,7 +38,7 @@ struct ShowItemView: View {
                     )
                 
                 Text(show.title)
-                    .font(.caption)
+                    .font(.callout)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
                     .truncationMode(.tail)
@@ -53,7 +53,7 @@ struct ShowItemView: View {
 
 struct BrandItemView: View {
     
-    let brand: BrandItem
+    let brand: Brand
     let width: CGFloat = 115
     
     @ObservedObject var eventModel: EventModel
@@ -66,15 +66,15 @@ struct BrandItemView: View {
             showBrandDetails = true
         } label: {
             VStack(spacing: 7) {
-                Image(brand.imageName)
+                Image(brand.name)
                     .resizable()
                     .frame(width: width, height: width)
                     .foregroundColor(Colors.Primary.foreground)
                     .background(Colors.Secondary.background)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                 
-                Text(brand.title)
-                    .font(.caption)
+                Text(brand.name)
+                    .font(.callout)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
                     .truncationMode(.tail)
@@ -96,7 +96,6 @@ struct DesignerItemView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDesignerDetails: Bool
-    @State private var imageOpacity: Double = 0.0
     
     var body: some View {
         
@@ -112,20 +111,17 @@ struct DesignerItemView: View {
                 ZStack{
                     Image(designer.name)
                         .resizable()
-                        .opacity(imageOpacity)
-                        .onAppear {
-                            withAnimation(.easeIn(duration: 0.3)) {
-                                imageOpacity = 1.0
-                            }
-                        }
                 }
                 .frame(width: width, height: width)
                 .background(Colors.Secondary.background)
                 .clipShape(Circle())
-                
+                .overlay {
+                    Circle()
+                        .stroke(Colors.Primary.background, lineWidth: 1)
+                }
                 
                 Text(designer.name.components(separatedBy: " ").first ?? "")
-                    .font(.caption)
+                    .font(.callout)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .center)
                     .truncationMode(.tail)
@@ -146,6 +142,7 @@ struct DesignerItemView: View {
 
 struct DiscoverView: View {
     
+    @State private var brands: [Brand] = []
     @State private var designers: [Designer] = []
     
     @EnvironmentObject var globalData: GlobalData
@@ -158,6 +155,9 @@ struct DiscoverView: View {
     @State private var showDesignerDetails = false
     @State private var showBrandDetails = false
     @State private var showShowDetails = false
+    
+    @State private var itemOpacity: Double = 0.0
+    
     
     var body: some View {
         
@@ -198,10 +198,7 @@ struct DiscoverView: View {
                         }
                     }
                     .padding(.vertical, 20)
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
+        
                     
                     
                     // Brands
@@ -225,26 +222,23 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(DataModel.brands) { brand in
+                                ForEach(brands) { brand in
                                     BrandItemView(brand: brand, eventModel: eventModel, showBrandDetails: $showBrandDetails)
                                 }
                             }
                             .padding(.vertical, 10)
                             .padding(.horizontal, 20)
                         }
+                        .opacity(itemOpacity)
+                        
+                        
                     }
                     .padding(.vertical, 20)
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
                     
                     
                     // Designers
                     VStack(spacing: 5) {
-                        
                         HStack {
-                            
                             Button(action: {
                                 showDesignersList = true
                             }, label: {
@@ -268,12 +262,11 @@ struct DiscoverView: View {
                             .padding(.vertical, 10)
                             .padding(.horizontal, 20)
                         }
+                        .opacity(itemOpacity)
+                        
                     }
                     .padding(.vertical, 20)
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
+                    
                     
                 }
             }
@@ -305,6 +298,10 @@ struct DiscoverView: View {
             }
             .task {
                 designers = await fetchDesigners()
+                brands = await fetchBrands()
+                withAnimation(.easeOut(duration: 0.3)) {
+                    itemOpacity = 1.0
+                }
             }
         }
     }

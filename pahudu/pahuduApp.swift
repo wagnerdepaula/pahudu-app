@@ -40,7 +40,7 @@ struct PahuduApp: App {
         configureToolbarAppearance()
         configureTabBarAppearance()
         configureButtonAppearance()
-        // listFonts()
+        //listFonts()
     }
     
     private func configureNavigationBarAppearance() {
@@ -53,16 +53,16 @@ struct PahuduApp: App {
         
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
-            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .foregroundColor: UIColor.clear
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "Inter-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32),
+            .font: UIFont(name: "Inter-Medium", size: 32) ?? UIFont.systemFont(ofSize: 32),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         navigationBarAppearance.titleTextAttributes = [
-            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
@@ -96,9 +96,16 @@ struct PahuduApp: App {
         tabBarAppearance.shadowColor = .clear
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
-        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Tertiary.foreground)]
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
-        tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
+        tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .font: UIFont(name: "Inter-Medium", size: 10) ?? UIFont.systemFont(ofSize: 10),
+            .foregroundColor: UIColor(Color.accentColor)
+        ]
+        tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .font: UIFont(name: "Inter-Medium", size: 10) ?? UIFont.systemFont(ofSize: 10),
+            .foregroundColor: UIColor(Colors.Tertiary.foreground)
+        ]
+        
         UITabBar.appearance().standardAppearance = tabBarAppearance
         //UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         

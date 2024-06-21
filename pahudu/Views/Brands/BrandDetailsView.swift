@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BrandDetailsView: View {
     
-    let item: BrandItem
+    let item: Brand
     let width: CGFloat = 300
     let height: CGFloat = 300
     
@@ -23,7 +23,7 @@ struct BrandDetailsView: View {
                     let offsetY = geometry.frame(in: .global).minY
                     
                     ZStack {
-                        Image(item.imageName)
+                        Image(item.name)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .foregroundColor(Colors.Primary.foreground)
@@ -38,17 +38,17 @@ struct BrandDetailsView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(item.title)
+                    Text(item.name)
                         .foregroundColor(Colors.Primary.foreground)
                         .font(.largeTitle)
                     
-                    Text(item.subtitle)
+                    Text(item.nationality)
                         .foregroundColor(Colors.Tertiary.foreground)
                         .font(.body)
                     
                     Spacer(minLength: 10)
                     
-                    TypedText(text: "New York Fashion Week, held in February and September of each year, is a semi-annual series of events in Manhattan typically spanning seven to nine days when international fashion collections are shown to buyers, the press, and the general public.")
+                    TypedText(text: item.about)
                         .foregroundColor(Colors.Primary.foreground)
                         .font(.body)
                         .lineSpacing(6)

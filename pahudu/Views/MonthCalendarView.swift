@@ -107,8 +107,8 @@ struct CalendarCellView: View {
         25: "Marine Serre"
     ]
     private let width: CGFloat = CalendarView.width
-    private var circleWidth: CGFloat { width - 10 }
-    private var cellWidth: CGFloat { width - 16 }
+    private var circleWidth: CGFloat { width - 12 }
+    private var cellWidth: CGFloat { width - 14 }
     
     var body: some View {
         Group {

@@ -13,14 +13,24 @@ struct BrandsView: View {
     @State private var showDetails: Bool = false
     @State private var searchText = ""
     @State private var showGridView = false
+    @State private var brands: [Brand] = []
+    @State private var itemOpacity: Double = 0.0
+    
     
     var body: some View {
         NavigationStack {
             Group {
                 if showGridView {
-                    BrandsGridView(eventModel: eventModel, showDetails: $showDetails)
+                    BrandsGridView(eventModel: eventModel, showDetails: $showDetails, brands: $brands)
                 } else {
-                    BrandsListView(eventModel: eventModel, showDetails: $showDetails)
+                    BrandsListView(eventModel: eventModel, showDetails: $showDetails, brands: $brands)
+                }
+            }
+            .opacity(itemOpacity)
+            .task {
+                brands = await fetchBrands()
+                withAnimation(.easeOut(duration: 0.3)) {
+                    itemOpacity = 1.0
                 }
             }
             .navigationBarTitle("Brands", displayMode: .inline)
@@ -33,13 +43,13 @@ struct BrandsView: View {
                             showGridView = true
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("Grid", systemImage: "square.grid.2x2")
+                            Label("Grid", systemImage: "circle.grid.3x3.fill")
                         }
                         Button(action: {
                             showGridView = false
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("List", systemImage: "list.dash")
+                            Label("List", systemImage: "rectangle.grid.1x2.fill")
                         }
                     } label: {
                         ZStack {
@@ -68,45 +78,41 @@ struct BrandsListView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
+    @Binding var brands: [Brand]
     let width: CGFloat = 60
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                ForEach(DataModel.brands) { item in
+                ForEach(brands) { item in
                     Button {
                         showDetails = true
                         eventModel.selectedBrand = item
                     } label: {
+                        
                         HStack(spacing: 15) {
                             
-                            Image(item.imageName)
+                            Image(item.name)
                                 .resizable()
                                 .frame(width: width, height: width)
                                 .background(Colors.Secondary.background)
                                 .foregroundColor(Colors.Primary.foreground)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                             
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(item.title)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.button)
-                                
-                                Text(item.subtitle)
-                                    .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.caption)
-                            }
+                            Text(item.name)
+                                .foregroundColor(Colors.Primary.foreground)
+                                .font(.body)
                             
                             Spacer()
                         }
                         .background(Colors.Primary.background)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                     }
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
+                    //                    .overlay(
+                    //                        Divider(),
+                    //                        alignment: .bottom
+                    //                    )
                 }
             }
         }
@@ -120,6 +126,7 @@ struct BrandsGridView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
+    @Binding var brands: [Brand]
     
     let columns = [
         GridItem(.flexible(), spacing: 15, alignment: .top),
@@ -132,36 +139,39 @@ struct BrandsGridView: View {
         ScrollView {
             
             LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(DataModel.brands) { item in
+                ForEach(brands) { item in
                     
                     Button {
                         showDetails = true
                         eventModel.selectedBrand = item
                     } label: {
-                        VStack(alignment: .center, spacing: 7) {
+                        VStack(alignment: .center, spacing: 5) {
                             
-                            Image(item.imageName)
+                            Image(item.name)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .foregroundColor(Colors.Primary.foreground)
                                 .background(Colors.Secondary.background)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                             
-                            Text(item.title.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Primary.foreground)
-                                .font(.caption)
+                            Text(item.name)
+                                .foregroundColor(Colors.Tertiary.foreground)
+                                .font(.callout)
+                                .lineLimit(1)
+                                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
                         }
                     }
                     
                 }
             }
+            .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
         }
         .background(Colors.Primary.background)
     }
 }
+
 
 
 

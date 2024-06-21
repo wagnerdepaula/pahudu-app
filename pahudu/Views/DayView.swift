@@ -10,16 +10,9 @@ import SwiftUI
 struct DayView: View {
     
     @EnvironmentObject var globalData: GlobalData
-    
     @Environment(\.presentationMode) var presentationMode
-    
     @StateObject private var eventModel = EventModel()
-    
-    
-    
     @State private var events: [pahudu.Event] = []
-    
-    
     
     var body: some View {
         
@@ -56,6 +49,7 @@ struct DayView: View {
             HStack(alignment: .top, spacing: 10) {
                 Text(getHourString(hour))
                     .font(.numberSmall)
+                    .kerning(0.5)
                     .lineSpacing(0)
                     .foregroundColor(Colors.Tertiary.foreground)
                     .frame(minWidth: 50, maxWidth: 50, maxHeight: .infinity, alignment: .trailing)
@@ -89,9 +83,9 @@ struct DayView: View {
     private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             
-            Text(show.brand.name)
-                .font(.callout)
-                .foregroundColor(Colors.Primary.foreground)
+//            Text(show.brand.name)
+//                .font(.callout)
+//                .foregroundColor(Colors.Primary.foreground)
             
             Text("\(event.name) (\(event.acronym))")
                 .font(.callout)

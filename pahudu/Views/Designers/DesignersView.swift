@@ -7,21 +7,34 @@
 
 import SwiftUI
 
-
 struct DesignersView: View {
     
-    @ObservedObject var eventModel: EventModel = EventModel()
+    
+    
+    @StateObject var eventModel: EventModel = EventModel()
     @State private var showDetails: Bool = false
     @State private var searchText = ""
     @State private var showGridView = false
+    @State private var itemOpacity: Double = 0.0
+    @State private var designers: [Designer] = []
+    
     
     var body: some View {
+        
         NavigationStack {
+            
             Group {
                 if showGridView {
-                    DesignersGridView(eventModel: eventModel, showDetails: $showDetails)
+                    DesignersGridView(eventModel: eventModel, showDetails: $showDetails, designers: $designers)
                 } else {
-                    DesignersListView(eventModel: eventModel, showDetails: $showDetails)
+                    DesignersListView(eventModel: eventModel, showDetails: $showDetails, designers: $designers)
+                }
+            }
+            .opacity(itemOpacity)
+            .task {
+                designers = await fetchDesigners()
+                withAnimation(.easeOut(duration: 0.3)) {
+                    itemOpacity = 1.0
                 }
             }
             .navigationBarTitle("Designers", displayMode: .inline)
@@ -34,13 +47,13 @@ struct DesignersView: View {
                             showGridView = true
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("Grid", systemImage: "square.grid.2x2")
+                            Label("Grid", systemImage: "circle.grid.3x3.fill")
                         }
                         Button(action: {
                             showGridView = false
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("List", systemImage: "list.dash")
+                            Label("List", systemImage: "rectangle.grid.1x2.fill")
                         }
                     } label: {
                         ZStack {
@@ -54,94 +67,86 @@ struct DesignersView: View {
                     }
                 }
             }
+            
         }
         .navigationDestination(isPresented: $showDetails) {
             if let designer = eventModel.selectedDesigner {
                 DesignerDetailsView(item: designer)
             }
         }
-        
     }
-    
 }
-
 
 
 
 struct DesignersListView: View {
     
-    @State var designers: [Designer] = []
-    @ObservedObject var eventModel: EventModel
-    @Binding var showDetails: Bool
-    @State private var imageOpacity: Double = 0.0
+    @StateObject private var viewModel = DesignerViewModel()
     
+    @StateObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    @Binding var designers: [Designer]
     let width: CGFloat = 60
     
+    
+    
+    
+    
     var body: some View {
+        
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                ForEach(designers) { item in
+                
+                ForEach(
+                    Array(designers.enumerated()), id: \.offset
+                ) { index, item in
                     Button {
                         showDetails = true
                         eventModel.selectedDesigner = item
                     } label: {
                         HStack(spacing: 15) {
                             
-                            ZStack{
-                                Image(item.name)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .opacity(imageOpacity)
-                                    .frame(width: width, height: width)
-                                    .onAppear {
-                                        withAnimation(.easeIn(duration: 0.3)) {
-                                            imageOpacity = 1.0
-                                        }
-                                    }
-                            }
-                            .background(Colors.Secondary.background)
-                            .clipShape(Circle())
+                            AsyncImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/\(item.name).png")!)
+                                .frame(width: width, height: width)
+                                .background(Colors.Secondary.background)
+                                .clipShape(Circle())
+                                .overlay{
+                                    Circle()
+                                        .stroke(Colors.Secondary.background, lineWidth: 1)
+                                }
                             
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(item.name)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.button)
-                                
-                                Text("\(item.nationality) \(item.title)")
-                                    .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.caption)
-                            }
+                            
+                            
+                            Text(item.name)
+                                .foregroundColor(Colors.Primary.foreground)
+                                .font(.body)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                             
                             Spacer()
                         }
                         .background(Colors.Primary.background)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 5)
                         .padding(.horizontal, 20)
+                        
                     }
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
+                    .drawingGroup()
                 }
             }
         }
-        .task {
-            designers = await fetchDesigners()
-        }
     }
+    
+    
 }
-
 
 
 
 
 struct DesignersGridView: View {
     
-    @State var designers: [Designer] = []
-    
-    @ObservedObject var eventModel: EventModel
+    @StateObject var eventModel: EventModel
     @Binding var showDetails: Bool
-    @State private var imageOpacity: Double = 0.0
+    @Binding var designers: [Designer]
     
     let columns = [
         GridItem(.flexible(), spacing: 15, alignment: .top),
@@ -152,46 +157,60 @@ struct DesignersGridView: View {
     
     var body: some View {
         ScrollView {
-            
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(designers) { item in
                     Button {
                         showDetails = true
                         eventModel.selectedDesigner = item
                     } label: {
-                        VStack(alignment: .center, spacing: 7) {
-                            
-                            ZStack{
-                                Image(item.name)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .opacity(imageOpacity)
-                                    .onAppear {
-                                        withAnimation(.easeIn(duration: 0.3)) {
-                                            imageOpacity = 1.0
-                                        }
+                        VStack(alignment: .center, spacing: 5) {
+                            ZStack {
+                                GeometryReader { geometry in
+                                    ZStack {
+                                        //                                        if let url = URL(string: "https://storage.googleapis.com/pahudu.com/designers/\(item.name).png") {
+                                        //                                            AsyncImage(url: url) { image in
+                                        //                                                image
+                                        //                                                    .resizable()
+                                        //                                                    .aspectRatio(contentMode: .fit)
+                                        //                                                    .frame(width: geometry.size.width, height: geometry.size.height)
+                                        //                                            } placeholder: {
+                                        //                                                ProgressView()
+                                        //                                            }
+                                        //                                        }
                                     }
+                                    .frame(width: geometry.size.width, height: geometry.size.width) // Make it square
+                                    .background(Colors.Secondary.background)
+                                    .clipShape(Circle())
+                                    .overlay {
+                                        Circle()
+                                            .stroke(Colors.Primary.background, lineWidth: 1)
+                                    }
+                                }
+                                .aspectRatio(1, contentMode: .fit)
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(Colors.Secondary.background)
                             .clipShape(Circle())
+                            .overlay {
+                                Circle()
+                                    .stroke(Colors.Primary.background, lineWidth: 1)
+                            }
                             
-                        
                             Text(item.name.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Primary.foreground)
-                                .font(.caption)
+                                .foregroundColor(Colors.Tertiary.foreground)
+                                .font(.callout)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                         }
                     }
-                    
                 }
             }
+            .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+            
         }
+        .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
-        .task {
-            designers = await fetchDesigners()
-        }
     }
 }
-
 

@@ -17,7 +17,7 @@ struct MonthView: View {
     
     @State private var navBarTitle = "2024"
     @State private var showCalendarView = true
-    @State private var selectedMenuOption: String = "calendar"
+    @State private var selectedMenuOption: String = "circle.grid.3x3.fill"
     
     
     var body: some View {
@@ -34,24 +34,24 @@ struct MonthView: View {
                     Menu {
                         Button(action: {
                             showCalendarView = true
-                            selectedMenuOption = "calendar"
+                            selectedMenuOption = "circle.grid.3x3.fill"
                             UIApplication.triggerHapticFeedback()
                         }) {
                             HStack {
                                 Text("Calendar")
                                 Spacer()
-                                Image(systemName: "calendar")
+                                Image(systemName: "circle.grid.3x3.fill")
                             }
                         }
                         Button(action: {
                             showCalendarView = false
-                            selectedMenuOption = "calendar.day.timeline.left"
+                            selectedMenuOption = "rectangle.grid.1x2.fill"
                             UIApplication.triggerHapticFeedback()
                         }) {
                             HStack {
                                 Text("Schedule")
                                 Spacer()
-                                Image(systemName: "calendar.day.timeline.left")
+                                Image(systemName: "rectangle.grid.1x2.fill")
                             }
                         }
                     } label: {

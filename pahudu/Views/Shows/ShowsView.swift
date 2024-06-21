@@ -33,13 +33,13 @@ struct ShowsView: View {
                             showGridView = true
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("Grid", systemImage: "square.grid.2x2")
+                            Label("Grid", systemImage: "circle.grid.3x3.fill")
                         }
                         Button(action: {
                             showGridView = false
                             UIApplication.triggerHapticFeedback()
                         }) {
-                            Label("List", systemImage: "list.dash")
+                            Label("List", systemImage: "rectangle.grid.1x2.fill")
                         }
                     } label: {
                         ZStack {
@@ -70,8 +70,8 @@ struct ShowsListView: View {
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     
-    let width: CGFloat = 100
-    let height: CGFloat = 60
+    let width: CGFloat = 140
+    let height: CGFloat = 85
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -96,23 +96,25 @@ struct ShowsListView: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(item.title)
                                     .foregroundColor(Colors.Primary.foreground)
-                                    .font(.button)
+                                    .font(.body)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                                 
                                 Text(item.subtitle)
                                     .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.caption)
+                                    .font(.body)
                             }
                             
                             Spacer()
                         }
                         .background(Colors.Primary.background)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                     }
-                    .overlay(
-                        Divider(),
-                        alignment: .bottom
-                    )
+//                    .overlay(
+//                        Divider(),
+//                        alignment: .bottom
+//                    )
                 }
             }
         }
@@ -143,7 +145,8 @@ struct ShowsGridView: View {
                         showDetails = true
                         eventModel.selectedShow = item
                     } label: {
-                        VStack(spacing: 7) {
+                        
+                        VStack(spacing: 5) {
                             
                             Image(item.imageName)
                                 .resizable()
@@ -156,7 +159,7 @@ struct ShowsGridView: View {
                                 )
                             
                             Text(item.title)
-                                .font(.caption)
+                                .font(.callout)
                                 .foregroundColor(Colors.Primary.foreground)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .lineLimit(1)
@@ -167,8 +170,9 @@ struct ShowsGridView: View {
                     
                 }
             }
+            .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+            
         }
         .background(Colors.Primary.background)
     }

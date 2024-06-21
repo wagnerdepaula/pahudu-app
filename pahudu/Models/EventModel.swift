@@ -12,7 +12,6 @@ import Foundation
 struct Show {
     let id: UUID
     let hour: Int
-    let brand: Brand
     let venue: Venue
     let date: Date
     let description: String
@@ -32,14 +31,6 @@ struct Event {
     var shows: [Show]
 }
 
-struct Brand {
-    let id: UUID
-    let name: String
-    let history: String
-    let logoURL: URL?
-    let websiteURL: URL?
-    let socialMediaLinks: [String: URL?]
-}
 
 struct Venue {
     let id: UUID
@@ -54,14 +45,26 @@ struct Venue {
 class EventModel: ObservableObject {
     
     @Published var selectedDesigner: Designer?
-    @Published var selectedBrand: BrandItem?
+    @Published var selectedBrand: Brand?
     @Published var selectedShow: ShowItem?
     @Published var events: [Event] = []
-    
+    @Published var designers: [Designer] = []
+
     
     init() {
         loadEvents()
+        
+        Task {
+            await loadDesigners()
+        }
     }
+    
+    
+    
+    private func loadDesigners() async {
+        designers = await fetchDesigners()
+    }
+    
     
     private func loadEvents() {
         
@@ -86,18 +89,6 @@ class EventModel: ObservableObject {
                     Show(
                         id: UUID(),
                         hour: 12,
-                        brand: Brand(
-                            id: UUID(),
-                            name: "Tom Ford",
-                            history: "Founded by designer Tom Ford in 2006, the brand is known for its high-end fashion and accessories, blending timeless elegance with contemporary style.",
-                            logoURL: URL(string: "https://www.tomford.com/path/to/logo.png"),
-                            websiteURL: URL(string: "https://www.tomford.com"),
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/tomford"),
-                                "Twitter": URL(string: "https://twitter.com/tomford"),
-                                "Facebook": URL(string: "https://www.facebook.com/tomford")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "Spring Studios",
@@ -130,18 +121,6 @@ class EventModel: ObservableObject {
                     Show(
                         id: UUID(),
                         hour: 15,
-                        brand: Brand(
-                            id: UUID(),
-                            name: "Burberry",
-                            history: "Founded in 1856 by Thomas Burberry, Burberry is a British luxury fashion house known for its distinctive trench coats, tartan patterns, and high-quality craftsmanship.",
-                            logoURL: URL(string: "https://www.burberry.com/path/to/logo.png"),
-                            websiteURL: URL(string: "https://www.burberry.com"),
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/burberry"),
-                                "Twitter": URL(string: "https://twitter.com/burberry"),
-                                "Facebook": URL(string: "https://www.facebook.com/burberry")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "The Royal Exchange",
@@ -174,18 +153,6 @@ class EventModel: ObservableObject {
                     Show(
                         id: UUID(),
                         hour: 11,
-                        brand: Brand(
-                            id: UUID(),
-                            name: "Dolce & Gabbana",
-                            history: "Founded in 1985 by Italian designers Domenico Dolce and Stefano Gabbana in Milan. Known for its innovative and bold designs, it has become a symbol of luxury and sophistication in the fashion industry.",
-                            logoURL: URL(string: "https://www.dolcegabbana.com/path/to/logo.png"),
-                            websiteURL: URL(string: "https://www.dolcegabbana.com"),
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/dolcegabbana"),
-                                "Twitter": URL(string: "https://twitter.com/dolcegabbana"),
-                                "Facebook": URL(string: "https://www.facebook.com/DolceGabbana")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "VIALE PIAVE, 24",
@@ -218,18 +185,6 @@ class EventModel: ObservableObject {
                     Show(
                         id: UUID(),
                         hour: 17,
-                        brand: Brand(
-                            id: UUID(),
-                            name: "Chanel",
-                            history: "Founded in 1910 by Coco Chanel, Chanel is renowned for its timeless elegance, iconic designs, and luxury products, including haute couture, ready-to-wear, and accessories.",
-                            logoURL: URL(string: "https://www.chanel.com/path/to/logo.png"),
-                            websiteURL: URL(string: "https://www.chanel.com"),
-                            socialMediaLinks: [
-                                "Instagram": URL(string: "https://www.instagram.com/chanel"),
-                                "Twitter": URL(string: "https://twitter.com/chanel"),
-                                "Facebook": URL(string: "https://www.facebook.com/chanel")
-                            ]
-                        ),
                         venue: Venue(
                             id: UUID(),
                             name: "Grand Palais",

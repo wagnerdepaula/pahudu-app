@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Combine
+
 
 struct DesignerResponse: Codable {
     let version: String
-    let designers: [Designer]
+    var designers: [Designer]
 }
 
 struct Designer: Codable, Identifiable {
@@ -26,17 +28,55 @@ struct Designer: Codable, Identifiable {
     let website: String
 }
 
+struct DesignerWithImageURL: Identifiable {
+    let id: String
+    let designer: Designer
+    let imageURL: URL
+}
 
+class DesignerViewModel: ObservableObject {
+    @Published var designersWithImageURLs: [DesignerWithImageURL] = []
 
+    init() {
+        Task {
+            await fetchAndPopulateDesigners()
+        }
+    }
+    
+    private func fetchAndPopulateDesigners() async {
+        let designers = await fetchDesigners()
+    }
+    
+}
+
+@MainActor
 func fetchDesigners() async -> [Designer] {
     let url = URL(string: "https://api.pahudu.com/v1/designers")!
     
     do {
         let (data, _) = try await URLSession.shared.data(from: url)
-        let designerResponse = try JSONDecoder().decode(DesignerResponse.self, from: data)
-        return designerResponse.designers
+        var response = try JSONDecoder().decode(DesignerResponse.self, from: data)
+        response.designers.sort { $0.name.lowercased() < $1.name.lowercased() }
+        return response.designers
     } catch {
         print("Error fetching data: \(error)")
         return []
+    }
+}
+
+
+extension DesignerViewModel {
+    func preloadImages(for url: URL) {
+        guard let index = designersWithImageURLs.firstIndex(where: { $0.imageURL == url }) else { return }
+        
+        // Preload next images
+        let preloadCount = 2
+        let startIndex = max(0, index - preloadCount)
+        let endIndex = min(designersWithImageURLs.count - 1, index + preloadCount)
+        
+        for i in startIndex...endIndex {
+            let preloadUrl = designersWithImageURLs[i].imageURL
+            AsyncImageLoader().loadImage(from: preloadUrl, cacheKey: preloadUrl.absoluteString)
+        }
     }
 }

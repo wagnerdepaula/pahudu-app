@@ -10,7 +10,7 @@ import SwiftUI
 extension Font {
     
     static var largeTitle: Font {
-        .custom("Inter-Regular", size: 34)
+        .custom("Inter-Medium", size: 32)
     }
     
     static var title: Font {

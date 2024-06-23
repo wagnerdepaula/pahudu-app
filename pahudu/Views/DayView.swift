@@ -21,9 +21,9 @@ struct DayView: View {
         eventList
 //            .navigationBarTitle(globalData.selectedCalendarItem?.dateItem != nil ? "\(item.dateItem!.monthString) \(item.dateItem!.day), \(item.dateItem!.year)" : "", displayMode: .inline)
             .onAppear {
-                if let item = item?.dateItem {
-                    events = eventModel.eventsForDate(item.date)
-                }
+//                if let item = item?.dateItem {
+//                    events = eventModel.eventsForDate(item.date)
+//                }
             }
     }
     
@@ -60,11 +60,11 @@ struct DayView: View {
                 //                        alignment: .trailing
                 //                    )
                 
-                ForEach(events.flatMap { $0.shows }.filter { $0.hour == hour }, id: \.id) { show in
-                    if let event = events.first(where: { $0.shows.contains(where: { $0.id == show.id }) }) {
-                        showView(show: show, event: event)
-                    }
-                }
+//                ForEach(events.flatMap { $0.shows }.filter { $0.hour == hour }, id: \.id) { show in
+//                    if let event = events.first(where: { $0.shows.contains(where: { $0.id == show.id }) }) {
+//                        showView(show: show, event: event)
+//                    }
+//                }
                 .padding(EdgeInsets(top: 0.5, leading: 0, bottom: 0.5, trailing: 0))
             }
             

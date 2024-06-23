@@ -13,10 +13,13 @@ class GlobalData: ObservableObject {
     @Published var showDayView: Bool = false
     @Published var selectedCalendarItem: CalendarItem?
     
-    @Published var calendarStack: NavigationPath = .init()
-    @Published var discoverStack: NavigationPath = .init()
-    @Published var searchStack: NavigationPath = .init()
-    @Published var accountStack: NavigationPath = .init()
+    @Published var isLoading = true
+    @Published var errorMessage: String?
+    
+    @Published var brands: [Brand] = []
+    @Published var designers: [Designer] = []
+    @Published var shows: [Show] = []
     
     
+        
 }

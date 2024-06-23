@@ -7,70 +7,82 @@
 
 import SwiftUI
 
+
 struct DesignerDetailsView: View {
     
-    let item: Designer
-    let width: CGFloat = UIScreen.main.bounds.width
-    let height: CGFloat = UIScreen.main.bounds.width
+    let designer: Designer
+    let size: CGFloat = UIScreen.main.bounds.width
+    let imageSize: CGFloat = UIScreen.main.bounds.width
+    @State private var itemOpacity: Double = 0.0
     
     var body: some View {
+        
         ScrollView {
             VStack(spacing: 0) {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
-                    
-                    
                     ZStack(alignment: .bottom) {
-                        
-//                        AsyncImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/lg/\(item.name).png")!)
-//                            .background(
-//                                LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
-//                            )
-//                            .frame(width: width, height: max(width, width + offsetY))
-//                            .clipped()
-                        
-                        
+                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
+                        AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/lg/\(designer.name).png")!) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: imageSize, height: max(imageSize, imageSize + offsetY))
+                                .opacity(itemOpacity)
+                                .onAppear {
+                                    withAnimation(.easeOut(duration: 0.5)) {
+                                        itemOpacity = 1.0
+                                    }
+                                }
+                        } placeholder: {
+                            Color.clear
+                        }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: height, alignment: .bottom)
+                    .frame(maxWidth: size, maxHeight: size, alignment: .bottom)
                 }
-                .frame(height: height)
+                .frame(height: size)
                 
-                Text(item.name)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .font(.largeTitle)
+                
+                VStack(alignment: .leading) {
+                    
+                    Text(designer.name)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.largeTitle)
+                        .kerning(-0.3)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Spacer(minLength: 10)
+                    
+                    TypedText(text: designer.about)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                        .lineSpacing(6)
+                    
+                    Spacer(minLength: 25)
+                    
+                    // Table
+                    VStack(alignment: .leading, spacing: 0) {
+                        DetailsSectionView(title: "Born", detail: designer.dateOfBirth)
+                        DetailsSectionView(title: "Founder", detail: designer.founder)
+                        DetailsSectionView(title: "Education", detail: designer.education)
+                        DetailsSectionView(title: "Years Active", detail: designer.yearsActive)
+                        DetailsSectionView(title: "Spouse", detail: designer.spouse)
+                        DetailsSectionView(title: "Nationality", detail: designer.nationality)
+                        if designer.website != "N/A" {
+                            DetailsLinkSectionView(title: "Website", link: designer.website)
+                        } else {
+                            DetailsSectionView(title: "Website", detail: "N/A")
+                        }
+                    }
+                    .background(Colors.Secondary.background)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
-                
-                TypedText(text: item.about)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .font(.body)
-                    .lineSpacing(6)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                
-                
-                // Table
-                VStack(alignment: .leading, spacing: 0) {
-                    DetailsSectionView(title: "Born", detail: item.dateOfBirth)
-                    DetailsSectionView(title: "Founder", detail: item.founder)
-                    DetailsSectionView(title: "Education", detail: item.education)
-                    DetailsSectionView(title: "Years Active", detail: item.yearsActive)
-                    DetailsSectionView(title: "Spouse", detail: item.spouse)
-                    DetailsSectionView(title: "Nationality", detail: item.nationality)
-                    if item.website != "N/A" {
-                        DetailsLinkSectionView(title: "Website", link: item.website)
-                    } else {
-                        DetailsSectionView(title: "Website", detail: "N/A")
-                    }
+                    
+                    Spacer(minLength: 100)
                 }
-                .background(Colors.Secondary.background)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
                 
-                Spacer(minLength: 100)
             }
-            .padding(0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .edgesIgnoringSafeArea(.all)
         .scrollContentBackground(.hidden)
@@ -80,41 +92,7 @@ struct DesignerDetailsView: View {
 }
 
 
-struct DetailsSectionView: View {
-    let title: String
-    let detail: String
-    
-    var body: some View {
-        HStack(alignment: .top) {
-            Text(title)
-                .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: 100, alignment: .leading)
-            Text(detail)
-                .foregroundColor(Colors.Secondary.foreground)
-                .lineSpacing(4)
-        }
-        .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-        Divider(padding: 0, height: 1)
-    }
-}
 
 
-struct DetailsLinkSectionView: View {
-    
-    let title: String
-    let link: String
-    
-    var body: some View {
-        HStack(alignment: .top) {
-            Text(title)
-                .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: 100, alignment: .leading)
-            Link(cleanURL(link), destination: URL(string: link)!)
-                .foregroundColor(Colors.Primary.accent)
-                .lineSpacing(4)
-        }
-        .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 11, trailing: 15))
-    }
-}
+
+

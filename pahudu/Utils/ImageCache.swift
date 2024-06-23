@@ -52,7 +52,7 @@ struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
         }
         .onAppear(perform: loadImage)
         .onDisappear(perform: cancelDownload)
-        .onChange(of: url) { _ in
+        .onChange(of: url) { _ , _ in
             cancelDownload()
             loadImage()
         }

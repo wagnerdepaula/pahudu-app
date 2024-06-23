@@ -10,21 +10,51 @@ import SwiftUI
 @main
 struct PahuduApp: App {
     
-    @StateObject private var globalData = GlobalData()
-
+    @State private var globalData = GlobalData()
+    @State private var isDataLoaded = false
+    
     init() {
         configureAppearance()
     }
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(.dark)
-                .accentColor(Colors.Primary.accent)
-                .environmentObject(globalData)
-            
+            Group {
+                if isDataLoaded {
+                    ContentView()
+                        .preferredColorScheme(.dark)
+                        .accentColor(Colors.Primary.accent)
+                        .environmentObject(globalData)
+                        .modifier(ThemeModifier())
+                } else {
+                    LaunchView()
+                }
+            }
+            .task {
+                await fetchData()
+                isDataLoaded = true
+            }
         }
     }
+    
+    
+    private func fetchData() async {
+        globalData.isLoading = true
+        defer { globalData.isLoading = false }
+            
+        async let showsTask = fetchShows()
+        async let brandsTask = fetchBrands()
+        async let designersTask = fetchDesigners()
+        
+        let (fetchedShows, fetchedBrands, fetchedDesigners) = await (showsTask, brandsTask, designersTask)
+        
+        globalData.shows = fetchedShows
+        globalData.brands = fetchedBrands
+        globalData.designers = fetchedDesigners
+    }
+    
+    
+    
     
     private func listFonts() {
         for familyName in UIFont.familyNames.sorted() {
@@ -47,22 +77,22 @@ struct PahuduApp: App {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterial)
         //navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         navigationBarAppearance.shadowColor = .clear
         
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
-            .font: UIFont(name: "Inter-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .foregroundColor: UIColor.clear
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
-            .font: UIFont(name: "Inter-Medium", size: 32) ?? UIFont.systemFont(ofSize: 32),
-            .kern: NSNumber(value: 0),
+            .font: UIFont(name: "Inter-Medium", size: 34) ?? UIFont.systemFont(ofSize: 32),
+            .kern: NSNumber(value: 0.3),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         navigationBarAppearance.titleTextAttributes = [
-            .font: UIFont(name: "Inter-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17),
+            .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .kern: NSNumber(value: 0),
             .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
@@ -74,7 +104,7 @@ struct PahuduApp: App {
     private func configureToolbarAppearance() {
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithDefaultBackground()
-        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterial)
         //toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         toolbarAppearance.shadowColor = .clear
         
@@ -91,7 +121,7 @@ struct PahuduApp: App {
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
-        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
+        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterial)
         //tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
         tabBarAppearance.shadowColor = .clear
         
@@ -115,6 +145,7 @@ struct PahuduApp: App {
         UIButton.appearance().tintColor = UIColor(Color.accentColor)
     }
     
+  
     
 }
 

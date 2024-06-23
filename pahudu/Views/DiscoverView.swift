@@ -8,154 +8,10 @@
 import SwiftUI
 
 
-struct ShowItemView: View {
-    
-    let show: ShowItem
-    let width: CGFloat = 245
-    let height: CGFloat = 150
-    
-    @ObservedObject var eventModel: EventModel
-    @Binding var showShowDetails: Bool
-    
-    var body: some View {
-        
-        Button {
-            
-            eventModel.selectedShow = show
-            showShowDetails = true
-            
-        } label: {
-            VStack(spacing: 7) {
-                
-                Image(show.imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: width, height: height)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .background(Colors.Secondary.background)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 15)
-                    )
-                
-                Text(show.title)
-                    .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .frame(maxWidth: width, alignment: .leading)
-                    .truncationMode(.tail)
-            }
-            
-        }
-    }
-}
-
-
-
-
-struct BrandItemView: View {
-    
-    let brand: Brand
-    let width: CGFloat = 115
-    
-    @ObservedObject var eventModel: EventModel
-    @Binding var showBrandDetails: Bool
-    
-    var body: some View {
-        
-        Button {
-            eventModel.selectedBrand = brand
-            showBrandDetails = true
-        } label: {
-            VStack(spacing: 7) {
-                Image(brand.name)
-                    .resizable()
-                    .frame(width: width, height: width)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .background(Colors.Secondary.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                
-                Text(brand.name)
-                    .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .frame(maxWidth: width, alignment: .leading)
-                    .truncationMode(.tail)
-            }
-        }
-        
-    }
-}
-
-
-
-
-
-
-struct DesignerItemView: View {
-    
-    let imageURL: URL
-    let designer: Designer
-    let width: CGFloat = 115
-    
-    @ObservedObject var eventModel: EventModel
-    @Binding var showDesignerDetails: Bool
-    
-    var body: some View {
-        
-        Button {
-            
-            eventModel.selectedDesigner = designer
-            showDesignerDetails = true
-            
-        } label: {
-            
-            VStack(spacing: 7) {
-                
-                AsyncCachedImage(url: imageURL) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: width, height: width)
-                .background(Colors.Secondary.background)
-                .clipShape(Circle())
-                .overlay {
-                    Circle()
-                        .stroke(Colors.Primary.background, lineWidth: 1)
-                }
-                
-                
-                Text(designer.name.components(separatedBy: " ").first ?? "")
-                    .font(.callout)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .frame(width: width, alignment: .center)
-            }
-            
-        }
-        
-    }
-}
-
-
-
-
-
-
-
-
-
-
 struct DiscoverView: View {
-    
-    @State private var brands: [Brand] = []
-    @State private var designers: [Designer] = []
-    
+        
     @EnvironmentObject var globalData: GlobalData
     @StateObject private var eventModel = EventModel()
-    @StateObject private var viewModel = DesignerViewModel()
-    
     
     @State private var showDesignersList = false
     @State private var showBrandsList = false
@@ -165,9 +21,8 @@ struct DiscoverView: View {
     @State private var showBrandDetails = false
     @State private var showShowDetails = false
     
-    
-    
     var body: some View {
+        
         
         NavigationStack() {
             
@@ -175,16 +30,17 @@ struct DiscoverView: View {
                 
                 VStack(spacing: 0) {
                     
+                    
                     // Shows
-                    VStack(spacing: 5) {
+                    VStack(spacing: 15) {
                         
                         HStack{
-                            
                             Button(action: {
                                 showShowsList = true
                             }, label: {
                                 HStack {
                                     Text("Shows")
+                                    Spacer()
                                     Image(systemName: "chevron.forward")
                                 }
                                 .font(.button)
@@ -195,20 +51,21 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(DataModel.shows) { show in
+                                ForEach(globalData.shows) { show in
                                     ShowItemView(show: show, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                        .id(show.id)
                                 }
                             }
-                            .padding(.vertical, 10)
                             .padding(.horizontal, 20)
+                            .drawingGroup()
                         }
+                        .frame(minHeight: 175)
                     }
                     .padding(.vertical, 20)
                     
                     
-                    
                     // Brands
-                    VStack(spacing: 5) {
+                    VStack(spacing: 15) {
                         
                         HStack {
                             
@@ -217,6 +74,7 @@ struct DiscoverView: View {
                             }, label: {
                                 HStack {
                                     Text("Brands")
+                                    Spacer()
                                     Image(systemName: "chevron.forward")
                                 }
                                 .font(.button)
@@ -228,28 +86,30 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(brands) { brand in
+                                ForEach(globalData.brands) { brand in
                                     BrandItemView(brand: brand, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                        .id(brand.id)
                                 }
                             }
-                            .padding(.vertical, 10)
                             .padding(.horizontal, 20)
+                            .drawingGroup()
                         }
-                        
-                        
+                        .frame(minHeight: 140)
                     }
                     .padding(.vertical, 20)
                     
                     
                     
+                    
                     // Designers
-                    VStack(spacing: 5) {
+                    VStack(spacing: 15) {
                         HStack {
                             Button(action: {
                                 showDesignersList = true
                             }, label: {
                                 HStack {
                                     Text("Designers")
+                                    Spacer()
                                     Image(systemName: "chevron.forward")
                                 }
                                 .font(.button)
@@ -260,23 +120,17 @@ struct DiscoverView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
-                                ForEach(
-                                    viewModel.designersWithImageURLs.indices, id: \.self
-                                ) { index in
-                                    
-                                    DesignerItemView(imageURL: viewModel.designersWithImageURLs[index].imageURL, designer: viewModel.designersWithImageURLs[index].designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
-                                    
+                                ForEach(globalData.designers) { designer in
+                                    DesignerItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                        .id(designer.id)
                                 }
                             }
-                            .padding(.vertical, 10)
                             .padding(.horizontal, 20)
+                            .drawingGroup()
                         }
-                        
+                        .frame(minHeight: 140)
                     }
                     .padding(.vertical, 20)
-                    
-                    
-                    
                     
                 }
             }
@@ -293,23 +147,187 @@ struct DiscoverView: View {
             }
             .navigationDestination(isPresented: $showShowDetails) {
                 if let show = eventModel.selectedShow {
-                    ShowDetailsView(item: show)
+                    ShowDetailsView(show: show)
                 }
             }
             .navigationDestination(isPresented: $showBrandDetails) {
                 if let brand = eventModel.selectedBrand {
-                    BrandDetailsView(item: brand)
+                    BrandDetailsView(brand: brand)
                 }
             }
             .navigationDestination(isPresented: $showDesignerDetails) {
                 if let designer = eventModel.selectedDesigner {
-                    DesignerDetailsView(item: designer)
+                    DesignerDetailsView(designer: designer)
                 }
-            }
-            .task {
-                designers = await fetchDesigners()
             }
         }
     }
     
+    
+   
+
 }
+
+
+
+
+
+
+struct ShowItemView: View {
+    let show: Show
+    let width: CGFloat = 180
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showShowDetails: Bool
+    
+    var body: some View {
+        Button(action: {
+            eventModel.selectedShow = show
+            showShowDetails = true
+        }) {
+            VStack(spacing: 7) {
+                ShowImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!,
+                              width: width,
+                              height: width)
+                
+                Text(show.name)
+                    .font(.callout)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: width, alignment: .leading)
+                    .truncationMode(.tail)
+            }
+        }
+    }
+}
+
+
+struct BrandItemView: View {
+    let brand: Brand
+    let width: CGFloat = 115
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showBrandDetails: Bool
+    
+    private let cornerRadius: CGFloat = 15
+    
+    var body: some View {
+        Button(action: {
+            eventModel.selectedBrand = brand
+            showBrandDetails = true
+        }) {
+            VStack(spacing: 7) {
+                BrandImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!,
+                               width: width)
+                
+                Text(brand.name)
+                    .font(.callout)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: width, alignment: .leading)
+                    .truncationMode(.tail)
+            }
+        }
+    }
+}
+
+
+
+struct DesignerItemView: View {
+    let designer: Designer
+    let width: CGFloat = 115
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDesignerDetails: Bool
+    
+    var body: some View {
+        Button(action: {
+            eventModel.selectedDesigner = designer
+            showDesignerDetails = true
+        }) {
+            VStack(spacing: 7) {
+                DesignerImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/sm/\(designer.name).png")!,
+                                  width: width)
+                
+                Text(designer.name.components(separatedBy: " ").first ?? "")
+                    .font(.callout)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(width: width, alignment: .center)
+            }
+        }
+    }
+}
+
+
+
+
+struct ShowImageView: View {
+    
+    let url: URL
+    let width: CGFloat
+    let height: CGFloat
+    
+    var body: some View {
+        AsyncCachedImage(url: url) { image in
+            image
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        } placeholder: {
+            Colors.Secondary.background
+        }
+        .frame(width: width, height: height)
+        .foregroundColor(Colors.Primary.foreground)
+        .background(Colors.Secondary.background)
+    }
+}
+
+
+
+struct BrandImageView: View {
+    let url: URL
+    let width: CGFloat
+    
+    var body: some View {
+        AsyncCachedImage(url: url) { image in
+            image
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        } placeholder: {
+            Colors.Secondary.background
+        }
+        .frame(width: width, height: width)
+        .foregroundColor(Colors.Primary.foreground)
+        .background(Colors.Secondary.background)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+
+
+
+struct DesignerImageView: View {
+    
+    let url: URL
+    let width: CGFloat
+    
+    var body: some View {
+        AsyncCachedImage(url: url) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        } placeholder: {
+            Colors.Secondary.background
+        }
+        .frame(width: width, height: width)
+        .background(Colors.Secondary.background)
+        .clipShape(Circle())
+        .overlay {
+            Circle()
+                .stroke(Colors.Primary.background, lineWidth: 1)
+        }
+    }
+}
+
+

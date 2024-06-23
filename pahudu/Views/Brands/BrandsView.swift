@@ -9,26 +9,25 @@ import SwiftUI
 
 struct BrandsView: View {
     
+    @EnvironmentObject var globalData: GlobalData
     @ObservedObject var eventModel: EventModel = EventModel()
-    @State private var showDetails: Bool = false
+    
     @State private var searchText = ""
     @State private var showGridView = false
-    @State private var brands: [Brand] = []
+    @State private var showDetails: Bool = false
     @State private var itemOpacity: Double = 0.0
-    
     
     var body: some View {
         NavigationStack {
             Group {
                 if showGridView {
-                    BrandsGridView(eventModel: eventModel, showDetails: $showDetails, brands: $brands)
+                    BrandsGridView(eventModel: eventModel, showDetails: $showDetails, brands: $globalData.brands, searchText: $searchText)
                 } else {
-                    BrandsListView(eventModel: eventModel, showDetails: $showDetails, brands: $brands)
+                    BrandsListView(eventModel: eventModel, showDetails: $showDetails, brands: $globalData.brands, searchText: $searchText)
                 }
             }
             .opacity(itemOpacity)
-            .task {
-                brands = await fetchBrands()
+            .onAppear {
                 withAnimation(.easeOut(duration: 0.3)) {
                     itemOpacity = 1.0
                 }
@@ -66,11 +65,12 @@ struct BrandsView: View {
         }
         .navigationDestination(isPresented: $showDetails) {
             if let brand = eventModel.selectedBrand {
-                BrandDetailsView(item: brand)
+                BrandDetailsView(brand: brand)
             }
         }
     }
 }
+
 
 
 
@@ -79,27 +79,41 @@ struct BrandsListView: View {
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var brands: [Brand]
-    let width: CGFloat = 60
+    @Binding var searchText: String
+    
+    let width: CGFloat = 70
+    
+    var filteredBrands: [Brand] {
+        if searchText.isEmpty {
+            return brands
+        } else {
+            return brands.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                ForEach(brands) { item in
+                ForEach(filteredBrands) { brand in
                     Button {
                         showDetails = true
-                        eventModel.selectedBrand = item
+                        eventModel.selectedBrand = brand
                     } label: {
-                        
-                        HStack(spacing: 15) {
+                        HStack(spacing: 10) {
+                            AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!) { image in
+                                image
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            } placeholder: {
+                                Colors.Secondary.background
+                            }
+                            .frame(width: width, height: width)
+                            .background(Colors.Secondary.background)
+                            .foregroundColor(Colors.Primary.foreground)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             
-                            Image(item.name)
-                                .resizable()
-                                .frame(width: width, height: width)
-                                .background(Colors.Secondary.background)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                            
-                            Text(item.name)
+                            Text(brand.name)
                                 .foregroundColor(Colors.Primary.foreground)
                                 .font(.body)
                             
@@ -109,15 +123,14 @@ struct BrandsListView: View {
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                     }
-                    //                    .overlay(
-                    //                        Divider(),
-                    //                        alignment: .bottom
-                    //                    )
+                    .id(brand.id)
                 }
             }
+            .drawingGroup()
         }
     }
 }
+
 
 
 
@@ -127,48 +140,82 @@ struct BrandsGridView: View {
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var brands: [Brand]
+    @Binding var searchText: String
     
     let columns = [
-        GridItem(.flexible(), spacing: 15, alignment: .top),
         GridItem(.flexible(), spacing: 15, alignment: .top),
         GridItem(.flexible(), spacing: 15, alignment: .top),
         GridItem(.flexible(), spacing: 15, alignment: .top)
     ]
     
+    var filteredBrands: [Brand] {
+        if searchText.isEmpty {
+            return brands
+        } else {
+            return brands.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
     var body: some View {
         ScrollView {
-            
             LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(brands) { item in
-                    
-                    Button {
-                        showDetails = true
-                        eventModel.selectedBrand = item
-                    } label: {
-                        VStack(alignment: .center, spacing: 5) {
-                            
-                            Image(item.name)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .background(Colors.Secondary.background)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                            
-                            Text(item.name)
-                                .foregroundColor(Colors.Tertiary.foreground)
-                                .font(.callout)
-                                .lineLimit(1)
-                                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
-                        }
-                    }
-                    
+                ForEach(filteredBrands) { brand in
+                    BrandGridItemView(brand: brand, eventModel: eventModel, showDetails: $showDetails)
+                        .id(brand.id)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
+            .drawingGroup()
         }
         .background(Colors.Primary.background)
+    }
+}
+
+
+
+
+
+struct BrandGridItemView: View {
+    let brand: Brand
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    
+    private let cornerRadius: CGFloat = 10
+    private let animationDuration: Double = 0.5
+    
+    var body: some View {
+        Button {
+            showDetails = true
+            eventModel.selectedBrand = brand
+        } label: {
+            VStack(alignment: .center, spacing: 5) {
+                GeometryReader { geometry in
+                    AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!) { image in
+                        image
+                            .renderingMode(.template)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Colors.Secondary.background
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.width)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .background(Colors.Secondary.background)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                }
+                .aspectRatio(1, contentMode: .fit)
+                
+                
+                Text(brand.name)
+                    .foregroundColor(Colors.Secondary.foreground)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Brand: \(brand.name)"))
     }
 }
 

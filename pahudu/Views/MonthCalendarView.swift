@@ -23,9 +23,10 @@ struct MonthCalendarView: View {
             VStack(spacing: 0) {
                 ForEach(viewModel.monthsData.indices, id: \.self) { monthIndex in
                     CalendarView(showDayView: $globalData.showDayView, items: viewModel.monthsData[monthIndex].items, monthIndex: viewModel.monthsData[monthIndex].monthIndex)
-                        .id(viewModel.monthsData[monthIndex].monthIndex)
+                        .id(monthIndex)
                 }
             }
+            .drawingGroup()
         }
         .background(Colors.Primary.background)
         

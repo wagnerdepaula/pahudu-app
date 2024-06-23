@@ -23,14 +23,14 @@ enum AccountOptions: String, CaseIterable, Identifiable {
     // Associated icon names for each option
     var iconName: String {
         switch self {
-        case .myAccount: return "person.fill"
-        case .welcome: return "hand.wave.fill"
-        case .whatsNew: return "star.fill"
-        case .themes: return "circle.lefthalf.filled"
-        case .preferences: return "gearshape.fill"
+        case .myAccount: return "person"
+        case .welcome: return "hand.wave"
+        case .whatsNew: return "star"
+        case .themes: return ""
+        case .preferences: return "gearshape"
         case .helpCenter: return "questionmark"
-        case .termsOfUse: return "doc.text.fill"
-        case .privacyPolicy: return "lock.shield.fill"
+        case .termsOfUse: return "doc.text"
+        case .privacyPolicy: return "lock.shield"
         }
     }
     
@@ -53,28 +53,26 @@ enum AccountCategory: String, CaseIterable, Identifiable {
 }
 
 struct AccountView: View {
+    
+    @AppStorage("selectedTheme") private var selectedTheme: ThemeOption = .system
+
     var body: some View {
         NavigationStack {
             List {
                 ForEach(AccountCategory.allCases) { category in
                     Section {
                         ForEach(AccountOptions.allCases.filter { $0.category == category }) { option in
-                            NavigationLink(destination: destinationView(for: option)) {
-                                HStack(spacing: 10) {
-                                    Image(systemName: option.iconName)
-                                        .font(.system(size: 21))
-                                        .frame(width: 35, height: 35)
-                                        .foregroundColor(Colors.Primary.accent)
-                                    Text(option.rawValue)
-                                        .font(.button)
-                                        .foregroundColor(Colors.Primary.foreground)
+                            if option == .themes {
+                                themeRow
+                            } else {
+                                NavigationLink(destination: destinationView(for: option)) {
+                                    optionRow(option: option)
                                 }
                             }
                         }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 15))
-                //                .listRowSeparator(.hidden)
                 .listRowSeparatorTint(Colors.Primary.divider)
             }
             .listStyle(.insetGrouped)
@@ -83,6 +81,57 @@ struct AccountView: View {
             .background(Colors.Primary.background)
         }
     }
+    
+    
+    func themeIcon(for theme: ThemeOption) -> String {
+        switch theme {
+        case .system:
+            return "circle.lefthalf.filled"
+        case .dark:
+            return "moon.fill"
+        case .light:
+            return "sun.max.fill"
+        }
+    }
+    
+    private var themeRow: some View {
+        HStack {
+            Image(systemName: themeIcon(for: selectedTheme))
+                .font(.system(size: 21))
+                .frame(width: 35, height: 35)
+                .foregroundColor(Colors.Primary.accent)
+            Text("Theme")
+                .font(.button)
+                .foregroundColor(Colors.Primary.foreground)
+            Spacer()
+            Menu {
+                ForEach(ThemeOption.allCases, id: \.self) { theme in
+                    Button(action: { 
+                        selectedTheme = theme
+                        UIApplication.triggerHapticFeedback()
+                    }) {
+                        Label(theme.rawValue, systemImage: themeIcon(for: theme))
+                    }
+                }
+            } label: {
+                Text(selectedTheme.rawValue)
+                    .foregroundColor(Colors.Primary.accent)
+            }
+        }
+    }
+    
+    private func optionRow(option: AccountOptions) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: option == .themes ? themeIcon(for: selectedTheme) : option.iconName)
+                .font(.system(size: 21))
+                .frame(width: 35, height: 35)
+                .foregroundColor(Colors.Primary.accent)
+            Text(option.rawValue)
+                .font(.button)
+                .foregroundColor(Colors.Primary.foreground)
+        }
+    }
+    
     
     @ViewBuilder
     private func destinationView(for option: AccountOptions) -> some View {

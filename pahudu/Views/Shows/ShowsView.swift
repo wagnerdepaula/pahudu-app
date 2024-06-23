@@ -9,18 +9,27 @@ import SwiftUI
 
 struct ShowsView: View {
     
+    @EnvironmentObject var globalData: GlobalData
     @ObservedObject var eventModel: EventModel = EventModel()
-    @State private var showDetails: Bool = false
+    
     @State private var searchText = ""
+    @State private var showDetails: Bool = false
     @State private var showGridView = false
+    @State private var itemOpacity: Double = 0.0
     
     var body: some View {
         NavigationStack {
             Group {
                 if showGridView {
-                    ShowsGridView(eventModel: eventModel, showDetails: $showDetails)
+                    ShowsGridView(eventModel: eventModel, showDetails: $showDetails, shows: $globalData.shows, searchText: $searchText)
                 } else {
-                    ShowsListView(eventModel: eventModel, showDetails: $showDetails)
+                    ShowsListView(eventModel: eventModel, showDetails: $showDetails, shows: $globalData.shows, searchText: $searchText)
+                }
+            }
+            .opacity(itemOpacity)
+            .onAppear {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    itemOpacity = 1.0
                 }
             }
             .navigationBarTitle("Shows", displayMode: .inline)
@@ -56,7 +65,7 @@ struct ShowsView: View {
         }
         .navigationDestination(isPresented: $showDetails) {
             if let show = eventModel.selectedShow {
-                ShowDetailsView(item: show)
+                ShowDetailsView(show: show)
             }
         }
     }
@@ -64,43 +73,53 @@ struct ShowsView: View {
 
 
 
-
 struct ShowsListView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
+    @Binding var shows: [Show]
+    @Binding var searchText: String
     
-    let width: CGFloat = 140
-    let height: CGFloat = 85
+    let width: CGFloat = 70
+    
+    var filteredShows: [Show] {
+        if searchText.isEmpty {
+            return shows
+        } else {
+            return shows.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                ForEach(DataModel.shows) { item in
+                ForEach(filteredShows) { show in
                     Button {
                         showDetails = true
-                        eventModel.selectedShow = item
+                        eventModel.selectedShow = show
                     } label: {
                         HStack(spacing: 15) {
+                            AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!) { image in
+                                image
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            } placeholder: {
+                                Colors.Secondary.background
+                            }
+                            .frame(width: width, height: width)
+                            .background(Colors.Secondary.background)
+                            .foregroundColor(Colors.Primary.foreground)
                             
-                            Image(item.imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: width, height: height)
-                                .background(Colors.Secondary.background)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .clipShape(
-                                    RoundedRectangle(cornerRadius: 10)
-                                )
                             
                             VStack(alignment: .leading, spacing: 5) {
-                                Text(item.title)
+                                Text(show.name)
                                     .foregroundColor(Colors.Primary.foreground)
                                     .font(.body)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                 
-                                Text(item.subtitle)
+                                Text(show.location)
                                     .foregroundColor(Colors.Tertiary.foreground)
                                     .font(.body)
                             }
@@ -111,12 +130,10 @@ struct ShowsListView: View {
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                     }
-//                    .overlay(
-//                        Divider(),
-//                        alignment: .bottom
-//                    )
+                    .id(show.id)
                 }
             }
+            .drawingGroup()
         }
     }
 }
@@ -129,52 +146,76 @@ struct ShowsGridView: View {
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
-    let height: CGFloat = 110
+    @Binding var shows: [Show]
+    @Binding var searchText: String
     
     let columns = [
         GridItem(.flexible(), spacing: 15, alignment: .topLeading),
         GridItem(.flexible(), spacing: 15, alignment: .topLeading)
     ]
     
+    var filteredShows: [Show] {
+        if searchText.isEmpty {
+            return shows
+        } else {
+            return shows.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
     var body: some View {
         ScrollView {
-            
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(DataModel.shows) { item in
-                    Button {
-                        showDetails = true
-                        eventModel.selectedShow = item
-                    } label: {
-                        
-                        VStack(spacing: 5) {
-                            
-                            Image(item.imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: .infinity, maxHeight: height)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .background(Colors.Secondary.background)
-                                .clipShape(
-                                    RoundedRectangle(cornerRadius: 15)
-                                )
-                            
-                            Text(item.title)
-                                .font(.callout)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                                .multilineTextAlignment(.leading)
-                        }
-                    }
-                    
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(filteredShows) { show in
+                    ShowGridItemView(show: show, eventModel: eventModel, showDetails: $showDetails)
+                        .id(show.id)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            
+            .drawingGroup()
         }
         .background(Colors.Primary.background)
     }
 }
 
+
+
+
+struct ShowGridItemView: View {
+    
+    let show: Show
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    
+    var body: some View {
+        Button {
+            showDetails = true
+            eventModel.selectedShow = show
+        } label: {
+            VStack(spacing: 5) {
+                AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!) { image in
+                    image
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundColor(Colors.Primary.foreground)
+                .background(Colors.Secondary.background)
+                
+                Text(show.name)
+                    .font(.callout)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .multilineTextAlignment(.leading)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Show: \(show.name)"))
+    }
+}

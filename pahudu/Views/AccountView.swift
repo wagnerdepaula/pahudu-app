@@ -10,7 +10,6 @@ import SwiftUI
 // Define an enum for your options
 enum AccountOptions: String, CaseIterable, Identifiable {
     case myAccount = "My Account"
-    case themes = "Themes"
     case preferences = "Preferences"
     case whatsNew = "What’s New"
     case welcome = "Welcome"
@@ -26,7 +25,6 @@ enum AccountOptions: String, CaseIterable, Identifiable {
         case .myAccount: return "person"
         case .welcome: return "hand.wave"
         case .whatsNew: return "star"
-        case .themes: return ""
         case .preferences: return "gearshape"
         case .helpCenter: return "questionmark"
         case .termsOfUse: return "doc.text"
@@ -38,7 +36,7 @@ enum AccountOptions: String, CaseIterable, Identifiable {
     var category: AccountCategory {
         switch self {
         case .myAccount, .welcome, .whatsNew: return .accountGeneral
-        case .themes, .preferences: return .appearanceCustomization
+        case .preferences: return .appearanceCustomization
         case .helpCenter, .termsOfUse, .privacyPolicy: return .supportLegal
         }
     }
@@ -53,8 +51,6 @@ enum AccountCategory: String, CaseIterable, Identifiable {
 }
 
 struct AccountView: View {
-    
-    @AppStorage("selectedTheme") private var selectedTheme: ThemeOption = .system
 
     var body: some View {
         NavigationStack {
@@ -62,12 +58,8 @@ struct AccountView: View {
                 ForEach(AccountCategory.allCases) { category in
                     Section {
                         ForEach(AccountOptions.allCases.filter { $0.category == category }) { option in
-                            if option == .themes {
-                                themeRow
-                            } else {
-                                NavigationLink(destination: destinationView(for: option)) {
-                                    optionRow(option: option)
-                                }
+                            NavigationLink(destination: destinationView(for: option)) {
+                                optionRow(option: option)
                             }
                         }
                     }
@@ -83,46 +75,9 @@ struct AccountView: View {
     }
     
     
-    func themeIcon(for theme: ThemeOption) -> String {
-        switch theme {
-        case .system:
-            return "circle.lefthalf.filled"
-        case .dark:
-            return "moon.fill"
-        case .light:
-            return "sun.max.fill"
-        }
-    }
-    
-    private var themeRow: some View {
-        HStack {
-            Image(systemName: themeIcon(for: selectedTheme))
-                .font(.system(size: 21))
-                .frame(width: 35, height: 35)
-                .foregroundColor(Colors.Primary.accent)
-            Text("Theme")
-                .font(.button)
-                .foregroundColor(Colors.Primary.foreground)
-            Spacer()
-            Menu {
-                ForEach(ThemeOption.allCases, id: \.self) { theme in
-                    Button(action: { 
-                        selectedTheme = theme
-                        UIApplication.triggerHapticFeedback()
-                    }) {
-                        Label(theme.rawValue, systemImage: themeIcon(for: theme))
-                    }
-                }
-            } label: {
-                Text(selectedTheme.rawValue)
-                    .foregroundColor(Colors.Primary.accent)
-            }
-        }
-    }
-    
     private func optionRow(option: AccountOptions) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: option == .themes ? themeIcon(for: selectedTheme) : option.iconName)
+            Image(systemName: option.iconName)
                 .font(.system(size: 21))
                 .frame(width: 35, height: 35)
                 .foregroundColor(Colors.Primary.accent)

@@ -23,6 +23,7 @@ struct Brand: Codable, Identifiable {
     let parentCompany: String
     let website: String
     let nationality: String
+    let color: String
 }
 
 

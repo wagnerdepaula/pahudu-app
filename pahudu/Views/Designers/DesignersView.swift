@@ -18,6 +18,7 @@ struct DesignersView: View {
     @State private var itemOpacity: Double = 0.0
     
     
+    
     var body: some View {
         
         NavigationStack {
@@ -85,7 +86,8 @@ struct DesignersListView: View {
     @Binding var searchText: String
     let width: CGFloat = 70
     
-  
+    let alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+    
     var filteredDesigners: [Designer] {
         if searchText.isEmpty {
             return designers
@@ -94,56 +96,110 @@ struct DesignersListView: View {
         }
     }
     
-    
-    var body: some View {
-        
-        ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 0) {
-                ForEach(filteredDesigners) { designer in
-                    Button {
-                        showDetails = true
-                        eventModel.selectedDesigner = designer
-                    } label: {
-                        HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/sm/\(designer.name).png")!) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            } placeholder: {
-                                Colors.Secondary.background
-                            }
-                            .frame(width: width, height: width)
-                            .background(Colors.Secondary.background)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle()
-                                    .stroke(Colors.Primary.background, lineWidth: 1)
-                            }
-                            
-                            Text(designer.name)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .font(.body)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                            
-                            
-                            Spacer()
-                        }
-                        .background(Colors.Primary.background)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 20)
-                    }
-                    .id(designer.id)
-                    
-                }
-            }
-            .drawingGroup()
-        }
+    var groupedDesigners: [String: [Designer]] {
+        Dictionary(grouping: filteredDesigners) { String($0.name.prefix(1).uppercased()) }
     }
     
-    
+    var body: some View {
+        ScrollViewReader { scrollProxy in
+            ZStack {
+                List {
+                    Group {
+                        ForEach(alphabet, id: \.self) { letter in
+                            if let designersForLetter = groupedDesigners[letter] {
+                                Section(header: Text(letter).id(letter)) {
+                                    ForEach(designersForLetter) { designer in
+                                        DesignerRow(designer: designer, eventModel: eventModel, showDetails: $showDetails, width: width)
+                                            .listRowInsets(EdgeInsets())
+                                            .listRowSeparator(.hidden)
+                                            .listRowSpacing(0)
+                                    }
+                                }
+                                .listSectionSeparator(.hidden)
+                            }
+                        }
+                    }
+                    .drawingGroup()
+                    
+                    
+                }
+                .listStyle(.plain)
+                .listSectionSpacing(0)
+                .scrollIndicators(.hidden)
+                
+                
+                VStack(spacing: 0) {
+                    ForEach(alphabet, id: \.self) { letter in
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                if groupedDesigners[letter] != nil {
+                                    withAnimation {
+                                        scrollProxy.scrollTo(letter, anchor: .top)
+                                    }
+                                }
+                            }) {
+                                Text(letter)
+                                    .font(.footnote)
+                            }
+                            .padding(.vertical, 2)
+                            .frame(width: 30)
+                            .background(Colors.Primary.background)
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
+
+
+
+struct DesignerRow: View {
+    
+    let designer: Designer
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    let width: CGFloat
+    
+    var body: some View {
+        Button {
+            showDetails = true
+            eventModel.selectedDesigner = designer
+        } label: {
+            HStack(spacing: 10) {
+                AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
+                }
+                .frame(width: width, height: width)
+                .background(Colors.Secondary.foreground)
+                .clipShape(Circle())
+                .overlay {
+                    Circle()
+                        .stroke(Colors.Primary.background, lineWidth: 1)
+                }
+                
+                Text(designer.name)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.body)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                
+                Spacer()
+            }
+            //.background(Colors.Primary.background)
+            .padding(.vertical, 5)
+            .padding(.horizontal, 20)
+            
+        }
+    }
+}
 
 
 
@@ -182,7 +238,7 @@ struct DesignersGridView: View {
                             
                             GeometryReader { geometry in
                                 
-                                AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/sm/\(designer.name).png")!) { image in
+                                AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!) { image in
                                     image
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
@@ -191,7 +247,7 @@ struct DesignersGridView: View {
                                     Colors.Secondary.background
                                 }
                                 .frame(width: geometry.size.width, height: geometry.size.width)
-                                .background(Colors.Secondary.background)
+                                .background(Colors.Secondary.foreground)
                                 .clipShape(Circle())
                                 .overlay {
                                     Circle()

@@ -100,7 +100,7 @@ struct BrandsListView: View {
                         eventModel.selectedBrand = brand
                     } label: {
                         HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!) { image in
+                            AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!) { image in
                                 image
                                     .renderingMode(.template)
                                     .resizable()
@@ -182,7 +182,6 @@ struct BrandGridItemView: View {
     @Binding var showDetails: Bool
     
     private let cornerRadius: CGFloat = 10
-    private let animationDuration: Double = 0.5
     
     var body: some View {
         Button {
@@ -191,7 +190,7 @@ struct BrandGridItemView: View {
         } label: {
             VStack(alignment: .center, spacing: 5) {
                 GeometryReader { geometry in
-                    AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!) { image in
+                    AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!) { image in
                         image
                             .renderingMode(.template)
                             .resizable()

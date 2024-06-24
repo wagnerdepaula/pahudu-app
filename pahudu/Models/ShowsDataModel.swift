@@ -17,6 +17,7 @@ struct ShowResponse: Codable {
 struct Show: Codable, Identifiable {
     let id: String
     let name: String
+    let acronym: String
     let location: String
     let startDate: String
     let endDate: String

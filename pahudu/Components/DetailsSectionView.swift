@@ -14,16 +14,19 @@ struct DetailsSectionView: View {
     
     var body: some View {
         HStack(alignment: .top) {
+            
             Text(title)
                 .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: 100, alignment: .leading)
+                .frame(maxWidth: 110, alignment: .leading)
+            
             Text(detail)
                 .foregroundColor(Colors.Secondary.foreground)
                 .lineSpacing(4)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-        .frame(alignment: .leading)
+        .padding(EdgeInsets(top: 10, leading: 0, bottom: 12, trailing: 0))
         Divider(padding: 0, height: 1)
     }
 }
@@ -36,16 +39,19 @@ struct DetailsLinkSectionView: View {
     
     var body: some View {
         HStack(alignment: .top) {
+            
             Text(title)
                 .foregroundColor(Colors.Primary.foreground)
-                .frame(maxWidth: 100, alignment: .leading)
+                .frame(maxWidth: 110, alignment: .leading)
+            
             Link(cleanURL(link), destination: URL(string: link)!)
                 .foregroundColor(Colors.Primary.accent)
                 .truncationMode(.tail)
                 .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 11, trailing: 15))
-        .frame(alignment: .leading)
+        .padding(EdgeInsets(top: 10, leading: 0, bottom: 12, trailing: 0))
     }
 }

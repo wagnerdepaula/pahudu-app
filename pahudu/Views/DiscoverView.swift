@@ -21,6 +21,8 @@ struct DiscoverView: View {
     @State private var showBrandDetails = false
     @State private var showShowDetails = false
     
+    @State private var opacity: Double = 0
+    
     var body: some View {
         
         
@@ -134,6 +136,12 @@ struct DiscoverView: View {
                     
                 }
             }
+            .opacity(opacity)
+            .onAppear {
+                withAnimation(.easeOut(duration: 0.5)) {
+                    opacity = 1.0
+                }
+            }
             .navigationBarTitle("Discover", displayMode: .inline)
             .background(Colors.Primary.background)
             .navigationDestination(isPresented: $showDesignersList) {
@@ -186,7 +194,7 @@ struct ShowItemView: View {
             showShowDetails = true
         }) {
             VStack(spacing: 7) {
-                ShowImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!,
+                ShowImageView(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!,
                               width: width,
                               height: width)
                 
@@ -216,8 +224,8 @@ struct BrandItemView: View {
             showBrandDetails = true
         }) {
             VStack(spacing: 7) {
-                BrandImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/brands/sm/\(brand.name).png")!,
-                               width: width)
+                BrandImageView(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!,
+                               width: width, color: brand.color)
                 
                 Text(brand.name)
                     .font(.callout)
@@ -244,7 +252,7 @@ struct DesignerItemView: View {
             showDesignerDetails = true
         }) {
             VStack(spacing: 7) {
-                DesignerImageView(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/sm/\(designer.name).png")!,
+                DesignerImageView(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!,
                                   width: width)
                 
                 Text(designer.name.components(separatedBy: " ").first ?? "")
@@ -287,6 +295,7 @@ struct ShowImageView: View {
 struct BrandImageView: View {
     let url: URL
     let width: CGFloat
+    let color: String
     
     var body: some View {
         AsyncCachedImage(url: url) { image in
@@ -321,7 +330,7 @@ struct DesignerImageView: View {
             Colors.Secondary.background
         }
         .frame(width: width, height: width)
-        .background(Colors.Secondary.background)
+        .background(Colors.Secondary.foreground)
         .clipShape(Circle())
         .overlay {
             Circle()

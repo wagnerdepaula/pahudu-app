@@ -12,7 +12,7 @@ struct DesignerResponse: Codable {
     var designers: [Designer]
 }
 
-struct Designer: Codable, Identifiable {
+struct Designer: Codable, Identifiable, Hashable  {
     let id: String
     let education: String
     let nationality: String

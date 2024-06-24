@@ -23,8 +23,8 @@ struct ShowDetailsView: View {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
                     ZStack(alignment: .bottom) {
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
-                        AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/lg/\(show.name).png")!) { image in
+                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
+                        AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/lg/\(show.name).png")!) { image in
                             image
                                 .renderingMode(.template)
                                 .resizable()
@@ -66,7 +66,8 @@ struct ShowDetailsView: View {
                     Spacer(minLength: 25)
                     
                     // Table
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(spacing: 0) {
+                        DetailsSectionView(title: "Acronym", detail: show.acronym)
                         DetailsSectionView(title: "Location", detail: show.location)
                         DetailsSectionView(title: "Founded by", detail: show.founder)
                         DetailsSectionView(title: "Established", detail: show.established)
@@ -80,10 +81,7 @@ struct ShowDetailsView: View {
                             DetailsSectionView(title: "Website", detail: "N/A")
                         }
                     }
-                    .background(Colors.Secondary.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-       
+                    .frame(maxWidth: .infinity)
                     
                     Spacer(minLength: 100)
                 }

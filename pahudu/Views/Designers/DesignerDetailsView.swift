@@ -19,11 +19,12 @@ struct DesignerDetailsView: View {
         
         ScrollView {
             VStack(spacing: 0) {
+                
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
                     ZStack(alignment: .bottom) {
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Tertiary.background]), startPoint: .top, endPoint: .bottom)
-                        AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/designers/lg/\(designer.name).png")!) { image in
+                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
+                        AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/lg/\(designer.name).png")!) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -60,8 +61,9 @@ struct DesignerDetailsView: View {
                     
                     Spacer(minLength: 25)
                     
+                    
                     // Table
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(spacing: 0) {
                         DetailsSectionView(title: "Born", detail: designer.dateOfBirth)
                         DetailsSectionView(title: "Founder", detail: designer.founder)
                         DetailsSectionView(title: "Education", detail: designer.education)
@@ -74,13 +76,13 @@ struct DesignerDetailsView: View {
                             DetailsSectionView(title: "Website", detail: "N/A")
                         }
                     }
-                    .background(Colors.Secondary.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity)
                     
                     Spacer(minLength: 100)
+                    
                 }
                 .padding(20)
+                
                 
             }
         }

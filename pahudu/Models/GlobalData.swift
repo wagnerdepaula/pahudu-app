@@ -20,6 +20,12 @@ class GlobalData: ObservableObject {
     @Published var designers: [Designer] = []
     @Published var shows: [Show] = []
     
-    
-        
 }
+
+
+
+struct Constants {
+    static let path: String = "https://storage.googleapis.com/pahudu.com"
+}
+
+

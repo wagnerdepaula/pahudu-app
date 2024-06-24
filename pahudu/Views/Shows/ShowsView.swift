@@ -98,8 +98,8 @@ struct ShowsListView: View {
                         showDetails = true
                         eventModel.selectedShow = show
                     } label: {
-                        HStack(spacing: 15) {
-                            AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!) { image in
+                        HStack(spacing: 10) {
+                            AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!) { image in
                                 image
                                     .renderingMode(.template)
                                     .resizable()
@@ -118,10 +118,8 @@ struct ShowsListView: View {
                                     .font(.body)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
+
                                 
-                                Text(show.location)
-                                    .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.body)
                             }
                             
                             Spacer()
@@ -164,7 +162,7 @@ struct ShowsGridView: View {
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 10) {
+            LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(filteredShows) { show in
                     ShowGridItemView(show: show, eventModel: eventModel, showDetails: $showDetails)
                         .id(show.id)
@@ -193,8 +191,8 @@ struct ShowGridItemView: View {
             showDetails = true
             eventModel.selectedShow = show
         } label: {
-            VStack(spacing: 5) {
-                AsyncCachedImage(url: URL(string: "https://storage.googleapis.com/pahudu.com/shows/sm/\(show.name).png")!) { image in
+            VStack(alignment: .leading, spacing: 5) {
+                AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!) { image in
                     image
                         .renderingMode(.template)
                         .resizable()
@@ -207,13 +205,13 @@ struct ShowGridItemView: View {
                 .background(Colors.Secondary.background)
                 
                 Text(show.name)
-                    .font(.callout)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(Colors.Secondary.foreground)
+                    .font(.caption)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .multilineTextAlignment(.leading)
             }
+            .frame(maxWidth: .infinity)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Show: \(show.name)"))

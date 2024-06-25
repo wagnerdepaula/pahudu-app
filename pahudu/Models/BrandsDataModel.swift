@@ -23,7 +23,7 @@ struct Brand: Codable, Identifiable {
     let parentCompany: String
     let website: String
     let nationality: String
-    let color: String
+    let imageName: String
 }
 
 
@@ -42,3 +42,9 @@ func fetchBrands() async -> [Brand] {
     }
 }
 
+
+extension Brand: Equatable {
+    static func == (lhs: Brand, rhs: Brand) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

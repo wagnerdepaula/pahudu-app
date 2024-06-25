@@ -33,6 +33,7 @@ struct DiscoverView: View {
                 VStack(spacing: 0) {
                     
                     
+                    
                     // Shows
                     VStack(spacing: 15) {
                         
@@ -48,7 +49,7 @@ struct DiscoverView: View {
                                 .font(.button)
                             })
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -58,12 +59,14 @@ struct DiscoverView: View {
                                         .id(show.id)
                                 }
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 10)
                             .drawingGroup()
                         }
                         .frame(minHeight: 175)
                     }
                     .padding(.vertical, 20)
+                    
+                    
                     
                     
                     // Brands
@@ -82,7 +85,7 @@ struct DiscoverView: View {
                                 .font(.button)
                             })
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         
@@ -93,7 +96,7 @@ struct DiscoverView: View {
                                         .id(brand.id)
                                 }
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 10)
                             .drawingGroup()
                         }
                         .frame(minHeight: 140)
@@ -117,7 +120,7 @@ struct DiscoverView: View {
                                 .font(.button)
                             })
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -127,12 +130,14 @@ struct DiscoverView: View {
                                         .id(designer.id)
                                 }
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 10)
                             .drawingGroup()
                         }
                         .frame(minHeight: 140)
                     }
                     .padding(.vertical, 20)
+                    
+                    
                     
                 }
             }
@@ -194,12 +199,12 @@ struct ShowItemView: View {
             showShowDetails = true
         }) {
             VStack(spacing: 7) {
-                ShowImageView(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!,
+                ShowImageView(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!,
                               width: width,
                               height: width)
                 
                 Text(show.name)
-                    .font(.callout)
+                    .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
                     .truncationMode(.tail)
@@ -209,14 +214,18 @@ struct ShowItemView: View {
 }
 
 
+
+
 struct BrandItemView: View {
+    
     let brand: Brand
     let width: CGFloat = 115
+    private let cornerRadius: CGFloat = 15
     
     @ObservedObject var eventModel: EventModel
     @Binding var showBrandDetails: Bool
     
-    private let cornerRadius: CGFloat = 15
+    
     
     var body: some View {
         Button(action: {
@@ -224,11 +233,10 @@ struct BrandItemView: View {
             showBrandDetails = true
         }) {
             VStack(spacing: 7) {
-                BrandImageView(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!,
-                               width: width, color: brand.color)
-                
+                BrandImageView(url: URL(string: "\(Constants.path)/brands/sm/\(brand.imageName)")!,
+                               width: width)
                 Text(brand.name)
-                    .font(.callout)
+                    .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
                     .truncationMode(.tail)
@@ -240,6 +248,7 @@ struct BrandItemView: View {
 
 
 struct DesignerItemView: View {
+    
     let designer: Designer
     let width: CGFloat = 115
     
@@ -252,11 +261,10 @@ struct DesignerItemView: View {
             showDesignerDetails = true
         }) {
             VStack(spacing: 7) {
-                DesignerImageView(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!,
+                DesignerImageView(url: URL(string: "\(Constants.path)/designers/sm/\(designer.imageName)")!,
                                   width: width)
-                
                 Text(designer.name.components(separatedBy: " ").first ?? "")
-                    .font(.callout)
+                    .font(.caption)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .foregroundColor(Colors.Primary.foreground)
@@ -265,6 +273,7 @@ struct DesignerItemView: View {
         }
     }
 }
+
 
 
 
@@ -287,15 +296,18 @@ struct ShowImageView: View {
         .frame(width: width, height: height)
         .foregroundColor(Colors.Primary.foreground)
         .background(Colors.Secondary.background)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 5)
+        )
     }
 }
 
 
 
 struct BrandImageView: View {
+    
     let url: URL
     let width: CGFloat
-    let color: String
     
     var body: some View {
         AsyncCachedImage(url: url) { image in
@@ -311,6 +323,7 @@ struct BrandImageView: View {
         .background(Colors.Secondary.background)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
+    
 }
 
 

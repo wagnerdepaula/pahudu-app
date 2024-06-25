@@ -22,7 +22,7 @@ struct BrandDetailsView: View {
                     let offsetY = geometry.frame(in: .global).minY
                     ZStack(alignment: .bottom) {
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
-                        AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/lg/\(brand.name).png")!) { image in
+                        AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/lg/\(brand.imageName)")!) { image in
                             image
                                 .renderingMode(.template)
                                 .resizable()
@@ -79,12 +79,10 @@ struct BrandDetailsView: View {
                         }
                     }
                     .frame(maxWidth: .infinity)
- 
-                    
                     
                     Spacer(minLength: 100)
                 }
-                .padding(20)
+                .padding(EdgeInsets(top: 20, leading: 10, bottom: 0, trailing: 10))
                 
             }
         }

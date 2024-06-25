@@ -99,7 +99,7 @@ struct ShowsListView: View {
                         eventModel.selectedShow = show
                     } label: {
                         HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!) { image in
+                            AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!) { image in
                                 image
                                     .renderingMode(.template)
                                     .resizable()
@@ -110,23 +110,21 @@ struct ShowsListView: View {
                             .frame(width: width, height: width)
                             .background(Colors.Secondary.background)
                             .foregroundColor(Colors.Primary.foreground)
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: 5)
+                            )
                             
-                            
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(show.name)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.body)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-
-                                
-                            }
+                            Text(show.name)
+                                .foregroundColor(Colors.Primary.foreground)
+                                .font(.body)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                             
                             Spacer()
                         }
                         .background(Colors.Primary.background)
                         .padding(.vertical, 5)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                     }
                     .id(show.id)
                 }
@@ -169,10 +167,11 @@ struct ShowsGridView: View {
                 }
             }
             .padding(.vertical, 5)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             .drawingGroup()
         }
         .background(Colors.Primary.background)
+        .scrollIndicators(.hidden)
     }
 }
 
@@ -192,7 +191,7 @@ struct ShowGridItemView: View {
             eventModel.selectedShow = show
         } label: {
             VStack(alignment: .leading, spacing: 5) {
-                AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.name).png")!) { image in
+                AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!) { image in
                     image
                         .renderingMode(.template)
                         .resizable()
@@ -203,6 +202,9 @@ struct ShowGridItemView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .foregroundColor(Colors.Primary.foreground)
                 .background(Colors.Secondary.background)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 5)
+                )
                 
                 Text(show.name)
                     .foregroundColor(Colors.Secondary.foreground)

@@ -29,18 +29,13 @@ struct Show: Codable, Identifiable {
     let website: String
     let keyHighlights: String
     let socialMedia: SocialMedia
+    let imageName: String
 }
 
 struct SocialMedia: Codable {
     let instagram: String
     let twitter: String
     let facebook: String
-}
-
-struct ShowWithImageURL: Identifiable {
-    let id: String
-    let show: Show
-    let imageURL: URL
 }
 
 
@@ -56,5 +51,12 @@ func fetchShows() async -> [Show] {
     } catch {
         print("Error fetching data: \(error)")
         return []
+    }
+}
+
+
+extension Show: Equatable {
+    static func == (lhs: Show, rhs: Show) -> Bool {
+        return lhs.id == rhs.id
     }
 }

@@ -24,12 +24,7 @@ struct Designer: Codable, Identifiable, Hashable  {
     let yearsActive: String
     let spouse: String
     let website: String
-}
-
-struct DesignerWithImageURL: Identifiable {
-    let id: String
-    let designer: Designer
-    let imageURL: URL
+    let imageName: String
 }
 
 
@@ -45,5 +40,12 @@ func fetchDesigners() async -> [Designer] {
     } catch {
         print("Error fetching data: \(error)")
         return []
+    }
+}
+
+
+extension Designer: Equatable {
+    static func == (lhs: Designer, rhs: Designer) -> Bool {
+        return lhs.id == rhs.id
     }
 }

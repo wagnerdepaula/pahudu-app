@@ -100,7 +100,7 @@ struct BrandsListView: View {
                         eventModel.selectedBrand = brand
                     } label: {
                         HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!) { image in
+                            AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.imageName)")!) { image in
                                 image
                                     .renderingMode(.template)
                                     .resizable()
@@ -121,7 +121,7 @@ struct BrandsListView: View {
                         }
                         .background(Colors.Primary.background)
                         .padding(.vertical, 5)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                     }
                     .id(brand.id)
                 }
@@ -165,7 +165,7 @@ struct BrandsGridView: View {
                 }
             }
             .padding(.vertical, 5)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             .drawingGroup()
         }
         .background(Colors.Primary.background)
@@ -190,7 +190,7 @@ struct BrandGridItemView: View {
         } label: {
             VStack(alignment: .center, spacing: 5) {
                 GeometryReader { geometry in
-                    AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.name).png")!) { image in
+                    AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/sm/\(brand.imageName)")!) { image in
                         image
                             .renderingMode(.template)
                             .resizable()

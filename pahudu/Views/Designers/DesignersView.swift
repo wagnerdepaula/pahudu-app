@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+
+
+
+
 struct DesignersView: View {
     
     @EnvironmentObject var globalData: GlobalData
@@ -103,49 +107,48 @@ struct DesignersListView: View {
     var body: some View {
         ScrollViewReader { scrollProxy in
             ZStack {
-                List {
-                    Group {
+                
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(alphabet, id: \.self) { letter in
                             if let designersForLetter = groupedDesigners[letter] {
-                                Section(header: Text(letter).id(letter)) {
-                                    ForEach(designersForLetter) { designer in
+                                Section(header: Text(letter).id(letter)
+                                    .font(.callout)
+                                    .foregroundStyle(Colors.Secondary.foreground)
+                                    .padding(EdgeInsets(top: 15, leading: 10, bottom: 0, trailing: 10))
+                                ) {
+                                    ForEach(designersForLetter, id: \.id) { designer in
                                         DesignerRow(designer: designer, eventModel: eventModel, showDetails: $showDetails, width: width)
-                                            .listRowInsets(EdgeInsets())
-                                            .listRowSeparator(.hidden)
-                                            .listRowSpacing(0)
+                                            .id(designer.id)
                                     }
                                 }
-                                .listSectionSeparator(.hidden)
                             }
                         }
                     }
-                    .drawingGroup()
-                    
-                    
                 }
-                .listStyle(.plain)
-                .listSectionSpacing(0)
                 .scrollIndicators(.hidden)
                 
                 
                 VStack(spacing: 0) {
                     ForEach(alphabet, id: \.self) { letter in
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                if groupedDesigners[letter] != nil {
-                                    withAnimation {
-                                        scrollProxy.scrollTo(letter, anchor: .top)
+                        if (groupedDesigners[letter] != nil) {
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    if groupedDesigners[letter] != nil {
+                                        withAnimation(.easeInOut(duration: 1)) {
+                                            scrollProxy.scrollTo(letter, anchor: .top)
+                                        }
+                                        UIApplication.triggerHapticFeedback()
                                     }
+                                }) {
+                                    Text(letter)
+                                        .font(.footnote)
                                 }
-                            }) {
-                                Text(letter)
-                                    .font(.footnote)
+                                .padding(.vertical, 3)
+                                .frame(width: 40)
+                                .background(Colors.Primary.background)
                             }
-                            .padding(.vertical, 2)
-                            .frame(width: 30)
-                            .background(Colors.Primary.background)
-                            
                         }
                     }
                 }
@@ -158,45 +161,47 @@ struct DesignersListView: View {
 
 
 struct DesignerRow: View {
-    
     let designer: Designer
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     let width: CGFloat
     
     var body: some View {
-        Button {
-            showDetails = true
-            eventModel.selectedDesigner = designer
-        } label: {
-            HStack(spacing: 10) {
-                AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    Colors.Secondary.background
-                }
-                .frame(width: width, height: width)
-                .background(Colors.Secondary.foreground)
-                .clipShape(Circle())
-                .overlay {
-                    Circle()
-                        .stroke(Colors.Primary.background, lineWidth: 1)
-                }
-                
-                Text(designer.name)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .font(.body)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                
-                Spacer()
-            }
-            //.background(Colors.Primary.background)
-            .padding(.vertical, 5)
-            .padding(.horizontal, 20)
+        
+        HStack {
             
+            Button(action: {
+                showDetails = true
+                eventModel.selectedDesigner = designer
+            }) {
+                HStack(spacing: 10) {
+                    AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.imageName)")!) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Colors.Secondary.background
+                    }
+                    .frame(width: width, height: width)
+                    .background(Colors.Secondary.foreground)
+                    .clipShape(Circle())
+                    .overlay {
+                        Circle()
+                            .stroke(Colors.Primary.background, lineWidth: 1)
+                    }
+                    
+                    Text(designer.name)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 5)
+                .padding(.horizontal, 10)
+                .background(Colors.Primary.background)
+            }
+            .buttonStyle(BorderlessButtonStyle())
         }
     }
 }
@@ -238,7 +243,7 @@ struct DesignersGridView: View {
                             
                             GeometryReader { geometry in
                                 
-                                AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.name).png")!) { image in
+                                AsyncCachedImage(url: URL(string: "\(Constants.path)/designers/sm/\(designer.imageName)")!) { image in
                                     image
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
@@ -269,7 +274,7 @@ struct DesignersGridView: View {
                 }
             }
             .padding(.vertical, 5)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             .drawingGroup()
             
         }

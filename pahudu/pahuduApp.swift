@@ -18,6 +18,9 @@ struct PahuduApp: App {
     }
     
     var body: some Scene {
+        
+        let eventModel = EventModel(globalData: globalData)
+        
         WindowGroup {
             Group {
                 if isDataLoaded {
@@ -25,6 +28,7 @@ struct PahuduApp: App {
                         .preferredColorScheme(.dark)
                         .accentColor(Colors.Primary.accent)
                         .environmentObject(globalData)
+                        .environmentObject(eventModel)
                 } else {
                     LaunchView()
                 }
@@ -40,18 +44,22 @@ struct PahuduApp: App {
     private func fetchData() async {
         globalData.isLoading = true
         defer { globalData.isLoading = false }
-            
+        
+        // Fetch shows
         async let showsTask = fetchShows()
-        async let brandsTask = fetchBrands()
-        async let designersTask = fetchDesigners()
-        
-        let (fetchedShows, fetchedBrands, fetchedDesigners) = await (showsTask, brandsTask, designersTask)
-        
+        let fetchedShows = await showsTask
         globalData.shows = fetchedShows
+        
+        // Fetch brands
+        async let brandsTask = fetchBrands()
+        let fetchedBrands = await brandsTask
         globalData.brands = fetchedBrands
+        
+        // Fetch designers
+        async let designersTask = fetchDesigners()
+        let fetchedDesigners = await designersTask
         globalData.designers = fetchedDesigners
     }
-    
     
     
     
@@ -69,6 +77,7 @@ struct PahuduApp: App {
         configureToolbarAppearance()
         configureTabBarAppearance()
         configureButtonAppearance()
+        configureSearchAppearance()
         //listFonts()
     }
     
@@ -76,10 +85,9 @@ struct PahuduApp: App {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
-        //navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         navigationBarAppearance.shadowColor = .clear
-        
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
@@ -103,8 +111,8 @@ struct PahuduApp: App {
     private func configureToolbarAppearance() {
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithDefaultBackground()
-        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
-        //toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         toolbarAppearance.shadowColor = .clear
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
@@ -120,8 +128,8 @@ struct PahuduApp: App {
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
-        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .dark)
-        //tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background)
+        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         tabBarAppearance.shadowColor = .clear
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
@@ -140,11 +148,41 @@ struct PahuduApp: App {
         
     }
     
+    
+    private func configureSearchAppearance() {
+        let searchBarAppearance = UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
+        searchBarAppearance.setImage(UIImage(systemName: "magnifyingglass"), for: .search, state: .normal)
+        searchBarAppearance.setImage(UIImage(systemName: "xmark.circle.fill"), for: .clear, state: .normal)
+        searchBarAppearance.tintColor = UIColor(Colors.Primary.accent)
+        
+        let textFieldAppearance = UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+        
+        if let customFont = UIFont(name: "Inter-Regular", size: 16) {
+            textFieldAppearance.font = customFont
+        }
+        
+        if #available(iOS 13.0, *) {
+            let searchTextFieldAppearance = UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+            
+            let placeholderAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor(Colors.Tertiary.foreground),
+                .font: UIFont(name: "Inter-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16)
+            ]
+            searchTextFieldAppearance.attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
+            
+            if let customFont = UIFont(name: "Inter-Regular", size: 16) {
+                searchTextFieldAppearance.font = customFont
+            }
+        }
+    }
+    
+    
+    
     private func configureButtonAppearance() {
         UIButton.appearance().tintColor = UIColor(Color.accentColor)
     }
     
-  
+    
     
 }
 

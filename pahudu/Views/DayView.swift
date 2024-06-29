@@ -10,9 +10,10 @@ import SwiftUI
 struct DayView: View {
     
     @EnvironmentObject var globalData: GlobalData
+    @EnvironmentObject var eventModel: EventModel
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var eventModel = EventModel()
-    @State private var events: [pahudu.Event] = []
+    
+    //@State private var events: [pahudu.Event] = []
     
     var body: some View {
         
@@ -80,41 +81,41 @@ struct DayView: View {
     }
     
     
-    private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            
-//            Text(show.brand.name)
+//    private func showView(show: pahudu.Show, event: pahudu.Event) -> some View {
+//        VStack(alignment: .leading, spacing: 5) {
+//            
+////            Text(show.brand.name)
+////                .font(.callout)
+////                .foregroundColor(Colors.Primary.foreground)
+//            
+//            Text("\(event.name) (\(event.acronym))")
 //                .font(.callout)
-//                .foregroundColor(Colors.Primary.foreground)
-            
-            Text("\(event.name) (\(event.acronym))")
-                .font(.callout)
-                .foregroundColor(Colors.Primary.foreground.opacity(0.5))
-            //            if let url = show.ticketLink {
-            //                Button(action: {
-            //                    if let url = URL(string: url.description) {
-            //                        UIApplication.shared.open(url)
-            //                    }
-            //                }) {
-            //                    Text("Get Tickets")
-            //                        .font(.callout)
-            //                        .foregroundColor(Colors.Primary.foreground)
-            //                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-            //                        .background(Colors.Primary.blue)
-            //                        .cornerRadius(25)
-            //                }
-            //            }
-        }
-        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 7)
-                .fill(colorForAcronym(event.acronym).opacity(0.3))
-            //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
-        )
-        
-        
-    }
+//                .foregroundColor(Colors.Primary.foreground.opacity(0.5))
+//            //            if let url = show.ticketLink {
+//            //                Button(action: {
+//            //                    if let url = URL(string: url.description) {
+//            //                        UIApplication.shared.open(url)
+//            //                    }
+//            //                }) {
+//            //                    Text("Get Tickets")
+//            //                        .font(.callout)
+//            //                        .foregroundColor(Colors.Primary.foreground)
+//            //                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+//            //                        .background(Colors.Primary.blue)
+//            //                        .cornerRadius(25)
+//            //                }
+//            //            }
+//        }
+//        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+//        .frame(maxWidth: .infinity, alignment: .leading)
+////        .background(
+////            RoundedRectangle(cornerRadius: 7)
+////                .fill(colorForAcronym(event.acronym).opacity(0.3))
+////            //.stroke(colorForAcronym(event.acronym), style: StrokeStyle(lineWidth: 0.5, lineCap: .square))
+////        )
+//        
+//        
+//    }
     
     func getHourString(_ hour: Int) -> String {
         let formatter = DateFormatter()

@@ -23,8 +23,10 @@ struct ShowDetailsView: View {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
                     ZStack(alignment: .bottom) {
+                        
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
-                        AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/lg/\(show.imageName)")!) { image in
+                        
+                        AsyncCachedImage(url: URL(string: "\(Path.shows)/lg/\(show.imageName)")!) { image in
                             image
                                 .renderingMode(.template)
                                 .resizable()
@@ -63,33 +65,80 @@ struct ShowDetailsView: View {
                         .font(.body)
                         .lineSpacing(6)
                     
-                    Spacer(minLength: 25)
+                    
+                    
+                    Spacer(minLength: 30)
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(Array(show.history.enumerated()), id: \.element) { index, item in
+                            HStack(alignment: .top, spacing: 0) {
+                                Text("\(index + 1).")
+                                    .foregroundColor(Colors.Secondary.foreground)
+                                    .font(.body)
+                                    .frame(width: 25, alignment: .leading)
+                                Text(item)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.body)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineSpacing(6)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 30)
                     
                     // Table
                     VStack(spacing: 0) {
-                        DetailsSectionView(title: "Acronym", detail: show.acronym)
-                        DetailsSectionView(title: "Location", detail: show.location)
-                        DetailsSectionView(title: "Founded by", detail: show.founder)
-                        DetailsSectionView(title: "Established", detail: show.established)
-                        DetailsSectionView(title: "Organizer", detail: show.organizer)
-                        DetailsSectionView(title: "Start date", detail: show.startDate)
-                        DetailsSectionView(title: "End date", detail: show.endDate)
-                        DetailsSectionView(title: "Frequency", detail: show.frequency)
+                        
+                        if show.acronym != "N/A" {
+                            DetailsSectionView(title: "Acronym", detail: show.acronym)
+                        }
+                        
+                        if show.location != "N/A" {
+                            DetailsSectionView(title: "Location", detail: show.location)
+                        }
+                        
+                        if show.founder != "N/A" {
+                            DetailsSectionView(title: "Founded by", detail: show.founder)
+                        }
+                        
+                        if show.established != "N/A" {
+                            DetailsSectionView(title: "Established", detail: show.established)
+                        }
+                        
+                        if show.organizer != "N/A" {
+                            DetailsSectionView(title: "Organizer", detail: show.organizer)
+                        }
+                        
+                        if show.startDate != "N/A" {
+                            DetailsSectionView(title: "Start date", detail: show.startDate)
+                        }
+                        
+                        if show.endDate != "N/A" {
+                            DetailsSectionView(title: "End date", detail: show.endDate)
+                        }
+                        
+                        if show.frequency != "N/A" {
+                            DetailsSectionView(title: "Frequency", detail: show.frequency)
+                        }
+                        
                         if show.website != "N/A" {
                             DetailsLinkSectionView(title: "Website", link: show.website)
-                        } else {
-                            DetailsSectionView(title: "Website", detail: "N/A")
                         }
                     }
                     .frame(maxWidth: .infinity)
+                    .background(Colors.Secondary.background)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 10)
+                    )
                     
                     Spacer(minLength: 100)
                 }
-                .padding(EdgeInsets(top: 20, leading: 10, bottom: 0, trailing: 10))
+                .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 
             }
         }
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.top)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)

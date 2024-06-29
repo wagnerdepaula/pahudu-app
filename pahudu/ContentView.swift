@@ -45,11 +45,11 @@ struct ContentView: View {
                     Image(systemName: Tab.discover.rawValue)
                 }
             
-            SearchView()
-                .tag(Tab.search)
-                .tabItem {
-                    Image(systemName: Tab.search.rawValue)
-                }
+//            SearchView()
+//                .tag(Tab.search)
+//                .tabItem {
+//                    Image(systemName: Tab.search.rawValue)
+//                }
             
             AccountView()
                 .tag(Tab.account)

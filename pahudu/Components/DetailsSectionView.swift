@@ -16,32 +16,31 @@ struct DetailsSectionView: View {
         HStack(alignment: .top) {
             
             Text(title)
-                .foregroundColor(Colors.Primary.foreground)
+                .foregroundColor(Colors.Tertiary.foreground)
                 .frame(maxWidth: 110, alignment: .leading)
             
             Text(detail)
-                .foregroundColor(Colors.Secondary.foreground)
+                .foregroundColor(Colors.Primary.foreground)
                 .lineSpacing(4)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 0, bottom: 12, trailing: 0))
-        Divider(padding: 0, height: 1)
+        .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
+        Divider(height: 1)
     }
 }
 
 
+
 struct DetailsLinkSectionView: View {
-    
     let title: String
     let link: String
     
     var body: some View {
         HStack(alignment: .top) {
-            
             Text(title)
-                .foregroundColor(Colors.Primary.foreground)
+                .foregroundColor(Colors.Tertiary.foreground)
                 .frame(maxWidth: 110, alignment: .leading)
             
             Link(cleanURL(link), destination: URL(string: link)!)
@@ -52,6 +51,6 @@ struct DetailsLinkSectionView: View {
                 .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 10, leading: 0, bottom: 12, trailing: 0))
+        .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
     }
 }

@@ -82,7 +82,7 @@ struct AccountView: View {
                 .frame(width: 35, height: 35)
                 .foregroundColor(Colors.Primary.accent)
             Text(option.rawValue)
-                .font(.button)
+                .font(.subheadline)
                 .foregroundColor(Colors.Primary.foreground)
         }
     }

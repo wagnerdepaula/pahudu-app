@@ -13,8 +13,16 @@ extension Font {
         .custom("Inter-Regular", size: 34)
     }
     
-    static var title: Font {
+    static var title1: Font {
         .custom("Inter-Regular", size: 24)
+    }
+    
+    static var title2: Font {
+        .custom("Inter-Regular", size: 22)
+    }
+    
+    static var title3: Font {
+        .custom("Inter-Medium", size: 18)
     }
     
     static var headline: Font {
@@ -58,7 +66,7 @@ extension Font {
     }
     
     static var button: Font {
-        .custom("Inter-Regular", size: 16)
+        .custom("Inter-Medium", size: 16)
     }
     
 }

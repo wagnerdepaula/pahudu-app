@@ -10,7 +10,7 @@ import SwiftUI
 struct ShowsView: View {
     
     @EnvironmentObject var globalData: GlobalData
-    @ObservedObject var eventModel: EventModel = EventModel()
+    @EnvironmentObject var eventModel: EventModel
     
     @State private var searchText = ""
     @State private var showDetails: Bool = false
@@ -75,6 +75,7 @@ struct ShowsView: View {
 
 struct ShowsListView: View {
     
+    @ObservedObject private var globalData = GlobalData()
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var shows: [Show]
@@ -96,10 +97,10 @@ struct ShowsListView: View {
                 ForEach(filteredShows) { show in
                     Button {
                         showDetails = true
-                        eventModel.selectedShow = show
+                        eventModel.selectShow(show: show)
                     } label: {
                         HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!) { image in
+                            AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
                                 image
                                     .renderingMode(.template)
                                     .resizable()
@@ -116,7 +117,7 @@ struct ShowsListView: View {
                             
                             Text(show.name)
                                 .foregroundColor(Colors.Primary.foreground)
-                                .font(.body)
+                                .font(.subheadline)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                             
@@ -124,12 +125,17 @@ struct ShowsListView: View {
                         }
                         .background(Colors.Primary.background)
                         .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 20)
                     }
                     .id(show.id)
                 }
             }
-            .drawingGroup()
+            //.drawingGroup()
+        }
+        .refreshable {
+            async let showsTask = fetchShows()
+            let fetchedShows = await showsTask
+            shows = fetchedShows
         }
     }
 }
@@ -167,8 +173,8 @@ struct ShowsGridView: View {
                 }
             }
             .padding(.vertical, 5)
-            .padding(.horizontal, 10)
-            .drawingGroup()
+            .padding(.horizontal, 20)
+            //.drawingGroup()
         }
         .background(Colors.Primary.background)
         .scrollIndicators(.hidden)
@@ -188,10 +194,10 @@ struct ShowGridItemView: View {
     var body: some View {
         Button {
             showDetails = true
-            eventModel.selectedShow = show
+            eventModel.selectShow(show: show)
         } label: {
             VStack(alignment: .leading, spacing: 5) {
-                AsyncCachedImage(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!) { image in
+                AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
                     image
                         .renderingMode(.template)
                         .resizable()

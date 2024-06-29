@@ -12,7 +12,8 @@ struct DesignerResponse: Codable {
     var designers: [Designer]
 }
 
-struct Designer: Codable, Identifiable, Hashable  {
+struct Designer: Codable, Identifiable, Hashable {
+    
     let id: String
     let education: String
     let nationality: String
@@ -21,10 +22,34 @@ struct Designer: Codable, Identifiable, Hashable  {
     let title: String
     let about: String
     let dateOfBirth: String
+    let placeOfBirth: String
     let yearsActive: String
     let spouse: String
     let website: String
     let imageName: String
+    let history: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case id, education, nationality, founder, name, title, about, dateOfBirth, placeOfBirth, yearsActive, spouse, website, imageName, history
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        education = try container.decodeIfPresent(String.self, forKey: .education) ?? "N/A"
+        nationality = try container.decodeIfPresent(String.self, forKey: .nationality) ?? "N/A"
+        founder = try container.decodeIfPresent(String.self, forKey: .founder) ?? "N/A"
+        name = try container.decodeIfPresent(String.self, forKey: .name) ?? "N/A"
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "N/A"
+        about = try container.decodeIfPresent(String.self, forKey: .about) ?? "N/A"
+        dateOfBirth = try container.decodeIfPresent(String.self, forKey: .dateOfBirth) ?? "N/A"
+        placeOfBirth = try container.decodeIfPresent(String.self, forKey: .placeOfBirth) ?? "N/A"
+        yearsActive = try container.decodeIfPresent(String.self, forKey: .yearsActive) ?? "N/A"
+        spouse = try container.decodeIfPresent(String.self, forKey: .spouse) ?? "N/A"
+        website = try container.decodeIfPresent(String.self, forKey: .website) ?? "N/A"
+        imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? "default_image"
+        history = try container.decodeIfPresent(Array.self, forKey: .history) ?? []
+    }
 }
 
 

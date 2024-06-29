@@ -5,49 +5,68 @@
 //  Created by Wagner De Paula on 3/26/24.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - Models
 
 
-struct Event {
-    let id: UUID
-    let acronym: String
-    let name: String
-    let location: String
-    let startDate: Date
-    let endDate: Date
-    let logoURL: URL?
-    let description: String
-    let socialMediaLinks: [String: URL?]
-    var shows: [Show]
-}
-
-
-struct Venue {
-    let id: UUID
-    let name: String
-    let location: String
-    let mapLink: URL?
-    let capacity: Int
-    let amenities: [String]
-}
+//struct Event {
+//    let id: UUID
+//    let acronym: String
+//    let name: String
+//    let location: String
+//    let startDate: Date
+//    let endDate: Date
+//    let logoURL: URL?
+//    let description: String
+//    let socialMediaLinks: [String: URL?]
+//    var shows: [Show]
+//}
+//
+//
+//struct Venue {
+//    let id: UUID
+//    let name: String
+//    let location: String
+//    let mapLink: URL?
+//    let capacity: Int
+//    let amenities: [String]
+//}
 
 
 
 class EventModel: ObservableObject {
     
+    private let globalData: GlobalData
+        
+    init(globalData: GlobalData) {
+        self.globalData = globalData
+    }
+
     @Published var selectedDesigner: Designer?
     @Published var selectedBrand: Brand?
     @Published var selectedShow: Show?
     
-    @Published var events: [Event] = []
+    //@Published var events: [Event] = []
     //@Published var designers: [Designer] = []
 
     
-    init() {
-        //loadEvents()
+    func selectDesigner(designer: Designer) {
+        selectedDesigner = designer
+        globalData.addRecentItem(designer)
     }
+    
+    func selectBrand(brand: Brand) {
+        selectedBrand = brand
+        globalData.addRecentItem(brand)
+    }
+    
+    func selectShow(show: Show) {
+        selectedShow = show
+        globalData.addRecentItem(show)
+    }
+    
+ 
     
     
 
@@ -178,5 +197,11 @@ class EventModel: ObservableObject {
 //        }
 //    }
     
+    
+}
+
+
+
+func refreshDesigners() async {
     
 }

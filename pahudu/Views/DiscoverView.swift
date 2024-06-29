@@ -9,9 +9,9 @@ import SwiftUI
 
 
 struct DiscoverView: View {
-        
+    
     @EnvironmentObject var globalData: GlobalData
-    @StateObject private var eventModel = EventModel()
+    @EnvironmentObject var eventModel: EventModel
     
     @State private var showDesignersList = false
     @State private var showBrandsList = false
@@ -33,36 +33,77 @@ struct DiscoverView: View {
                 VStack(spacing: 0) {
                     
                     
+                    // Recent
+                    if globalData.recentItems.count > 0 {
+                        VStack(spacing: 15) {
+                            HStack{
+                                Button(action: {
+                                    // showShowsList = true
+                                }, label: {
+                                    HStack {
+                                        Text("Recently viewed")
+                                    }
+                                    .font(.title3)
+                                })
+                            }
+                            .padding(.horizontal, 20)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(globalData.recentItems.indices, id: \.self) { index in
+                                        switch globalData.recentItems[index] {
+                                        case let show as Show:
+                                            ShowItemView(show: show, width: 105, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                                .id(show.id)
+                                        case let brand as Brand:
+                                            BrandItemView(brand: brand, width: 105, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                        case let designer as Designer:
+                                            DesignerItemView(designer: designer, width: 105, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                        default:
+                                            Text("Unknown item type")
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                            
+                        }
+                        .padding(.vertical, 20)
+                    }
+                    
+                    
+                    
+                    
                     
                     // Shows
                     VStack(spacing: 15) {
-                        
                         HStack{
                             Button(action: {
                                 showShowsList = true
                             }, label: {
                                 HStack {
                                     Text("Shows")
-                                    Spacer()
                                     Image(systemName: "chevron.forward")
+                                        .opacity(0.5)
+                                        .fontWeight(.semibold)
                                 }
-                                .font(.button)
+                                .font(.title3)
                             })
                         }
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 20)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(globalData.shows) { show in
-                                    ShowItemView(show: show, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                    ShowItemView(show: show, width: 165, eventModel: eventModel, showShowDetails: $showShowDetails)
                                         .id(show.id)
                                 }
                             }
-                            .padding(.horizontal, 10)
-                            .drawingGroup()
+                            .padding(.horizontal, 20)
+                            //.drawingGroup()
                         }
-                        .frame(minHeight: 175)
                     }
                     .padding(.vertical, 20)
                     
@@ -79,27 +120,28 @@ struct DiscoverView: View {
                             }, label: {
                                 HStack {
                                     Text("Brands")
-                                    Spacer()
                                     Image(systemName: "chevron.forward")
+                                        .opacity(0.5)
+                                        .fontWeight(.semibold)
                                 }
-                                .font(.button)
+                                .font(.title3)
                             })
                         }
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 20)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(globalData.brands) { brand in
-                                    BrandItemView(brand: brand, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                    BrandItemView(brand: brand, width: 105, eventModel: eventModel, showBrandDetails: $showBrandDetails)
                                         .id(brand.id)
                                 }
                             }
-                            .padding(.horizontal, 10)
-                            .drawingGroup()
+                            .padding(.horizontal, 20)
+                            //.drawingGroup()
                         }
-                        .frame(minHeight: 140)
+                        
                     }
                     .padding(.vertical, 20)
                     
@@ -114,32 +156,49 @@ struct DiscoverView: View {
                             }, label: {
                                 HStack {
                                     Text("Designers")
-                                    Spacer()
                                     Image(systemName: "chevron.forward")
+                                        .opacity(0.5)
+                                        .fontWeight(.semibold)
                                 }
-                                .font(.button)
+                                .font(.title3)
                             })
                         }
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 20)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(globalData.designers) { designer in
-                                    DesignerItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                    DesignerItemView(designer: designer, width: 105, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
                                         .id(designer.id)
                                 }
                             }
-                            .padding(.horizontal, 10)
-                            .drawingGroup()
+                            .padding(.horizontal, 20)
+                            //.drawingGroup()
                         }
-                        .frame(minHeight: 140)
                     }
                     .padding(.vertical, 20)
                     
                     
                     
                 }
+                
+                
+                
+                
+            }
+            .refreshable {
+                async let showsTask = fetchShows()
+                async let brandsTask = fetchBrands()
+                async let designersTask = fetchDesigners()
+                
+                let fetchedShows = await showsTask
+                let fetchedBrands = await brandsTask
+                let fetchedDesigners = await designersTask
+                
+                globalData.shows = fetchedShows
+                globalData.brands = fetchedBrands
+                globalData.designers = fetchedDesigners
             }
             .opacity(opacity)
             .onAppear {
@@ -177,8 +236,8 @@ struct DiscoverView: View {
     }
     
     
-   
-
+    
+    
 }
 
 
@@ -187,22 +246,21 @@ struct DiscoverView: View {
 
 
 struct ShowItemView: View {
+    
     let show: Show
-    let width: CGFloat = 180
+    let width: CGFloat
     
     @ObservedObject var eventModel: EventModel
     @Binding var showShowDetails: Bool
     
+    
     var body: some View {
         Button(action: {
-            eventModel.selectedShow = show
             showShowDetails = true
+            eventModel.selectShow(show: show)
         }) {
             VStack(spacing: 7) {
-                ShowImageView(url: URL(string: "\(Constants.path)/shows/sm/\(show.imageName)")!,
-                              width: width,
-                              height: width)
-                
+                ShowImageView(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!, width: width, height: width)
                 Text(show.name)
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
@@ -219,22 +277,18 @@ struct ShowItemView: View {
 struct BrandItemView: View {
     
     let brand: Brand
-    let width: CGFloat = 115
-    private let cornerRadius: CGFloat = 15
+    let width: CGFloat
     
     @ObservedObject var eventModel: EventModel
     @Binding var showBrandDetails: Bool
     
-    
-    
     var body: some View {
         Button(action: {
-            eventModel.selectedBrand = brand
             showBrandDetails = true
+            eventModel.selectBrand(brand: brand)
         }) {
             VStack(spacing: 7) {
-                BrandImageView(url: URL(string: "\(Constants.path)/brands/sm/\(brand.imageName)")!,
-                               width: width)
+                BrandImageView(url: URL(string: "\(Path.brands)/sm/\(brand.imageName)")!, width: width)
                 Text(brand.name)
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
@@ -250,19 +304,18 @@ struct BrandItemView: View {
 struct DesignerItemView: View {
     
     let designer: Designer
-    let width: CGFloat = 115
+    let width: CGFloat
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDesignerDetails: Bool
     
     var body: some View {
         Button(action: {
-            eventModel.selectedDesigner = designer
             showDesignerDetails = true
+            eventModel.selectDesigner(designer: designer)
         }) {
             VStack(spacing: 7) {
-                DesignerImageView(url: URL(string: "\(Constants.path)/designers/sm/\(designer.imageName)")!,
-                                  width: width)
+                DesignerImageView(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!, width: width)
                 Text(designer.name.components(separatedBy: " ").first ?? "")
                     .font(.caption)
                     .lineLimit(1)
@@ -321,7 +374,7 @@ struct BrandImageView: View {
         .frame(width: width, height: width)
         .foregroundColor(Colors.Primary.foreground)
         .background(Colors.Secondary.background)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
     
 }

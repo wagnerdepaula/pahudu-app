@@ -10,14 +10,34 @@ import Combine
 
 actor ImageCache {
     static let shared = ImageCache()
-    private let cache = NSCache<NSURL, UIImage>()
-    
+    private var cache = [URL: UIImage]()
+    private var lruList = [URL]()
+    private let maxCacheSize = 100
+
     func image(for url: URL) -> UIImage? {
-        cache.object(forKey: url as NSURL)
+        if let image = cache[url] {
+            updateLRU(url)
+            return image
+        }
+        return nil
     }
-    
+
     func insertImage(_ image: UIImage, for url: URL) {
-        cache.setObject(image, forKey: url as NSURL)
+        cache[url] = image
+        updateLRU(url)
+        if lruList.count > maxCacheSize {
+            if let oldestURL = lruList.first {
+                cache.removeValue(forKey: oldestURL)
+                lruList.removeFirst()
+            }
+        }
+    }
+
+    private func updateLRU(_ url: URL) {
+        if let index = lruList.firstIndex(of: url) {
+            lruList.remove(at: index)
+        }
+        lruList.append(url)
     }
 }
 
@@ -26,12 +46,13 @@ struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
     var url: URL?
     @ViewBuilder var content: (Image) -> ImageView
     @ViewBuilder var placeholder: () -> PlaceholderView
-    
+
     @State private var image: UIImage?
     @State private var cancellable: AnyCancellable?
-    
+
     private let imageCache = ImageCache.shared
-    
+    private let imageDownloader = ImageDownloader.shared
+
     init(
         url: URL?,
         @ViewBuilder content: @escaping (Image) -> ImageView,
@@ -41,7 +62,7 @@ struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
         self.content = content
         self.placeholder = placeholder
     }
-    
+
     var body: some View {
         Group {
             if let uiImage = image {
@@ -57,37 +78,64 @@ struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
             loadImage()
         }
     }
-    
+
     private func loadImage() {
         guard let url = url else { return }
-        
+
         Task {
             if let cachedImage = await imageCache.image(for: url) {
                 self.image = cachedImage
                 return
             }
-            
+
             await downloadImage(from: url)
         }
     }
-    
+
     private func downloadImage(from url: URL) async {
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            guard let uiImage = UIImage(data: data) else { return }
-            
-            let resizedImage = await resizeImage(uiImage, to: CGSize(width: 300, height: 300))
-            await imageCache.insertImage(resizedImage, for: url)
-            
-            self.image = resizedImage
+            let image = try await imageDownloader.downloadImage(from: url)
+            await imageCache.insertImage(image, for: url)
+            self.image = image
         } catch {
             print("Error downloading image: \(error)")
         }
     }
-    
+
+    private func cancelDownload() {
+        cancellable?.cancel()
+    }
+}
+
+class ImageDownloader {
+    static let shared = ImageDownloader()
+
+    private let session: URLSession
+    private let processingQueue: OperationQueue
+
+    private init() {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 30
+        configuration.timeoutIntervalForResource = 60
+        configuration.waitsForConnectivity = true
+        self.session = URLSession(configuration: configuration)
+
+        self.processingQueue = OperationQueue()
+        processingQueue.maxConcurrentOperationCount = 4
+        processingQueue.qualityOfService = .userInitiated
+    }
+
+    func downloadImage(from url: URL) async throws -> UIImage {
+        let (data, _) = try await session.data(from: url)
+        guard let image = UIImage(data: data) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+        return await resizeImage(image, to: CGSize(width: 200, height: 200))
+    }
+
     private func resizeImage(_ image: UIImage, to size: CGSize) async -> UIImage {
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
+        await withCheckedContinuation { continuation in
+            processingQueue.addOperation {
                 let renderer = UIGraphicsImageRenderer(size: size)
                 let resizedImage = renderer.image { _ in
                     image.draw(in: CGRect(origin: .zero, size: size))
@@ -95,9 +143,5 @@ struct AsyncCachedImage<ImageView: View, PlaceholderView: View>: View {
                 continuation.resume(returning: resizedImage)
             }
         }
-    }
-    
-    private func cancelDownload() {
-        cancellable?.cancel()
     }
 }

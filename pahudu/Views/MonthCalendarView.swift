@@ -126,7 +126,7 @@ struct CalendarCellView: View {
                 ZStack {
                     if dateItem.isToday {
                         Circle()
-                            .fill(Color.accentColor.opacity(0.2))
+                            .fill(Colors.Primary.accent)
                             .frame(width: cellWidth, height: cellWidth)
                     } else if CalendarCellView.images[dateItem.day] != nil {
                         Circle()
@@ -135,7 +135,7 @@ struct CalendarCellView: View {
                     }
                     Text("\(dateItem.day)")
                         .font(.numberMedium)
-                        .foregroundColor(dateItem.isToday ? Colors.Primary.accent : Colors.Primary.foreground)
+                        .foregroundColor(dateItem.isToday ? Colors.Primary.foreground : Colors.Primary.foreground)
                         .frame(width: width, height: width)
                     Circle()
                         .stroke(isSelected ? Colors.Primary.foreground : .clear, lineWidth: 1.5)

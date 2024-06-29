@@ -21,8 +21,10 @@ struct BrandDetailsView: View {
                 GeometryReader { geometry in
                     let offsetY = geometry.frame(in: .global).minY
                     ZStack(alignment: .bottom) {
+                        
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
-                        AsyncCachedImage(url: URL(string: "\(Constants.path)/brands/lg/\(brand.imageName)")!) { image in
+                        
+                        AsyncCachedImage(url: URL(string: "\(Path.brands)/lg/\(brand.imageName)")!) { image in
                             image
                                 .renderingMode(.template)
                                 .resizable()
@@ -38,6 +40,7 @@ struct BrandDetailsView: View {
                         } placeholder: {
                             Color.clear
                         }
+                        
                     }
                     .frame(maxWidth: size, maxHeight: size, alignment: .bottom)
                 }
@@ -48,12 +51,13 @@ struct BrandDetailsView: View {
                 
                 VStack(alignment: .leading) {
                     
+                    
                     Text(brand.name)
                         .foregroundColor(Colors.Primary.foreground)
                         .font(.largeTitle)
                         .kerning(-0.3)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                     Spacer(minLength: 10)
                     
                     TypedText(text: brand.about)
@@ -61,32 +65,71 @@ struct BrandDetailsView: View {
                         .font(.body)
                         .lineSpacing(6)
                     
-                    Spacer(minLength: 25)
+                    
+                    Spacer(minLength: 30)
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(Array(brand.history.enumerated()), id: \.element) { index, item in
+                            HStack(alignment: .top, spacing: 0) {
+                                Text("\(index + 1).")
+                                    .foregroundColor(Colors.Secondary.foreground)
+                                    .font(.body)
+                                    .frame(width: 25, alignment: .leading)
+                                Text(item)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.body)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineSpacing(6)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 30)
                     
                     
                     // Table
                     VStack(spacing: 0) {
-                        DetailsSectionView(title: "Founder", detail: brand.founder)
-                        DetailsSectionView(title: "Date founded", detail: brand.foundedDate)
-                        DetailsSectionView(title: "Headquarters", detail: brand.headquarters)
-                        DetailsSectionView(title: "Years Active", detail: brand.yearsActive)
-                        DetailsSectionView(title: "Parent", detail: brand.parentCompany)
-                        DetailsSectionView(title: "Nationality", detail: brand.nationality)
+                        if brand.founder != "N/A" {
+                            DetailsSectionView(title: "Founder", detail: brand.founder)
+                        }
+                        
+                        if brand.foundedDate != "N/A" {
+                            DetailsSectionView(title: "Date founded", detail: brand.foundedDate)
+                        }
+                        
+                        if brand.headquarters != "N/A" {
+                            DetailsSectionView(title: "Headquarters", detail: brand.headquarters)
+                        }
+                        
+                        if brand.yearsActive != "N/A" {
+                            DetailsSectionView(title: "Years Active", detail: brand.yearsActive)
+                        }
+                        
+                        if brand.parentCompany != "N/A" {
+                            DetailsSectionView(title: "Parent", detail: brand.parentCompany)
+                        }
+                        
+                        if brand.nationality != "N/A" {
+                            DetailsSectionView(title: "Nationality", detail: brand.nationality)
+                        }
+                        
                         if brand.website != "N/A" {
                             DetailsLinkSectionView(title: "Website", link: brand.website)
-                        } else {
-                            DetailsSectionView(title: "Website", detail: "N/A")
                         }
                     }
                     .frame(maxWidth: .infinity)
+                    .background(Colors.Secondary.background)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 10)
+                    )
                     
                     Spacer(minLength: 100)
                 }
-                .padding(EdgeInsets(top: 20, leading: 10, bottom: 0, trailing: 10))
+                .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 
             }
         }
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.top)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)

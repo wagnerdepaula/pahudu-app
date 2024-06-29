@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Divider: View {
     
-    var padding: CGFloat = 20
+    var padding: CGFloat = 0
     var height: CGFloat = 0.5
     
     var body: some View {

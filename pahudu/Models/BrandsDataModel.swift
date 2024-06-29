@@ -12,7 +12,7 @@ struct BrandResponse: Codable {
     var brands: [Brand]
 }
 
-struct Brand: Codable, Identifiable {
+struct Brand: Codable, Identifiable, Hashable {
     let id: String
     let name: String
     let founder: String
@@ -24,6 +24,27 @@ struct Brand: Codable, Identifiable {
     let website: String
     let nationality: String
     let imageName: String
+    let history: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, founder, foundedDate, about, headquarters, yearsActive, parentCompany, website, nationality, imageName, history
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decodeIfPresent(String.self, forKey: .name) ?? "N/A"
+        founder = try container.decodeIfPresent(String.self, forKey: .founder) ?? "N/A"
+        foundedDate = try container.decodeIfPresent(String.self, forKey: .foundedDate) ?? "N/A"
+        about = try container.decodeIfPresent(String.self, forKey: .about) ?? "N/A"
+        headquarters = try container.decodeIfPresent(String.self, forKey: .headquarters) ?? "N/A"
+        yearsActive = try container.decodeIfPresent(String.self, forKey: .yearsActive) ?? "N/A"
+        parentCompany = try container.decodeIfPresent(String.self, forKey: .parentCompany) ?? "N/A"
+        website = try container.decodeIfPresent(String.self, forKey: .website) ?? "N/A"
+        nationality = try container.decodeIfPresent(String.self, forKey: .nationality) ?? "N/A"
+        imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? "default_image"
+        history = try container.decodeIfPresent(Array.self, forKey: .history) ?? []
+    }
 }
 
 

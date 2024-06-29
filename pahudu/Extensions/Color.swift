@@ -15,16 +15,6 @@ enum Colors {
         static let background = Color("PrimaryBackground")
         static let foreground = Color("PrimaryForeground")
         static let divider = Color("PrimaryDivider")
-        
-        static let babyBlue = Color("PrimaryBabyBlue")
-        static let blue = Color("PrimaryBlue")
-        static let navy = Color("PrimaryNavy")
-        static let green = Color("PrimaryGreen")
-        static let yellow = Color("PrimaryYellow")
-        static let pink = Color("PrimaryPink")
-        static let purple = Color("PrimaryPurple")
-        static let mint = Color("PrimaryMint")
-        static let orange = Color("PrimaryOrange")
     }
     
     enum Secondary {
@@ -32,77 +22,20 @@ enum Colors {
         static let background = Color("SecondaryBackground")
         static let foreground = Color("SecondaryForeground")
         static let divider = Color("SecondaryDivider")
-        
-        static let babyBlue = Color("SecondaryBabyBlue")
-        static let blue = Color("SecondaryBlue")
-        static let navy = Color("SecondaryNavy")
-        static let green = Color("SecondaryGreen")
-        static let yellow = Color("SecondaryYellow")
-        static let pink = Color("SecondaryPink")
-        //static let purple = Color("SecondaryPurple")
-        //static let mint = Color("SecondaryMint")
     }
     
     enum Tertiary {
-        static let foreground = Color("TertiaryForeground")
         static let background = Color("TertiaryBackground")
+        static let foreground = Color("TertiaryForeground")
     }
     
-}
-
-func getRandomColor() -> Color {
-    let colors: [Color] = [
-        Colors.Primary.accent,
-        Colors.Primary.foreground,
-        Colors.Primary.babyBlue,
-        Colors.Primary.blue,
-        Colors.Primary.green,
-        Colors.Primary.yellow,
-        Colors.Primary.pink,
-        Colors.Primary.mint,
-        Colors.Primary.orange,
-        Colors.Primary.purple,
-        
-        Colors.Secondary.accent,
-        Colors.Secondary.foreground,
-        Colors.Secondary.babyBlue,
-        Colors.Secondary.blue,
-        Colors.Secondary.green,
-        Colors.Secondary.yellow,
-        Colors.Secondary.pink
-    ]
-    
-    return colors.randomElement()!
-}
-
-
-
-func colorForAcronym(_ acronym: String) -> Color {
-    switch acronym {
-    case "NYFW":
-        return Colors.Primary.blue
-    case "LFW":
-        return Colors.Primary.green
-    case "MFW":
-        return Colors.Primary.pink
-    case "TFW":
-        return Colors.Primary.mint
-    case "BFW":
-        return Colors.Primary.orange
-    case "SPFW":
-        return Colors.Primary.purple
-    case "KFW":
-        return Colors.Primary.blue
-    case "PFW":
-        return Colors.Primary.yellow
-    case "SFW":
-        return Colors.Primary.babyBlue
-    case "JFW":
-        return Colors.Primary.accent
-    default:
-        return Colors.Primary.accent
+    enum Quaternary {
+        static let background = Color("QuaternaryBackground")
+        static let foreground = Color("QuaternaryForeground")
     }
 }
+
+
 
 
 extension Color {

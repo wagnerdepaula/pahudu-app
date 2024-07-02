@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct DetailsSectionView: View {
+    
     let title: String
     let detail: String
     
@@ -26,8 +27,8 @@ struct DetailsSectionView: View {
                 .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
-        Divider(height: 1)
+        .padding(EdgeInsets(top: 13, leading: 15, bottom: 14, trailing: 15))
+        Divider(padding: 0, height: 1)
     }
 }
 
@@ -51,6 +52,6 @@ struct DetailsLinkSectionView: View {
                 .multilineTextAlignment(.trailing)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
+        .padding(EdgeInsets(top: 13, leading: 15, bottom: 14, trailing: 15))
     }
 }

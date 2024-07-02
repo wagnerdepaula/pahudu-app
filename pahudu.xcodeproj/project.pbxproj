@@ -24,6 +24,7 @@
 		D048D6B12BB055040034FF48 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B02BB055040034FF48 /* Font.swift */; };
 		D048D6B32BB0570F0034FF48 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B22BB0570F0034FF48 /* AccountView.swift */; };
 		D048D6B52BB0572C0034FF48 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048D6B42BB0572C0034FF48 /* DiscoverView.swift */; };
+		D063B8DC2C3448E700F10A6B /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = D063B8DB2C3448E700F10A6B /* Title.swift */; };
 		D077182B2C1F13DA000E12A5 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D07718282C1F13DA000E12A5 /* Inter-Regular.ttf */; };
 		D077182C2C1F13DA000E12A5 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D07718292C1F13DA000E12A5 /* Inter-Medium.ttf */; };
 		D077182D2C1F13DA000E12A5 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D077182A2C1F13DA000E12A5 /* Inter-Bold.ttf */; };
@@ -70,6 +71,7 @@
 		D048D6B02BB055040034FF48 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		D048D6B22BB0570F0034FF48 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		D048D6B42BB0572C0034FF48 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
+		D063B8DB2C3448E700F10A6B /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		D07718282C1F13DA000E12A5 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../../../../Downloads/Inter-3/static/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		D07718292C1F13DA000E12A5 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../../../../Downloads/Inter-3/static/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		D077182A2C1F13DA000E12A5 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Bold.ttf"; path = "../../../../Downloads/Inter-3/static/Inter-Bold.ttf"; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				D0AE1E362C121A84000205D7 /* TypedText.swift */,
 				D01C01092C278492005FFD3D /* DetailsSectionView.swift */,
 				D01C010B2C2784BD005FFD3D /* Divider.swift */,
+				D063B8DB2C3448E700F10A6B /* Title.swift */,
 				D0782A0A2C331DB20017769D /* TabBar.swift */,
 			);
 			path = Components;
@@ -354,6 +357,7 @@
 				D03F7BB42B952B6A0096A540 /* pahuduApp.swift in Sources */,
 				D0AE1E402C1351A6000205D7 /* BrandsView.swift in Sources */,
 				D0E5AD842C25AEC400003F59 /* ImageCache.swift in Sources */,
+				D063B8DC2C3448E700F10A6B /* Title.swift in Sources */,
 				D0782A0B2C331DB20017769D /* TabBar.swift in Sources */,
 				D0A5FB9F2BB4AC0D001CC1EE /* SearchView.swift in Sources */,
 				D048D6B32BB0570F0034FF48 /* AccountView.swift in Sources */,

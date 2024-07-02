@@ -74,7 +74,7 @@ struct DesignerDetailsView: View {
                 
                 
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) {
                     
                     TypedText(text: designer.about)
                         .foregroundColor(Colors.Primary.foreground)
@@ -82,17 +82,13 @@ struct DesignerDetailsView: View {
                         .lineSpacing(6)
                     
                     
-                    Spacer(minLength: 20)
-                    
-                    
                     // Table
                     VStack(spacing: 0) {
                         
-                        
                         if let affiliation = designer.affiliation,
                            let foundBrand = globalData.brands.findBrand(byName: affiliation.brand) {
-                            HStack(spacing: 0) {
-                                Text("\(affiliation.position) at ")
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("\(affiliation.position) at")
                                     .foregroundColor(Colors.Tertiary.foreground)
                                 
                                 Button {
@@ -106,10 +102,8 @@ struct DesignerDetailsView: View {
                             }
                             .font(.callout)
                             .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
-                            Divider(height: 1)
+                            Divider(padding: 15, height: 1)
                         }
-                        
-                        
                         
                         if designer.dateOfBirth != "N/A" {
                             DetailsSectionView(title: "Born", detail: "\(designer.dateOfBirth)")
@@ -151,9 +145,52 @@ struct DesignerDetailsView: View {
                     )
                     
                     
-                    Spacer(minLength: 20)
+                    
+                    if let affiliation = designer.affiliation,
+                       let foundBrand = globalData.brands.findBrand(byName: affiliation.brand) {
+                        
+                        Title(text: "Affiliation")
+                        
+                        Button(action: {
+                            showDetails = true
+                            eventModel.selectBrand(brand: foundBrand)
+                        }) {
+                            HStack(spacing: 10) {
+                                AsyncCachedImage(url: URL(string: "\(Path.brands)/sm/\(foundBrand.imageName)")!) { image in
+                                    image
+                                        .renderingMode(.template)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                } placeholder: {
+                                    Colors.Secondary.background
+                                }
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Colors.Secondary.divider, lineWidth: 1)
+                                }
+                                .frame(width: 80, height: 80)
+                                .foregroundColor(Colors.Primary.foreground)
+                                .background(Colors.Primary.background)
+                                .clipShape(
+                                    RoundedRectangle(cornerRadius: 15)
+                                )
+                                
+                                Text(foundBrand.name)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.subheadline)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Colors.Primary.background)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                    }
                     
                     
+                    
+                    
+                    Title(text: "Highlights")
                     
                     VStack(alignment: .leading, spacing: 14) {
                         ForEach(Array(designer.history.enumerated()), id: \.element) { index, item in
@@ -172,7 +209,7 @@ struct DesignerDetailsView: View {
                     }
                     
                     
-                    Spacer(minLength: 100)
+                    Spacer(minLength:50)
                     
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))

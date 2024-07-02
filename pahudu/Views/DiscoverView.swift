@@ -26,7 +26,7 @@ struct DiscoverView: View {
     var body: some View {
         
         
-        NavigationStack() {
+        NavigationStack {
             
             ScrollView(showsIndicators: false) {
                 
@@ -35,19 +35,14 @@ struct DiscoverView: View {
                     
                     // Recent
                     if globalData.recentItems.count > 0 {
+                        
                         VStack(spacing: 15) {
-                            HStack{
-                                Button(action: {
-                                    // showShowsList = true
-                                }, label: {
-                                    HStack {
-                                        Text("Recently viewed")
-                                    }
-                                    .font(.title3)
-                                })
-                            }
+                            
+                            Text("Recently viewed")
+                            .font(.headline)
                             .padding(.horizontal, 20)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundColor(Colors.Primary.foreground)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 15) {
@@ -75,6 +70,39 @@ struct DiscoverView: View {
                     
                     
                     
+                    // More to discover
+                    if globalData.designers.count > 0 {
+                        VStack(spacing: 15) {
+                            HStack{
+                                Button(action: {
+                                    showDesignersList = true
+                                }, label: {
+                                    HStack {
+                                        Text("Hightlights")
+                                        Image(systemName: "chevron.forward")
+                                            .opacity(0.5)
+                                            .fontWeight(.bold)
+                                    }
+                                    .font(.headline)
+                                })
+                            }
+                            .padding(.horizontal, 20)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(Array(globalData.designers.shuffled().prefix(10)), id: \.id) { designer in
+                                        HighlightsItemView(designer: designer, width: 280, height: 300, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                            .id(designer.id)
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                        }
+                    }
+                    
+                    
+                    
                     
                     // Shows
                     if globalData.shows.count > 0 {
@@ -87,9 +115,9 @@ struct DiscoverView: View {
                                         Text("Shows")
                                         Image(systemName: "chevron.forward")
                                             .opacity(0.5)
-                                            .fontWeight(.semibold)
+                                            .fontWeight(.bold)
                                     }
-                                    .font(.title3)
+                                    .font(.headline)
                                 })
                             }
                             .padding(.horizontal, 20)
@@ -124,9 +152,9 @@ struct DiscoverView: View {
                                         Text("Brands")
                                         Image(systemName: "chevron.forward")
                                             .opacity(0.5)
-                                            .fontWeight(.semibold)
+                                            .fontWeight(.bold)
                                     }
-                                    .font(.title3)
+                                    .font(.headline)
                                 })
                             }
                             .padding(.horizontal, 20)
@@ -149,7 +177,6 @@ struct DiscoverView: View {
                     
                     
                     
-                    
                     // Designers
                     if globalData.designers.count > 0 {
                         VStack(spacing: 15) {
@@ -161,9 +188,9 @@ struct DiscoverView: View {
                                         Text("Designers")
                                         Image(systemName: "chevron.forward")
                                             .opacity(0.5)
-                                            .fontWeight(.semibold)
+                                            .fontWeight(.bold)
                                     }
-                                    .font(.title3)
+                                    .font(.headline)
                                 })
                             }
                             .padding(.horizontal, 20)
@@ -181,27 +208,6 @@ struct DiscoverView: View {
                         }
                     }
                 }
-                
-                
-                
-                
-                
-                
-                
-            }
-            .padding(.vertical, 20)
-            .refreshable {
-                async let showsTask = fetchShows()
-                async let brandsTask = fetchBrands()
-                async let designersTask = fetchDesigners()
-                
-                let fetchedShows = await showsTask
-                let fetchedBrands = await brandsTask
-                let fetchedDesigners = await designersTask
-                
-                globalData.shows = fetchedShows
-                globalData.brands = fetchedBrands
-                globalData.designers = fetchedDesigners
             }
             .opacity(opacity)
             .onAppear {
@@ -235,13 +241,92 @@ struct DiscoverView: View {
                     DesignerDetailsView(designer: designer)
                 }
             }
+            .refreshable {
+                async let showsTask = fetchShows()
+                async let brandsTask = fetchBrands()
+                async let designersTask = fetchDesigners()
+                
+                let fetchedShows = await showsTask
+                let fetchedBrands = await brandsTask
+                let fetchedDesigners = await designersTask
+                
+                globalData.shows = fetchedShows
+                globalData.brands = fetchedBrands
+                globalData.designers = fetchedDesigners
+            }
+            
         }
     }
     
     
-    
-    
 }
+
+
+
+
+
+
+
+struct HighlightsItemView: View {
+    
+    let designer: Designer
+    let width: CGFloat
+    let height: CGFloat
+    
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDesignerDetails: Bool
+    
+    var body: some View {
+        
+        let url: URL = URL(string: "\(Path.designers)/lg/\(designer.imageName)")!
+        
+        Button(action: {
+            showDesignerDetails = true
+            eventModel.selectDesigner(designer: designer)
+        }) {
+            
+            ZStack(alignment: .bottomLeading) {
+                
+                AsyncCachedImage(url: url) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
+                }
+                
+                LinearGradient(gradient: Gradient(colors: [.clear, .clear, Colors.Primary.background.opacity(0.7)]),
+                               startPoint: .top,
+                               endPoint: .bottom)
+                
+                Text(designer.name)
+                    .font(.title3)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 12, trailing: 10))
+            }
+            
+            
+        }
+        .frame(width: width, height: height, alignment: .bottom)
+        .background(Colors.Secondary.background)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Colors.Secondary.divider, lineWidth: 0.5)
+        }
+
+        
+        
+    }
+}
+
+
+
+
 
 
 
@@ -267,7 +352,6 @@ struct ShowItemView: View {
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
-//                    .truncationMode(.tail)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
             }
@@ -349,11 +433,15 @@ struct ShowImageView: View {
         } placeholder: {
             Colors.Secondary.background
         }
+        .overlay {
+            Rectangle()
+                .stroke(Colors.Secondary.divider, lineWidth: 1)
+        }
         .frame(width: width, height: height)
         .foregroundColor(Colors.Primary.foreground)
-        .background(Colors.Secondary.background)
+        .background(Colors.Primary.background)
         .clipShape(
-            RoundedRectangle(cornerRadius: 5)
+            Rectangle()
         )
     }
 }
@@ -374,9 +462,13 @@ struct BrandImageView: View {
         } placeholder: {
             Colors.Secondary.background
         }
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Colors.Secondary.divider, lineWidth: 1)
+        }
         .frame(width: width, height: width)
         .foregroundColor(Colors.Primary.foreground)
-        .background(Colors.Secondary.background)
+        .background(Colors.Primary.background)
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
         )

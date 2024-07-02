@@ -96,10 +96,6 @@ struct DesignersListView: View {
         Dictionary(grouping: filteredDesigners) { String($0.name.prefix(1).uppercased()) }
     }
     
-//    @State private var selectedTab = 0
-//    let tabs = ["About", "Profile", "Settings"]
-    
-    
     var body: some View {
         ScrollViewReader { scrollProxy in
             ZStack {
@@ -130,8 +126,6 @@ struct DesignersListView: View {
                     let fetchedDesigners = await designersTask
                     designers = fetchedDesigners
                 }
-                
-                    
                 
                 
                 VStack(spacing: 0) {
@@ -172,58 +166,54 @@ struct DesignerRow: View {
     let width: CGFloat
     
     var body: some View {
-        
-        HStack {
-            
-            Button(action: {
-                showDetails = true
-                eventModel.selectDesigner(designer: designer)
-            }) {
-                HStack(spacing: 10) {
-                    
-                    AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        Colors.Secondary.background
-                    }
-                    .frame(width: width, height: width)
-                    .background(Colors.Secondary.foreground)
-                    .clipShape(
-                        Circle()
-                    )
-                    .overlay {
-                        Circle()
-                            .stroke(Colors.Primary.background, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(designer.name)
-                            .foregroundColor(Colors.Primary.foreground)
-                            .font(.subheadline)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                        
-                        if let affiliation = designer.affiliation {
-                            Text("\(affiliation.brand)")
-                                .foregroundColor(Colors.Tertiary.foreground)
-                                .font(.caption)
-                                .lineLimit(2)
-                                .lineSpacing(2)
-                                .truncationMode(.tail)
-                                .multilineTextAlignment(.leading)
-                        }
-                    }
-                    
-                    
+        Button(action: {
+            showDetails = true
+            eventModel.selectDesigner(designer: designer)
+        }) {
+            HStack(spacing: 10) {
+                
+                AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 40))
-                .background(Colors.Primary.background)
+                .frame(width: width, height: width)
+                .background(Colors.Secondary.foreground)
+                .clipShape(
+                    Circle()
+                )
+                .overlay {
+                    Circle()
+                        .stroke(Colors.Primary.background, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(designer.name)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.subheadline)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                    
+                    if let affiliation = designer.affiliation {
+                        Text("\(affiliation.brand)")
+                            .foregroundColor(Colors.Tertiary.foreground)
+                            .font(.caption)
+                            .lineLimit(2)
+                            .lineSpacing(2)
+                            .truncationMode(.tail)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                
+                
             }
-            .buttonStyle(BorderlessButtonStyle())
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 40))
+            .background(Colors.Primary.background)
         }
+        .buttonStyle(BorderlessButtonStyle())
     }
 }
 

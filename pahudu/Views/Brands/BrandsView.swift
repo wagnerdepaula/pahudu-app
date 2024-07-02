@@ -155,54 +155,6 @@ struct BrandsListView: View {
 
 
 
-struct BrandRow: View {
-    let brand: Brand
-    @ObservedObject var eventModel: EventModel
-    @Binding var showDetails: Bool
-    let width: CGFloat
-    
-    var body: some View {
-        
-        HStack {
-            
-            Button(action: {
-                showDetails = true
-                eventModel.selectBrand(brand: brand)
-            }) {
-                HStack(spacing: 10) {
-                    AsyncCachedImage(url: URL(string: "\(Path.brands)/sm/\(brand.imageName)")!) { image in
-                        image
-                            .renderingMode(.template)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        Colors.Secondary.background
-                    }
-                    .frame(width: width, height: width)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .background(Colors.Secondary.background)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 15)
-                    )
-                    
-                    Text(brand.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.subheadline)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 5)
-                .padding(.horizontal, 20)
-                .background(Colors.Primary.background)
-            }
-            .buttonStyle(BorderlessButtonStyle())
-        }
-    }
-}
-
-
-
 
 
 struct BrandsGridView: View {
@@ -244,6 +196,60 @@ struct BrandsGridView: View {
     }
 }
 
+
+
+
+
+struct BrandRow: View {
+    let brand: Brand
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    let width: CGFloat
+    
+    var body: some View {
+        Button(action: {
+            showDetails = true
+            eventModel.selectBrand(brand: brand)
+        }) {
+            HStack(spacing: 10) {
+                AsyncCachedImage(url: URL(string: "\(Path.brands)/sm/\(brand.imageName)")!) { image in
+                    image
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Colors.Secondary.divider, lineWidth: 1)
+                }
+                .frame(width: width, height: width)
+                .foregroundColor(Colors.Primary.foreground)
+                .background(Colors.Primary.background)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 15)
+                )
+                
+                Text(brand.name)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 5)
+            .padding(.horizontal, 20)
+            .background(Colors.Primary.background)
+        }
+        .buttonStyle(BorderlessButtonStyle())
+    }
+}
+
+
+
+
+
 struct BrandCell: View {
     let brand: Brand
     @ObservedObject var eventModel: EventModel
@@ -279,9 +285,13 @@ struct BrandImage: View {
             } placeholder: {
                 Colors.Secondary.background
             }
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Colors.Secondary.divider, lineWidth: 1)
+            }
             .frame(width: geometry.size.width, height: geometry.size.width)
             .foregroundColor(Colors.Primary.foreground)
-            .background(Colors.Secondary.background)
+            .background(Colors.Primary.background)
             .clipShape(
                 RoundedRectangle(cornerRadius: 20)
             )

@@ -162,42 +162,42 @@ struct ShowRow: View {
     let width: CGFloat
     
     var body: some View {
-        
-        HStack {
-            
-            Button(action: {
-                showDetails = true
-                eventModel.selectShow(show: show)
-            }) {
-                HStack(spacing: 10) {
-                    AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
-                        image
-                            .renderingMode(.template)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        Colors.Secondary.background
-                    }
-                    .frame(width: width, height: width)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .background(Colors.Secondary.background)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 5)
-                    )
-                    
-                    Text(show.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.subheadline)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
+        Button(action: {
+            showDetails = true
+            eventModel.selectShow(show: show)
+        }) {
+            HStack(spacing: 10) {
+                AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
+                    image
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Colors.Secondary.background
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 5)
-                .padding(.horizontal, 20)
+                .overlay {
+                    Rectangle()
+                        .stroke(Colors.Secondary.divider, lineWidth: 1)
+                }
+                .frame(width: width, height: width)
+                .foregroundColor(Colors.Primary.foreground)
                 .background(Colors.Primary.background)
+                .clipShape(
+                    Rectangle()
+                )
+                
+                Text(show.name)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
             }
-            .buttonStyle(BorderlessButtonStyle())
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 5)
+            .padding(.horizontal, 20)
+            .background(Colors.Primary.background)
         }
+        .buttonStyle(BorderlessButtonStyle())
     }
 }
 
@@ -278,11 +278,15 @@ struct ShowImage: View {
             } placeholder: {
                 Colors.Secondary.background
             }
+            .overlay {
+                Rectangle()
+                    .stroke(Colors.Secondary.divider, lineWidth: 1)
+            }
             .frame(width: geometry.size.width, height: geometry.size.width)
             .foregroundColor(Colors.Primary.foreground)
-            .background(Colors.Secondary.background)
+            .background(Colors.Primary.background)
             .clipShape(
-                RoundedRectangle(cornerRadius: 5)
+                Rectangle()
             )
         }
     }

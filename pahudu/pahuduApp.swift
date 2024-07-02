@@ -116,11 +116,11 @@ struct PahuduApp: App {
         toolbarAppearance.shadowColor = .clear
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
-        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.accentColor)]
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Colors.Primary.accent)]
         toolbarAppearance.buttonAppearance = barButtonItemAppearance
         toolbarAppearance.doneButtonAppearance = barButtonItemAppearance
         
-        UIToolbar.appearance().tintColor = UIColor(Color.accentColor)
+        UIToolbar.appearance().tintColor = UIColor(Colors.Primary.accent)
         UIToolbar.appearance().standardAppearance = toolbarAppearance
         //UIToolbar.appearance().scrollEdgeAppearance = toolbarAppearance
     }
@@ -132,15 +132,15 @@ struct PahuduApp: App {
         tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         tabBarAppearance.shadowColor = .clear
         
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Tertiary.foreground)
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.accentColor)
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Primary.foreground)
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Colors.Primary.accent)
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
             .font: UIFont(name: "Inter-Medium", size: 10) ?? UIFont.systemFont(ofSize: 10),
-            .foregroundColor: UIColor(Color.accentColor)
+            .foregroundColor: UIColor(Colors.Primary.accent)
         ]
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
             .font: UIFont(name: "Inter-Medium", size: 10) ?? UIFont.systemFont(ofSize: 10),
-            .foregroundColor: UIColor(Colors.Tertiary.foreground)
+            .foregroundColor: UIColor(Colors.Primary.foreground)
         ]
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
@@ -179,7 +179,7 @@ struct PahuduApp: App {
     
     
     private func configureButtonAppearance() {
-        UIButton.appearance().tintColor = UIColor(Color.accentColor)
+        UIButton.appearance().tintColor = UIColor(Colors.Primary.accent)
     }
     
     

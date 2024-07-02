@@ -63,9 +63,14 @@ func fetchBrands() async -> [Brand] {
     }
 }
 
-
 extension Brand: Equatable {
     static func == (lhs: Brand, rhs: Brand) -> Bool {
         return lhs.id == rhs.id
+    }
+}
+
+extension Array where Element == Brand {
+    func findBrand(byName name: String) -> Brand? {
+        return self.first { $0.name.lowercased().contains(name.lowercased()) }
     }
 }

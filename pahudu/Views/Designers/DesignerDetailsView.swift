@@ -10,10 +10,15 @@ import SwiftUI
 
 struct DesignerDetailsView: View {
     
+    @EnvironmentObject var globalData: GlobalData
+    @EnvironmentObject var eventModel: EventModel
+    
     let designer: Designer
     let size: CGFloat = UIScreen.main.bounds.width
     let imageSize: CGFloat = UIScreen.main.bounds.width
+    
     @State private var itemOpacity: Double = 0.0
+    @State private var showDetails: Bool = false
     
     var body: some View {
         
@@ -21,10 +26,12 @@ struct DesignerDetailsView: View {
             VStack(spacing: 0) {
                 
                 GeometryReader { geometry in
+                    
                     let offsetY = geometry.frame(in: .global).minY
+                    
                     ZStack(alignment: .bottom) {
                         
-                        LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
+                        Colors.Secondary.background
                         
                         AsyncCachedImage(url: URL(string: "\(Path.designers)/lg/\(designer.imageName)")!) { image in
                             image
@@ -38,28 +45,36 @@ struct DesignerDetailsView: View {
                                     }
                                 }
                         } placeholder: {
-                            Color.clear
+                            Colors.Secondary.background
                         }
                         
+                        
+                        LinearGradient(gradient: Gradient(colors: [.clear, .clear, Colors.Primary.background.opacity(0.7)]),
+                                       startPoint: .top,
+                                       endPoint: .bottom)
+                        
+                        Text(designer.name)
+                            .foregroundColor(Colors.Primary.foreground)
+                            .font(.largeTitle)
+                            .kerning(-0.3)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 13, trailing: 0))
+                        
+                        
+                        
                         Divider()
+                        
                     }
                     .frame(maxWidth: size, maxHeight: size, alignment: .bottom)
+                    
                 }
                 .frame(height: size)
                 
-
+                
+                
                 
                 
                 VStack(alignment: .leading) {
-                    
-                    
-                    Text(designer.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.largeTitle)
-                        .kerning(-0.3)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Spacer(minLength: 10)
                     
                     TypedText(text: designer.about)
                         .foregroundColor(Colors.Primary.foreground)
@@ -67,31 +82,34 @@ struct DesignerDetailsView: View {
                         .lineSpacing(6)
                     
                     
-                    
-                    Spacer(minLength: 30)
-                    
-                    VStack(alignment: .leading, spacing: 14) {
-                        ForEach(Array(designer.history.enumerated()), id: \.element) { index, item in
-                            HStack(alignment: .top, spacing: 0) {
-                                Text("\(index + 1).")
-                                    .foregroundColor(Colors.Secondary.foreground)
-                                    .font(.body)
-                                    .frame(width: 25, alignment: .leading)
-                                Text(item)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.body)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .lineSpacing(6)
-                            }
-                        }
-                    }
-                    
-                    
-                    Spacer(minLength: 30)
+                    Spacer(minLength: 20)
                     
                     
                     // Table
                     VStack(spacing: 0) {
+                        
+                        
+                        if let affiliation = designer.affiliation,
+                           let foundBrand = globalData.brands.findBrand(byName: affiliation.brand) {
+                            HStack(spacing: 0) {
+                                Text("\(affiliation.position) at ")
+                                    .foregroundColor(Colors.Tertiary.foreground)
+                                
+                                Button {
+                                    showDetails = true
+                                    eventModel.selectBrand(brand: foundBrand)
+                                } label: {
+                                    Text(foundBrand.name)
+                                        .foregroundColor(Colors.Primary.accent)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .font(.callout)
+                            .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
+                            Divider(height: 1)
+                        }
+                        
+                        
                         
                         if designer.dateOfBirth != "N/A" {
                             DetailsSectionView(title: "Born", detail: "\(designer.dateOfBirth)")
@@ -133,6 +151,27 @@ struct DesignerDetailsView: View {
                     )
                     
                     
+                    Spacer(minLength: 20)
+                    
+                    
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(Array(designer.history.enumerated()), id: \.element) { index, item in
+                            HStack(alignment: .top, spacing: 0) {
+                                Text("\(index + 1).")
+                                    .foregroundColor(Colors.Tertiary.foreground)
+                                    .font(.body)
+                                    .frame(width: 25, alignment: .leading)
+                                Text(item)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.body)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineSpacing(6)
+                            }
+                        }
+                    }
+                    
+                    
                     Spacer(minLength: 100)
                     
                 }
@@ -146,10 +185,50 @@ struct DesignerDetailsView: View {
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
+        .navigationDestination(isPresented: $showDetails) {
+            if let brand = eventModel.selectedBrand {
+                BrandDetailsView(brand: brand)
+            }
+        }
     }
 }
 
 
+
+//struct AffiliationView: View {
+//
+//    @ObservedObject var eventModel: EventModel
+//    @Binding var showDetails: Bool
+//
+//    let title: String
+//    let brand: Brand
+//
+//    var body: some View {
+//
+//        VStack(alignment: .leading, spacing: 0) {
+//            HStack(alignment: .top) {
+//
+//                Text(title)
+//                    .foregroundColor(Colors.Tertiary.foreground)
+//                    .frame(width: 110, alignment: .leading)
+//
+//                Button {
+//                    showDetails = true
+//                    eventModel.selectBrand(brand: brand)
+//                } label: {
+//                    Text(brand.name)
+//                        .foregroundColor(Colors.Primary.accent)
+//                }
+//                .frame(maxWidth: .infinity, alignment: .trailing)
+//
+//            }
+//            .font(.callout)
+//            .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
+//
+//            Divider(height: 1)
+//        }
+//    }
+//}
 
 
 

@@ -30,7 +30,7 @@ struct DiscoverView: View {
             
             ScrollView(showsIndicators: false) {
                 
-                VStack(spacing: 0) {
+                VStack(spacing: 50) {
                     
                     
                     // Recent
@@ -54,12 +54,14 @@ struct DiscoverView: View {
                                     ForEach(globalData.recentItems.indices, id: \.self) { index in
                                         switch globalData.recentItems[index] {
                                         case let show as Show:
-                                            ShowItemView(show: show, width: 105, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                            ShowItemView(show: show, width: 115, eventModel: eventModel, showShowDetails: $showShowDetails)
                                                 .id(show.id)
                                         case let brand as Brand:
-                                            BrandItemView(brand: brand, width: 105, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                            BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                                .id(brand.id)
                                         case let designer as Designer:
-                                            DesignerItemView(designer: designer, width: 105, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                            DesignerItemView(designer: designer, width: 115, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                                .id(designer.id)
                                         default:
                                             Text("Unknown item type")
                                         }
@@ -67,9 +69,7 @@ struct DiscoverView: View {
                                 }
                                 .padding(.horizontal, 20)
                             }
-                            
                         }
-                        .padding(.vertical, 20)
                     }
                     
                     
@@ -77,116 +77,119 @@ struct DiscoverView: View {
                     
                     
                     // Shows
-                    VStack(spacing: 15) {
-                        HStack{
-                            Button(action: {
-                                showShowsList = true
-                            }, label: {
-                                HStack {
-                                    Text("Shows")
-                                    Image(systemName: "chevron.forward")
-                                        .opacity(0.5)
-                                        .fontWeight(.semibold)
-                                }
-                                .font(.title3)
-                            })
-                        }
-                        .padding(.horizontal, 20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 15) {
-                                ForEach(globalData.shows) { show in
-                                    ShowItemView(show: show, width: 165, eventModel: eventModel, showShowDetails: $showShowDetails)
-                                        .id(show.id)
-                                }
+                    if globalData.shows.count > 0 {
+                        VStack(spacing: 15) {
+                            HStack{
+                                Button(action: {
+                                    showShowsList = true
+                                }, label: {
+                                    HStack {
+                                        Text("Shows")
+                                        Image(systemName: "chevron.forward")
+                                            .opacity(0.5)
+                                            .fontWeight(.semibold)
+                                    }
+                                    .font(.title3)
+                                })
                             }
                             .padding(.horizontal, 20)
-                            //.drawingGroup()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(globalData.shows) { show in
+                                        ShowItemView(show: show, width: 180, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                            .id(show.id)
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
                         }
                     }
-                    .padding(.vertical, 20)
+                    
                     
                     
                     
                     
                     // Brands
-                    VStack(spacing: 15) {
-                        
-                        HStack {
+                    if globalData.brands.count > 0 {
+                        VStack(spacing: 15) {
                             
-                            Button(action: {
-                                showBrandsList = true
-                            }, label: {
-                                HStack {
-                                    Text("Brands")
-                                    Image(systemName: "chevron.forward")
-                                        .opacity(0.5)
-                                        .fontWeight(.semibold)
-                                }
-                                .font(.title3)
-                            })
-                        }
-                        .padding(.horizontal, 20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 15) {
-                                ForEach(globalData.brands) { brand in
-                                    BrandItemView(brand: brand, width: 105, eventModel: eventModel, showBrandDetails: $showBrandDetails)
-                                        .id(brand.id)
-                                }
+                            HStack {
+                                
+                                Button(action: {
+                                    showBrandsList = true
+                                }, label: {
+                                    HStack {
+                                        Text("Brands")
+                                        Image(systemName: "chevron.forward")
+                                            .opacity(0.5)
+                                            .fontWeight(.semibold)
+                                    }
+                                    .font(.title3)
+                                })
                             }
                             .padding(.horizontal, 20)
-                            //.drawingGroup()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(globalData.brands) { brand in
+                                        BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                            .id(brand.id)
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
                         }
-                        
                     }
-                    .padding(.vertical, 20)
+                    
+                    
+                    
                     
                     
                     
                     
                     // Designers
-                    VStack(spacing: 15) {
-                        HStack {
-                            Button(action: {
-                                showDesignersList = true
-                            }, label: {
-                                HStack {
-                                    Text("Designers")
-                                    Image(systemName: "chevron.forward")
-                                        .opacity(0.5)
-                                        .fontWeight(.semibold)
-                                }
-                                .font(.title3)
-                            })
-                        }
-                        .padding(.horizontal, 20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 15) {
-                                ForEach(globalData.designers) { designer in
-                                    DesignerItemView(designer: designer, width: 105, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
-                                        .id(designer.id)
-                                }
+                    if globalData.designers.count > 0 {
+                        VStack(spacing: 15) {
+                            HStack {
+                                Button(action: {
+                                    showDesignersList = true
+                                }, label: {
+                                    HStack {
+                                        Text("Designers")
+                                        Image(systemName: "chevron.forward")
+                                            .opacity(0.5)
+                                            .fontWeight(.semibold)
+                                    }
+                                    .font(.title3)
+                                })
                             }
                             .padding(.horizontal, 20)
-                            //.drawingGroup()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(globalData.designers) { designer in
+                                        DesignerItemView(designer: designer, width: 115, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                            .id(designer.id)
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
                         }
                     }
-                    .padding(.vertical, 20)
-                    
-                    
-                    
                 }
                 
                 
                 
                 
+                
+                
+                
             }
+            .padding(.vertical, 20)
             .refreshable {
                 async let showsTask = fetchShows()
                 async let brandsTask = fetchBrands()
@@ -253,7 +256,6 @@ struct ShowItemView: View {
     @ObservedObject var eventModel: EventModel
     @Binding var showShowDetails: Bool
     
-    
     var body: some View {
         Button(action: {
             showShowDetails = true
@@ -265,7 +267,9 @@ struct ShowItemView: View {
                     .font(.caption)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(maxWidth: width, alignment: .leading)
-                    .truncationMode(.tail)
+//                    .truncationMode(.tail)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
             }
         }
     }
@@ -318,10 +322,9 @@ struct DesignerItemView: View {
                 DesignerImageView(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!, width: width)
                 Text(designer.name.components(separatedBy: " ").first ?? "")
                     .font(.caption)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
                     .foregroundColor(Colors.Primary.foreground)
                     .frame(width: width, alignment: .center)
+                    .truncationMode(.tail)
             }
         }
     }
@@ -374,7 +377,9 @@ struct BrandImageView: View {
         .frame(width: width, height: width)
         .foregroundColor(Colors.Primary.foreground)
         .background(Colors.Secondary.background)
-        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20)
+        )
     }
     
 }
@@ -395,13 +400,16 @@ struct DesignerImageView: View {
         } placeholder: {
             Colors.Secondary.background
         }
-        .frame(width: width, height: width)
-        .background(Colors.Secondary.foreground)
-        .clipShape(Circle())
         .overlay {
             Circle()
                 .stroke(Colors.Primary.background, lineWidth: 1)
         }
+        .frame(width: width, height: width)
+        .background(Colors.Secondary.foreground)
+        .clipShape(
+            Circle()
+        )
+        
     }
 }
 

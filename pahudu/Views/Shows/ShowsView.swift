@@ -14,21 +14,24 @@ struct ShowsView: View {
     
     @State private var searchText = ""
     @State private var showDetails: Bool = false
-    @State private var showGridView = false
     @State private var itemOpacity: Double = 0.0
+    @State private var currentViewMode: ViewMode = .list
     
     var body: some View {
+        
         NavigationStack {
+            
             Group {
-                if showGridView {
+                switch currentViewMode {
+                case .grid:
                     ShowsGridView(eventModel: eventModel, showDetails: $showDetails, shows: $globalData.shows, searchText: $searchText)
-                } else {
+                case .list:
                     ShowsListView(eventModel: eventModel, showDetails: $showDetails, shows: $globalData.shows, searchText: $searchText)
                 }
             }
             .opacity(itemOpacity)
             .onAppear {
-                withAnimation(.easeOut(duration: 0.3)) {
+                withAnimation(.easeOut(duration: 1)) {
                     itemOpacity = 1.0
                 }
             }
@@ -37,31 +40,16 @@ struct ShowsView: View {
             .background(Colors.Primary.background)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button(action: {
-                            showGridView = true
-                            UIApplication.triggerHapticFeedback()
-                        }) {
-                            Label("Grid", systemImage: "circle.grid.3x3.fill")
-                        }
-                        Button(action: {
-                            showGridView = false
-                            UIApplication.triggerHapticFeedback()
-                        }) {
-                            Label("List", systemImage: "rectangle.grid.1x2.fill")
-                        }
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Colors.Tertiary.background)
-                                .frame(width: 30, height: 30)
-                            Image(systemName: "ellipsis")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(Colors.Primary.accent)
-                        }
+                    Button(action: {
+                        cycleViewMode()
+                        UIApplication.triggerHapticFeedback()
+                    }) {
+                        Image(systemName: currentViewMode.iconName)
+                            .foregroundColor(Colors.Primary.accent)
                     }
                 }
             }
+            
         }
         .navigationDestination(isPresented: $showDetails) {
             if let show = eventModel.selectedShow {
@@ -69,19 +57,29 @@ struct ShowsView: View {
             }
         }
     }
+    
+    func cycleViewMode() {
+        let allModes = ViewMode.allCases
+        if let currentIndex = allModes.firstIndex(of: currentViewMode) {
+            let nextIndex = (currentIndex + 1) % allModes.count
+            currentViewMode = allModes[nextIndex]
+        }
+        
+        
+    }
 }
-
 
 
 struct ShowsListView: View {
     
     @ObservedObject private var globalData = GlobalData()
-    @ObservedObject var eventModel: EventModel
+    @StateObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var shows: [Show]
     @Binding var searchText: String
+    let width: CGFloat = 80
     
-    let width: CGFloat = 70
+    let characters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     
     var filteredShows: [Show] {
         if searchText.isEmpty {
@@ -91,51 +89,114 @@ struct ShowsListView: View {
         }
     }
     
+    var groupedShows: [String: [Show]] {
+        Dictionary(grouping: filteredShows) { String($0.name.prefix(1).uppercased()) }
+    }
+    
+    
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 0) {
-                ForEach(filteredShows) { show in
-                    Button {
-                        showDetails = true
-                        eventModel.selectShow(show: show)
-                    } label: {
-                        HStack(spacing: 10) {
-                            AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
-                                image
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            } placeholder: {
-                                Colors.Secondary.background
+        ScrollViewReader { scrollProxy in
+            ZStack {
+                
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(characters, id: \.self) { character in
+                            if let showsForLetter = groupedShows[character] {
+                                Section(header: Text(character).id(character)
+                                    .font(.callout)
+                                    .foregroundStyle(Colors.Secondary.foreground)
+                                    .padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
+                                ) {
+                                    ForEach(showsForLetter, id: \.id) { show in
+                                        ShowRow(show: show, eventModel: eventModel, showDetails: $showDetails, width: width)
+                                            .id(show.id)
+                                    }
+                                }
                             }
-                            .frame(width: width, height: width)
-                            .background(Colors.Secondary.background)
-                            .foregroundColor(Colors.Primary.foreground)
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 5)
-                            )
-                            
-                            Text(show.name)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                            
-                            Spacer()
                         }
-                        .background(Colors.Primary.background)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 20)
                     }
-                    .id(show.id)
+                }
+                .scrollIndicators(.hidden)
+                .refreshable {
+                    async let showsTask = fetchShows()
+                    let fetchedShows = await showsTask
+                    shows = fetchedShows
+                }
+                
+                
+                VStack(spacing: 0) {
+                    ForEach(characters, id: \.self) { character in
+                        if (groupedShows[character] != nil) {
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    if groupedShows[character] != nil {
+                                        withAnimation(.easeInOut(duration: 1)) {
+                                            scrollProxy.scrollTo(character, anchor: .top)
+                                        }
+                                        UIApplication.triggerHapticFeedback()
+                                    }
+                                }) {
+                                    Text(character)
+                                        .font(.footnote)
+                                        .padding(.vertical, 2)
+                                        .frame(width: 30)
+                                        .background(Colors.Primary.background)
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            //.drawingGroup()
         }
-        .refreshable {
-            async let showsTask = fetchShows()
-            let fetchedShows = await showsTask
-            shows = fetchedShows
+    }
+}
+
+
+
+
+struct ShowRow: View {
+    let show: Show
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    let width: CGFloat
+    
+    var body: some View {
+        
+        HStack {
+            
+            Button(action: {
+                showDetails = true
+                eventModel.selectShow(show: show)
+            }) {
+                HStack(spacing: 10) {
+                    AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
+                        image
+                            .renderingMode(.template)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Colors.Secondary.background
+                    }
+                    .frame(width: width, height: width)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .background(Colors.Secondary.background)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 5)
+                    )
+                    
+                    Text(show.name)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.subheadline)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 5)
+                .padding(.horizontal, 20)
+                .background(Colors.Primary.background)
+            }
+            .buttonStyle(BorderlessButtonStyle())
         }
     }
 }
@@ -146,48 +207,44 @@ struct ShowsListView: View {
 
 struct ShowsGridView: View {
     
-    @ObservedObject var eventModel: EventModel
+    @StateObject var eventModel: EventModel
     @Binding var showDetails: Bool
     @Binding var shows: [Show]
     @Binding var searchText: String
     
-    let columns = [
-        GridItem(.flexible(), spacing: 15, alignment: .topLeading),
-        GridItem(.flexible(), spacing: 15, alignment: .topLeading)
+    private let columns = [
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
     ]
     
     var filteredShows: [Show] {
-        if searchText.isEmpty {
-            return shows
-        } else {
-            return shows.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
+        searchText.isEmpty ? shows : shows.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(filteredShows) { show in
-                    ShowGridItemView(show: show, eventModel: eventModel, showDetails: $showDetails)
+                    ShowCell(show: show, eventModel: eventModel, showDetails: $showDetails)
                         .id(show.id)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            //.drawingGroup()
+            .drawingGroup()
         }
-        .background(Colors.Primary.background)
         .scrollIndicators(.hidden)
+        .background(Colors.Primary.background)
+        .refreshable {
+            async let showsTask = fetchShows()
+            let fetchedShows = await showsTask
+            shows = fetchedShows
+        }
     }
 }
 
-
-
-
-struct ShowGridItemView: View {
-    
+struct ShowCell: View {
     let show: Show
-    
     @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
     
@@ -197,31 +254,36 @@ struct ShowGridItemView: View {
             eventModel.selectShow(show: show)
         } label: {
             VStack(alignment: .leading, spacing: 5) {
-                AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(show.imageName)")!) { image in
-                    image
-                        .renderingMode(.template)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    Colors.Secondary.background
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .foregroundColor(Colors.Primary.foreground)
-                .background(Colors.Secondary.background)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 5)
-                )
-                
+                ShowImage(imageName: show.imageName)
+                    .aspectRatio(1, contentMode: .fit)
                 Text(show.name)
-                    .foregroundColor(Colors.Secondary.foreground)
+                    .foregroundColor(Colors.Primary.foreground)
                     .font(.caption)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                    .multilineTextAlignment(.leading)
             }
-            .frame(maxWidth: .infinity)
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text("Show: \(show.name)"))
+    }
+}
+
+struct ShowImage: View {
+    let imageName: String
+    var body: some View {
+        GeometryReader { geometry in
+            AsyncCachedImage(url: URL(string: "\(Path.shows)/sm/\(imageName)")) { image in
+                image
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } placeholder: {
+                Colors.Secondary.background
+            }
+            .frame(width: geometry.size.width, height: geometry.size.width)
+            .foregroundColor(Colors.Primary.foreground)
+            .background(Colors.Secondary.background)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 5)
+            )
+        }
     }
 }

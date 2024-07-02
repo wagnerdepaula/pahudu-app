@@ -73,7 +73,7 @@ struct ShowDetailsView: View {
                         ForEach(Array(show.history.enumerated()), id: \.element) { index, item in
                             HStack(alignment: .top, spacing: 0) {
                                 Text("\(index + 1).")
-                                    .foregroundColor(Colors.Secondary.foreground)
+                                    .foregroundColor(Colors.Tertiary.foreground)
                                     .font(.body)
                                     .frame(width: 25, alignment: .leading)
                                 Text(item)

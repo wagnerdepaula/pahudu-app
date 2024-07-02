@@ -25,8 +25,6 @@ struct DesignersView: View {
                 switch currentViewMode {
                 case .grid:
                     DesignersGridView(eventModel: eventModel, showDetails: $showDetails, designers: $globalData.designers, searchText: $searchText)
-                case .condensedGrid:
-                    DesignersCondesedGridView(eventModel: eventModel, showDetails: $showDetails, designers: $globalData.designers, searchText: $searchText)
                 case .list:
                     DesignersListView(eventModel: eventModel, showDetails: $showDetails, designers: $globalData.designers, searchText: $searchText)
                 }
@@ -60,7 +58,6 @@ struct DesignersView: View {
         }
     }
     
-    
     func cycleViewMode() {
         let allModes = ViewMode.allCases
         if let currentIndex = allModes.firstIndex(of: currentViewMode) {
@@ -70,22 +67,10 @@ struct DesignersView: View {
         
         
     }
-    
-    
 }
 
 
-enum ViewMode: CaseIterable {
-    case grid, condensedGrid, list
-    
-    var iconName: String {
-        switch self {
-        case .grid: return "circle.grid.2x2.fill"
-        case .condensedGrid: return "circle.grid.3x3.fill"
-        case .list: return "rectangle.grid.1x2.fill"
-        }
-    }
-}
+
 
 
 struct DesignersListView: View {
@@ -95,7 +80,7 @@ struct DesignersListView: View {
     @Binding var showDetails: Bool
     @Binding var designers: [Designer]
     @Binding var searchText: String
-    let width: CGFloat = 70
+    let width: CGFloat = 80
     
     let characters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     
@@ -111,11 +96,16 @@ struct DesignersListView: View {
         Dictionary(grouping: filteredDesigners) { String($0.name.prefix(1).uppercased()) }
     }
     
+//    @State private var selectedTab = 0
+//    let tabs = ["About", "Profile", "Settings"]
+    
+    
     var body: some View {
         ScrollViewReader { scrollProxy in
             ZStack {
                 
                 ScrollView {
+                    
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(characters, id: \.self) { character in
                             if let designersForLetter = groupedDesigners[character] {
@@ -132,6 +122,7 @@ struct DesignersListView: View {
                             }
                         }
                     }
+                    
                 }
                 .scrollIndicators(.hidden)
                 .refreshable {
@@ -139,6 +130,8 @@ struct DesignersListView: View {
                     let fetchedDesigners = await designersTask
                     designers = fetchedDesigners
                 }
+                
+                    
                 
                 
                 VStack(spacing: 0) {
@@ -187,6 +180,7 @@ struct DesignerRow: View {
                 eventModel.selectDesigner(designer: designer)
             }) {
                 HStack(spacing: 10) {
+                    
                     AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!) { image in
                         image
                             .resizable()
@@ -196,27 +190,44 @@ struct DesignerRow: View {
                     }
                     .frame(width: width, height: width)
                     .background(Colors.Secondary.foreground)
-                    .clipShape(Circle())
+                    .clipShape(
+                        Circle()
+                    )
                     .overlay {
                         Circle()
-                            .stroke(Colors.Primary.background, lineWidth: 1)
+                            .stroke(Colors.Primary.background, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
                     }
                     
-                    Text(designer.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.subheadline)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(designer.name)
+                            .foregroundColor(Colors.Primary.foreground)
+                            .font(.subheadline)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        
+                        if let affiliation = designer.affiliation {
+                            Text("\(affiliation.brand)")
+                                .foregroundColor(Colors.Tertiary.foreground)
+                                .font(.caption)
+                                .lineLimit(2)
+                                .lineSpacing(2)
+                                .truncationMode(.tail)
+                                .multilineTextAlignment(.leading)
+                        }
+                    }
+                    
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 5)
-                .padding(.horizontal, 20)
+                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 40))
                 .background(Colors.Primary.background)
             }
             .buttonStyle(BorderlessButtonStyle())
         }
     }
 }
+
+
 
 
 
@@ -227,151 +238,81 @@ struct DesignersGridView: View {
     @Binding var designers: [Designer]
     @Binding var searchText: String
     
-    var filteredDesigners: [Designer] {
-        if searchText.isEmpty {
-            return designers
-        } else {
-            return designers.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    let columns = [
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top)
+    private let columns = [
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
     ]
     
+    var filteredDesigners: [Designer] {
+        searchText.isEmpty ? designers : designers.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+    }
+    
     var body: some View {
-        
         ScrollView {
-            
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(filteredDesigners) { designer in
-                    Button {
-                        showDetails = true
-                        eventModel.selectDesigner(designer: designer)
-                    } label: {
-                        VStack(alignment: .center, spacing: 5) {
-                            
-                            GeometryReader { geometry in
-                                
-                                AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                    
-                                } placeholder: {
-                                    Colors.Secondary.background
-                                }
-                                .frame(width: geometry.size.width, height: geometry.size.width)
-                                .background(Colors.Secondary.foreground)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(Colors.Primary.background, lineWidth: 1)
-                                }
-                                
-                                
-                            }
-                            .aspectRatio(1, contentMode: .fit)
-                            
-                            Text(designer.name.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Secondary.foreground)
-                                .font(.caption)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                        }
-                    }
-                    .id(designer.id)
+                    DesignerCell(designer: designer, eventModel: eventModel, showDetails: $showDetails)
+                        .id(designer.id)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            //.drawingGroup()
-            
+            .drawingGroup()
         }
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
+        .refreshable {
+            async let designersTask = fetchDesigners()
+            let fetchedDesigners = await designersTask
+            designers = fetchedDesigners
+        }
     }
 }
 
-
-
-
-struct DesignersCondesedGridView: View {
-    
-    @StateObject var eventModel: EventModel
+struct DesignerCell: View {
+    let designer: Designer
+    @ObservedObject var eventModel: EventModel
     @Binding var showDetails: Bool
-    @Binding var designers: [Designer]
-    @Binding var searchText: String
-    
-    var filteredDesigners: [Designer] {
-        if searchText.isEmpty {
-            return designers
-        } else {
-            return designers.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    let columns = [
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top)
-    ]
     
     var body: some View {
-        
-        ScrollView {
-            
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(filteredDesigners) { designer in
-                    Button {
-                        showDetails = true
-                        eventModel.selectDesigner(designer: designer)
-                    } label: {
-                        VStack(alignment: .center, spacing: 5) {
-                            
-                            GeometryReader { geometry in
-                                
-                                AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(designer.imageName)")!) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                    
-                                } placeholder: {
-                                    Colors.Secondary.background
-                                }
-                                .frame(width: geometry.size.width, height: geometry.size.width)
-                                .background(Colors.Secondary.foreground)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(Colors.Primary.background, lineWidth: 1)
-                                }
-                                
-                                
-                            }
-                            .aspectRatio(1, contentMode: .fit)
-                            
-                            Text(designer.name.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Secondary.foreground)
-                                .font(.caption)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                        }
-                    }
-                    .id(designer.id)
-                }
+        Button {
+            showDetails = true
+            eventModel.selectDesigner(designer: designer)
+        } label: {
+            VStack(alignment: .center, spacing: 5) {
+                DesignerImage(imageName: designer.imageName)
+                    .aspectRatio(1, contentMode: .fit)
+                Text(designer.name.components(separatedBy: " ").first ?? "")
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
             }
-            .padding(.vertical, 5)
-            .padding(.horizontal, 20)
-            //.drawingGroup()
-            
         }
-        .scrollIndicators(.hidden)
-        .background(Colors.Primary.background)
     }
 }
 
-
+struct DesignerImage: View {
+    let imageName: String
+    var body: some View {
+        GeometryReader { geometry in
+            AsyncCachedImage(url: URL(string: "\(Path.designers)/sm/\(imageName)")) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } placeholder: {
+                Colors.Secondary.background
+            }
+            .frame(width: geometry.size.width, height: geometry.size.width)
+            .background(Colors.Secondary.foreground)
+            .clipShape(
+                Circle()
+            )
+            .overlay {
+                Circle()
+                    .stroke(Colors.Primary.background, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
+            }
+        }
+    }
+}

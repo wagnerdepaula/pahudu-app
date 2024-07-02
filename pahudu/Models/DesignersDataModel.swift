@@ -12,6 +12,12 @@ struct DesignerResponse: Codable {
     var designers: [Designer]
 }
 
+struct Affiliation: Codable, Hashable {
+    let brand: String
+    let position: String
+    let since: String
+}
+
 struct Designer: Codable, Identifiable, Hashable {
     
     let id: String
@@ -19,18 +25,19 @@ struct Designer: Codable, Identifiable, Hashable {
     let nationality: String
     let founder: String
     let name: String
-    let title: String
     let about: String
     let dateOfBirth: String
     let placeOfBirth: String
     let yearsActive: String
     let spouse: String
     let website: String
+    let title: String
     let imageName: String
     let history: [String]
+    let affiliation: Affiliation?
     
     enum CodingKeys: String, CodingKey {
-        case id, education, nationality, founder, name, title, about, dateOfBirth, placeOfBirth, yearsActive, spouse, website, imageName, history
+        case id, education, nationality, founder, name, title, about, dateOfBirth, placeOfBirth, yearsActive, spouse, website, imageName, history, affiliation
     }
     
     init(from decoder: Decoder) throws {
@@ -49,6 +56,7 @@ struct Designer: Codable, Identifiable, Hashable {
         website = try container.decodeIfPresent(String.self, forKey: .website) ?? "N/A"
         imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? "default_image"
         history = try container.decodeIfPresent(Array.self, forKey: .history) ?? []
+        affiliation = try container.decodeIfPresent(Affiliation.self, forKey: .affiliation)
     }
 }
 

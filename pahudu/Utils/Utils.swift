@@ -59,3 +59,15 @@ extension UIApplication {
         generator.impactOccurred()
     }
 }
+
+
+enum ViewMode: CaseIterable {
+    case grid, list
+    
+    var iconName: String {
+        switch self {
+        case .grid: return "circle.grid.3x3.fill"
+        case .list: return "rectangle.grid.1x2.fill"
+        }
+    }
+}

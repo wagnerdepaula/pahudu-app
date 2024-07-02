@@ -2,7 +2,7 @@
 //  BrandsView.swift
 //  pahudu
 //
-//  Created by Wagner De Paula on 6/7/24.
+//  Created by Wagner De Paula on 6/5/24.
 //
 
 import SwiftUI
@@ -11,28 +11,27 @@ struct BrandsView: View {
     
     @EnvironmentObject var globalData: GlobalData
     @EnvironmentObject var eventModel: EventModel
-    //@StateObject var eventModel: EventModel = EventModel()
     
     @State private var searchText = ""
     @State private var showDetails: Bool = false
-    @State private var showGridView = false
     @State private var itemOpacity: Double = 0.0
-    
+    @State private var currentViewMode: ViewMode = .list
     
     var body: some View {
         
         NavigationStack {
             
             Group {
-                if showGridView {
+                switch currentViewMode {
+                case .grid:
                     BrandsGridView(eventModel: eventModel, showDetails: $showDetails, brands: $globalData.brands, searchText: $searchText)
-                } else {
+                case .list:
                     BrandsListView(eventModel: eventModel, showDetails: $showDetails, brands: $globalData.brands, searchText: $searchText)
                 }
             }
             .opacity(itemOpacity)
             .onAppear {
-                withAnimation(.easeOut(duration: 0.3)) {
+                withAnimation(.easeOut(duration: 1)) {
                     itemOpacity = 1.0
                 }
             }
@@ -41,28 +40,12 @@ struct BrandsView: View {
             .background(Colors.Primary.background)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button(action: {
-                            showGridView = true
-                            UIApplication.triggerHapticFeedback()
-                        }) {
-                            Label("Grid", systemImage: "circle.grid.3x3.fill")
-                        }
-                        Button(action: {
-                            showGridView = false
-                            UIApplication.triggerHapticFeedback()
-                        }) {
-                            Label("List", systemImage: "rectangle.grid.1x2.fill")
-                        }
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Colors.Tertiary.background)
-                                .frame(width: 30, height: 30)
-                            Image(systemName: "ellipsis")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(Colors.Primary.accent)
-                        }
+                    Button(action: {
+                        cycleViewMode()
+                        UIApplication.triggerHapticFeedback()
+                    }) {
+                        Image(systemName: currentViewMode.iconName)
+                            .foregroundColor(Colors.Primary.accent)
                     }
                 }
             }
@@ -74,8 +57,17 @@ struct BrandsView: View {
             }
         }
     }
+    
+    func cycleViewMode() {
+        let allModes = ViewMode.allCases
+        if let currentIndex = allModes.firstIndex(of: currentViewMode) {
+            let nextIndex = (currentIndex + 1) % allModes.count
+            currentViewMode = allModes[nextIndex]
+        }
+        
+        
+    }
 }
-
 
 
 struct BrandsListView: View {
@@ -85,7 +77,7 @@ struct BrandsListView: View {
     @Binding var showDetails: Bool
     @Binding var brands: [Brand]
     @Binding var searchText: String
-    let width: CGFloat = 70
+    let width: CGFloat = 80
     
     let characters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     
@@ -100,6 +92,7 @@ struct BrandsListView: View {
     var groupedBrands: [String: [Brand]] {
         Dictionary(grouping: filteredBrands) { String($0.name.prefix(1).uppercased()) }
     }
+    
     
     var body: some View {
         ScrollViewReader { scrollProxy in
@@ -150,8 +143,6 @@ struct BrandsListView: View {
                                         .frame(width: 30)
                                         .background(Colors.Primary.background)
                                 }
-                                
-                                
                             }
                         }
                     }
@@ -190,11 +181,9 @@ struct BrandRow: View {
                     .frame(width: width, height: width)
                     .foregroundColor(Colors.Primary.foreground)
                     .background(Colors.Secondary.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .overlay {
+                    .clipShape(
                         RoundedRectangle(cornerRadius: 15)
-                            .stroke(Colors.Primary.background, lineWidth: 1)
-                    }
+                    )
                     
                     Text(brand.name)
                         .foregroundColor(Colors.Primary.foreground)
@@ -214,6 +203,8 @@ struct BrandRow: View {
 
 
 
+
+
 struct BrandsGridView: View {
     
     @StateObject var eventModel: EventModel
@@ -221,72 +212,79 @@ struct BrandsGridView: View {
     @Binding var brands: [Brand]
     @Binding var searchText: String
     
-    var filteredBrands: [Brand] {
-        if searchText.isEmpty {
-            return brands
-        } else {
-            return brands.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    let columns = [
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top),
-        GridItem(.flexible(), spacing: 15, alignment: .top)
+    private let columns = [
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
     ]
     
+    var filteredBrands: [Brand] {
+        searchText.isEmpty ? brands : brands.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+    }
+    
     var body: some View {
-        
         ScrollView {
-            
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(filteredBrands) { brand in
-                    Button {
-                        showDetails = true
-                        eventModel.selectBrand(brand: brand)
-                    } label: {
-                        VStack(alignment: .center, spacing: 5) {
-                            
-                            GeometryReader { geometry in
-                                
-                                AsyncCachedImage(url: URL(string: "\(Path.brands)/sm/\(brand.imageName)")!) { image in
-                                    image
-                                        .renderingMode(.template)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                    
-                                } placeholder: {
-                                    Colors.Secondary.background
-                                }
-                                .frame(width: geometry.size.width, height: geometry.size.width)
-                                .foregroundColor(Colors.Primary.foreground)
-                                .background(Colors.Secondary.background)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Colors.Primary.background, lineWidth: 1)
-                                }
-                                
-                                
-                            }
-                            .aspectRatio(1, contentMode: .fit)
-                            
-                            Text(brand.name.components(separatedBy: " ").first ?? "")
-                                .foregroundColor(Colors.Secondary.foreground)
-                                .font(.caption)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                        }
-                    }
-                    .id(brand.id)
+                    BrandCell(brand: brand, eventModel: eventModel, showDetails: $showDetails)
+                        .id(brand.id)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            //.drawingGroup()
-            
+            .drawingGroup()
         }
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
+        .refreshable {
+            async let brandsTask = fetchBrands()
+            let fetchedBrands = await brandsTask
+            brands = fetchedBrands
+        }
+    }
+}
+
+struct BrandCell: View {
+    let brand: Brand
+    @ObservedObject var eventModel: EventModel
+    @Binding var showDetails: Bool
+    
+    var body: some View {
+        Button {
+            showDetails = true
+            eventModel.selectBrand(brand: brand)
+        } label: {
+            VStack(alignment: .center, spacing: 5) {
+                BrandImage(imageName: brand.imageName)
+                    .aspectRatio(1, contentMode: .fit)
+                Text(brand.name)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+        }
+    }
+}
+
+struct BrandImage: View {
+    let imageName: String
+    var body: some View {
+        GeometryReader { geometry in
+            AsyncCachedImage(url: URL(string: "\(Path.brands)/sm/\(imageName)")) { image in
+                image
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } placeholder: {
+                Colors.Secondary.background
+            }
+            .frame(width: geometry.size.width, height: geometry.size.width)
+            .foregroundColor(Colors.Primary.foreground)
+            .background(Colors.Secondary.background)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 20)
+            )
+        }
     }
 }

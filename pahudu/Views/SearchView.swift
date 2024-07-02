@@ -12,25 +12,24 @@ import UIKit
 
 struct SearchView: View {
     
-    @State private var searchText = ""
+    @State private var selectedTab = 0
+    let tabs = ["Home", "Profile", "Settings"]
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack {
-                    Spacer()
-                    Text("SearchView")
-                        .font(.headline)
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding()
+        VStack {
+            TabBar(selectedTab: $selectedTab, tabs: tabs)
+            
+            TabView(selection: $selectedTab) {
+                Text("Home View").tag(0)
+                Text("Profile View").tag(1)
+                Text("Settings View").tag(2)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationBarTitle("Search", displayMode: .inline)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
-            .scrollIndicators(.hidden)
-            .background(Colors.Primary.background)
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .animation(.easeInOut, value: selectedTab)
         }
     }
 }
+
+
+
+

@@ -9,7 +9,6 @@
 import SwiftUI
 import UIKit
 
-
 enum Tab: String, CaseIterable {
     case calendar = "circle.grid.3x3"
     case discover = "safari"

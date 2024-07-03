@@ -23,12 +23,11 @@ struct DetailsSectionView: View {
             Text(detail)
                 .foregroundColor(Colors.Primary.foreground)
                 .lineSpacing(4)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 13, leading: 15, bottom: 14, trailing: 15))
-        Divider(padding: 0, height: 1)
+        .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
     }
 }
 
@@ -48,10 +47,10 @@ struct DetailsLinkSectionView: View {
                 .foregroundColor(Colors.Primary.accent)
                 .truncationMode(.tail)
                 .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
         }
         .font(.callout)
-        .padding(EdgeInsets(top: 13, leading: 15, bottom: 14, trailing: 15))
+        .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
     }
 }

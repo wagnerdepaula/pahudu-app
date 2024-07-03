@@ -91,8 +91,8 @@ struct DiscoverView: View {
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 15) {
-                                    ForEach(Array(globalData.designers.shuffled().prefix(10)), id: \.id) { designer in
-                                        HighlightsItemView(designer: designer, width: 280, height: 300, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                    ForEach(Array(globalData.designers.prefix(10)), id: \.id) { designer in
+                                        HighlightsItemView(designer: designer, width: 300, height: 340, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
                                             .id(designer.id)
                                     }
                                 }
@@ -285,7 +285,7 @@ struct HighlightsItemView: View {
             eventModel.selectDesigner(designer: designer)
         }) {
             
-            ZStack(alignment: .bottomLeading) {
+            ZStack(alignment: .bottom) {
                 
                 AsyncCachedImage(url: url) { image in
                     image
@@ -299,12 +299,17 @@ struct HighlightsItemView: View {
                                startPoint: .top,
                                endPoint: .bottom)
                 
-                Text(designer.name)
-                    .font(.title3)
-                    .foregroundColor(Colors.Primary.foreground)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 12, trailing: 10))
+                VStack {
+                    Text(designer.name)
+                        .font(.title3)
+                        .foregroundColor(Colors.Primary.foreground)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .padding(EdgeInsets(top: 15, leading: 20, bottom: 15, trailing: 10))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                    Spacer()
+                }
             }
             
             

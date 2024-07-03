@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 enum Tab: String, CaseIterable {
     case calendar = "circle.grid.3x3"
@@ -31,7 +30,13 @@ struct ContentView: View {
     @State private var selectedTab: Tab = .discover
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: Binding(
+            get: { selectedTab },
+            set: { newValue in
+                selectedTab = newValue
+                UIApplication.triggerHapticFeedback()
+            }
+        )) {
             YearView()
                 .tag(Tab.calendar)
                 .tabItem {
@@ -44,11 +49,11 @@ struct ContentView: View {
                     Image(systemName: Tab.discover.rawValue)
                 }
             
-//            SearchView()
-//                .tag(Tab.search)
-//                .tabItem {
-//                    Image(systemName: Tab.search.rawValue)
-//                }
+            //            SearchView()
+            //                .tag(Tab.search)
+            //                .tabItem {
+            //                    Image(systemName: Tab.search.rawValue)
+            //                }
             
             AccountView()
                 .tag(Tab.account)

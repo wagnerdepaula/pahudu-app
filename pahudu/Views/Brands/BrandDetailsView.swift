@@ -49,7 +49,7 @@ struct BrandDetailsView: View {
                 
                 
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) {
                     
                     
                     Text(brand.name)
@@ -57,8 +57,7 @@ struct BrandDetailsView: View {
                         .font(.largeTitle)
                         .kerning(-0.3)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                    Spacer(minLength: 10)
+
                     
                     TypedText(text: brand.about)
                         .foregroundColor(Colors.Primary.foreground)
@@ -66,29 +65,12 @@ struct BrandDetailsView: View {
                         .lineSpacing(6)
                     
                     
-                    Spacer(minLength: 30)
-                    
-                    VStack(alignment: .leading, spacing: 14) {
-                        ForEach(Array(brand.history.enumerated()), id: \.element) { index, item in
-                            HStack(alignment: .top, spacing: 0) {
-                                Text("\(index + 1).")
-                                    .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.body)
-                                    .frame(width: 25, alignment: .leading)
-                                Text(item)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.body)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .lineSpacing(6)
-                            }
-                        }
-                    }
-                    
-                    Spacer(minLength: 30)
-                    
                     
                     // Table
                     VStack(spacing: 0) {
+                        
+                        Spacer(minLength: 15)
+                        
                         if brand.founder != "N/A" {
                             DetailsSectionView(title: "Founder", detail: brand.founder)
                         }
@@ -123,7 +105,25 @@ struct BrandDetailsView: View {
                         RoundedRectangle(cornerRadius: 10)
                     )
                     
-                    Spacer(minLength: 100)
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(Array(brand.history.enumerated()), id: \.element) { index, item in
+                            HStack(alignment: .top, spacing: 0) {
+                                Text("\(index + 1).")
+                                    .foregroundColor(Colors.Tertiary.foreground)
+                                    .font(.body)
+                                    .frame(width: 25, alignment: .leading)
+                                Text(item)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.body)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineSpacing(6)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength:50)
+                    
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 

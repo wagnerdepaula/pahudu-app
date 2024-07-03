@@ -73,7 +73,6 @@ struct DesignerDetailsView: View {
                 
                 
                 
-                
                 VStack(alignment: .leading, spacing: 20) {
                     
                     TypedText(text: designer.about)
@@ -87,7 +86,7 @@ struct DesignerDetailsView: View {
                         
                         if let affiliation = designer.affiliation,
                            let foundBrand = globalData.brands.findBrand(byName: affiliation.brand) {
-                            VStack(alignment: .leading, spacing: 3) {
+                            HStack(spacing: 5) {
                                 Text("\(affiliation.position) at")
                                     .foregroundColor(Colors.Tertiary.foreground)
                                 
@@ -102,8 +101,10 @@ struct DesignerDetailsView: View {
                             }
                             .font(.callout)
                             .padding(EdgeInsets(top: 12, leading: 15, bottom: 13, trailing: 15))
-                            Divider(padding: 15, height: 1)
+                            Divider(height: 1)
                         }
+                        
+                        Spacer(minLength: 15)
                         
                         if designer.dateOfBirth != "N/A" {
                             DetailsSectionView(title: "Born", detail: "\(designer.dateOfBirth)")

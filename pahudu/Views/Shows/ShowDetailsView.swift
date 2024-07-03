@@ -50,7 +50,7 @@ struct ShowDetailsView: View {
                 
                 
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) {
                     
                     Text(show.name)
                         .foregroundColor(Colors.Primary.foreground)
@@ -58,7 +58,6 @@ struct ShowDetailsView: View {
                         .kerning(-0.3)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Spacer(minLength: 10)
                     
                     TypedText(text: "\(show.about) \(show.keyHighlights)")
                         .foregroundColor(Colors.Primary.foreground)
@@ -67,28 +66,10 @@ struct ShowDetailsView: View {
                     
                     
                     
-                    Spacer(minLength: 30)
-                    
-                    VStack(alignment: .leading, spacing: 14) {
-                        ForEach(Array(show.history.enumerated()), id: \.element) { index, item in
-                            HStack(alignment: .top, spacing: 0) {
-                                Text("\(index + 1).")
-                                    .foregroundColor(Colors.Tertiary.foreground)
-                                    .font(.body)
-                                    .frame(width: 25, alignment: .leading)
-                                Text(item)
-                                    .foregroundColor(Colors.Primary.foreground)
-                                    .font(.body)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .lineSpacing(6)
-                            }
-                        }
-                    }
-                    
-                    Spacer(minLength: 30)
-                    
                     // Table
                     VStack(spacing: 0) {
+                        
+                        Spacer(minLength: 15)
                         
                         if show.acronym != "N/A" {
                             DetailsSectionView(title: "Acronym", detail: show.acronym)
@@ -132,7 +113,27 @@ struct ShowDetailsView: View {
                         RoundedRectangle(cornerRadius: 10)
                     )
                     
-                    Spacer(minLength: 100)
+                    
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(Array(show.history.enumerated()), id: \.element) { index, item in
+                            HStack(alignment: .top, spacing: 0) {
+                                Text("\(index + 1).")
+                                    .foregroundColor(Colors.Tertiary.foreground)
+                                    .font(.body)
+                                    .frame(width: 25, alignment: .leading)
+                                Text(item)
+                                    .foregroundColor(Colors.Primary.foreground)
+                                    .font(.body)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineSpacing(6)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength:50)
+                    
+                    
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 

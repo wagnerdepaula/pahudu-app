@@ -30,184 +30,168 @@ struct DiscoverView: View {
             
             ScrollView(showsIndicators: false) {
                 
-                VStack(spacing: 50) {
-                    
-                    
-                    // Recent
-                    if globalData.recentItems.count > 0 {
-                        
-                        VStack(spacing: 15) {
-                            
-                            Text("Recently viewed")
-                            .font(.headline)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(Colors.Primary.foreground)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(globalData.recentItems.indices, id: \.self) { index in
-                                        switch globalData.recentItems[index] {
-                                        case let show as Show:
-                                            ShowItemView(show: show, width: 115, eventModel: eventModel, showShowDetails: $showShowDetails)
-                                                .id(show.id)
-                                        case let brand as Brand:
-                                            BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
-                                                .id(brand.id)
-                                        case let designer as Designer:
-                                            DesignerItemView(designer: designer, width: 115, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
-                                                .id(designer.id)
-                                        default:
-                                            Text("Unknown item type")
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                        }
-                    }
-                    
+                VStack(alignment: .leading, spacing: 20) {
                     
                     
                     
                     // More to discover
                     if globalData.designers.count > 0 {
-                        VStack(spacing: 15) {
-                            HStack{
-                                Button(action: {
-                                    showDesignersList = true
-                                }, label: {
-                                    HStack {
-                                        Text("Hightlights")
-                                        Image(systemName: "chevron.forward")
-                                            .opacity(0.5)
-                                            .fontWeight(.bold)
-                                    }
-                                    .font(.headline)
-                                })
+                        
+                        Text("Highlights")
+                            .font(.title3)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundColor(Colors.Primary.foreground)
+                            .padding(.horizontal, 20)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(Array(globalData.designers.prefix(10)), id: \.id) { designer in
+                                    HighlightsItemView(designer: designer, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                        .id(designer.id)
+                                }
                             }
                             .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(Array(globalData.designers.prefix(10)), id: \.id) { designer in
-                                        HighlightsItemView(designer: designer, width: 300, height: 340, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
-                                            .id(designer.id)
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                            }
                         }
                     }
                     
+                    
+                    Spacer()
                     
                     
                     
                     // Shows
                     if globalData.shows.count > 0 {
-                        VStack(spacing: 15) {
-                            HStack{
-                                Button(action: {
-                                    showShowsList = true
-                                }, label: {
-                                    HStack {
-                                        Text("Shows")
-                                        Image(systemName: "chevron.forward")
-                                            .opacity(0.5)
-                                            .fontWeight(.bold)
-                                    }
-                                    .font(.headline)
-                                })
+                        
+                        Button(action: {
+                            showShowsList = true
+                        }, label: {
+                            HStack {
+                                Text("Shows")
+                                Image(systemName: "chevron.forward")
+                                    .opacity(0.5)
+                                    .fontWeight(.bold)
+                            }
+                            .font(.title3)
+                        })
+                        .padding(.horizontal, 20)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(globalData.shows) { show in
+                                    ShowItemView(show: show, width: 180, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                        .id(show.id)
+                                }
                             }
                             .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(globalData.shows) { show in
-                                        ShowItemView(show: show, width: 180, eventModel: eventModel, showShowDetails: $showShowDetails)
-                                            .id(show.id)
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                            }
                         }
+                        
                     }
                     
                     
                     
+                    Spacer()
                     
                     
                     // Brands
                     if globalData.brands.count > 0 {
-                        VStack(spacing: 15) {
-                            
+                        
+                        Button(action: {
+                            showBrandsList = true
+                        }, label: {
                             HStack {
-                                
-                                Button(action: {
-                                    showBrandsList = true
-                                }, label: {
-                                    HStack {
-                                        Text("Brands")
-                                        Image(systemName: "chevron.forward")
-                                            .opacity(0.5)
-                                            .fontWeight(.bold)
-                                    }
-                                    .font(.headline)
-                                })
+                                Text("Brands")
+                                Image(systemName: "chevron.forward")
+                                    .opacity(0.5)
+                                    .fontWeight(.bold)
+                            }
+                            .font(.title3)
+                        })
+                        .padding(.horizontal, 20)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(globalData.brands) { brand in
+                                    BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                        .id(brand.id)
+                                }
                             }
                             .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(globalData.brands) { brand in
-                                        BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
-                                            .id(brand.id)
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                            }
                         }
                     }
                     
                     
                     
                     
+                    Spacer()
                     
                     
                     // Designers
                     if globalData.designers.count > 0 {
-                        VStack(spacing: 15) {
+                        Button(action: {
+                            showDesignersList = true
+                        }, label: {
                             HStack {
-                                Button(action: {
-                                    showDesignersList = true
-                                }, label: {
-                                    HStack {
-                                        Text("Designers")
-                                        Image(systemName: "chevron.forward")
-                                            .opacity(0.5)
-                                            .fontWeight(.bold)
-                                    }
-                                    .font(.headline)
-                                })
+                                Text("Designers")
+                                Image(systemName: "chevron.forward")
+                                    .opacity(0.5)
+                                    .fontWeight(.bold)
+                            }
+                            .font(.title3)
+                        })
+                        .padding(.horizontal, 20)
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(globalData.designers) { designer in
+                                    DesignerItemView(designer: designer, width: 115, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
+                                        .id(designer.id)
+                                }
                             }
                             .padding(.horizontal, 20)
+                        }
+                        
+                    }
+                    
+                    
+                    
+                    
+                    Spacer()
+                    
+                    
+                    // Recent
+                    if globalData.recentItems.count > 0 {
+                        
+                        
+                        Text("Recently viewed")
+                            .font(.title3)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(globalData.designers) { designer in
+                            .foregroundColor(Colors.Primary.foreground)
+                            .padding(.horizontal, 20)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(globalData.recentItems.indices, id: \.self) { index in
+                                    switch globalData.recentItems[index] {
+                                    case let show as Show:
+                                        ShowItemView(show: show, width: 115, eventModel: eventModel, showShowDetails: $showShowDetails)
+                                            .id(show.id)
+                                    case let brand as Brand:
+                                        BrandItemView(brand: brand, width: 115, eventModel: eventModel, showBrandDetails: $showBrandDetails)
+                                            .id(brand.id)
+                                    case let designer as Designer:
                                         DesignerItemView(designer: designer, width: 115, eventModel: eventModel, showDesignerDetails: $showDesignerDetails)
                                             .id(designer.id)
+                                    default:
+                                        Text("Unknown item type")
                                     }
                                 }
-                                .padding(.horizontal, 20)
                             }
+                            .padding(.horizontal, 20)
                         }
                     }
                 }
+                
             }
             .opacity(opacity)
             .onAppear {
@@ -270,8 +254,8 @@ struct DiscoverView: View {
 struct HighlightsItemView: View {
     
     let designer: Designer
-    let width: CGFloat
-    let height: CGFloat
+    let width: CGFloat = 280
+    let height: CGFloat = 170
     
     @ObservedObject var eventModel: EventModel
     @Binding var showDesignerDetails: Bool
@@ -285,7 +269,7 @@ struct HighlightsItemView: View {
             eventModel.selectDesigner(designer: designer)
         }) {
             
-            ZStack(alignment: .bottom) {
+            ZStack(alignment: .bottomTrailing) {
                 
                 AsyncCachedImage(url: url) { image in
                     image
@@ -295,35 +279,26 @@ struct HighlightsItemView: View {
                     Colors.Secondary.background
                 }
                 
-                LinearGradient(gradient: Gradient(colors: [.clear, .clear, Colors.Primary.background.opacity(0.7)]),
-                               startPoint: .top,
-                               endPoint: .bottom)
+                let name = designer.name.split(separator: " ", maxSplits: 1)
+                Text("\(name[0])\n\(name.count > 1 ? name[1] : "")")
+                    .font(.headline)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 10))
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                VStack {
-                    Text(designer.name)
-                        .font(.title3)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                        .padding(EdgeInsets(top: 15, leading: 20, bottom: 15, trailing: 10))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                    Spacer()
-                }
             }
             
-            
         }
-        .frame(width: width, height: height, alignment: .bottom)
         .background(Colors.Secondary.background)
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
         )
-        .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.Secondary.divider, lineWidth: 0.5)
-        }
-
+        .frame(width: width, height: height, alignment: .bottom)
+        
+        
+        
         
         
     }
@@ -438,13 +413,9 @@ struct ShowImageView: View {
         } placeholder: {
             Colors.Secondary.background
         }
-        .overlay {
-            Rectangle()
-                .stroke(Colors.Secondary.divider, lineWidth: 1)
-        }
         .frame(width: width, height: height)
         .foregroundColor(Colors.Primary.foreground)
-        .background(Colors.Primary.background)
+        .background(Colors.Secondary.background)
         .clipShape(
             Rectangle()
         )
@@ -467,13 +438,9 @@ struct BrandImageView: View {
         } placeholder: {
             Colors.Secondary.background
         }
-        .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.Secondary.divider, lineWidth: 1)
-        }
         .frame(width: width, height: width)
         .foregroundColor(Colors.Primary.foreground)
-        .background(Colors.Primary.background)
+        .background(Colors.Secondary.background)
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
         )
@@ -502,12 +469,8 @@ struct DesignerImageView: View {
                 .stroke(Colors.Primary.background, lineWidth: 1)
         }
         .frame(width: width, height: width)
-        .background(Colors.Secondary.foreground)
-        .clipShape(
-            Circle()
-        )
+        .background(Colors.Tertiary.foreground)
+        .clipShape(Circle())
         
     }
 }
-
-

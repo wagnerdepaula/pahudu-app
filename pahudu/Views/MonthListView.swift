@@ -101,7 +101,7 @@ struct DayCell: View {
                 .foregroundColor(Colors.Secondary.foreground)
             
         }
-        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
+        .padding(EdgeInsets(top: 20, leading: 0, bottom: 15, trailing: 0))
         .frame(minWidth: 80, maxWidth: 80, maxHeight: .infinity, alignment: .center)
         //        .overlay(
         //            Rectangle()

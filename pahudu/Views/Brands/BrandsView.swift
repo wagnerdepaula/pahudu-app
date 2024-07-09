@@ -93,7 +93,6 @@ struct BrandsListView: View {
         Dictionary(grouping: filteredBrands) { String($0.name.prefix(1).uppercased()) }
     }
     
-    
     var body: some View {
         ScrollViewReader { scrollProxy in
             ZStack {
@@ -105,7 +104,7 @@ struct BrandsListView: View {
                                 Section(header: Text(character).id(character)
                                     .font(.callout)
                                     .foregroundStyle(Colors.Secondary.foreground)
-                                    .padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                                 ) {
                                     ForEach(brandsForLetter, id: \.id) { brand in
                                         BrandRow(brand: brand, eventModel: eventModel, showDetails: $showDetails, width: width)
@@ -182,7 +181,7 @@ struct BrandsGridView: View {
                         .id(brand.id)
                 }
             }
-            .padding(.vertical, 5)
+            .padding(.vertical, 0)
             .padding(.horizontal, 20)
             .drawingGroup()
         }
@@ -220,13 +219,9 @@ struct BrandRow: View {
                 } placeholder: {
                     Colors.Secondary.background
                 }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Colors.Secondary.divider, lineWidth: 1)
-                }
                 .frame(width: width, height: width)
                 .foregroundColor(Colors.Primary.foreground)
-                .background(Colors.Primary.background)
+                .background(Colors.Secondary.background)
                 .clipShape(
                     RoundedRectangle(cornerRadius: 15)
                 )
@@ -285,13 +280,9 @@ struct BrandImage: View {
             } placeholder: {
                 Colors.Secondary.background
             }
-            .overlay {
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Colors.Secondary.divider, lineWidth: 1)
-            }
             .frame(width: geometry.size.width, height: geometry.size.width)
             .foregroundColor(Colors.Primary.foreground)
-            .background(Colors.Primary.background)
+            .background(Colors.Secondary.background)
             .clipShape(
                 RoundedRectangle(cornerRadius: 20)
             )

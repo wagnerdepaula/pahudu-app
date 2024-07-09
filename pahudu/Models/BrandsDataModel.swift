@@ -12,11 +12,29 @@ struct BrandResponse: Codable {
     var brands: [Brand]
 }
 
+struct CreativeDirector: Codable, Identifiable, Hashable {
+    let id: String
+    let name: String
+    let yearStarted: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, yearStarted
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(String.self, forKey: .id) ?? "unknown"
+        name = try container.decode(String.self, forKey: .name)
+        yearStarted = try container.decode(String.self, forKey: .yearStarted)
+    }
+}
+
 struct Brand: Codable, Identifiable, Hashable {
     let id: String
     let name: String
-    let founder: String
-    let foundedDate: String
+    let founders: [String]
+    let creativeDirectors: [CreativeDirector]
+    let foundedYear: String
     let about: String
     let headquarters: String
     let yearsActive: String
@@ -27,15 +45,16 @@ struct Brand: Codable, Identifiable, Hashable {
     let history: [String]
     
     enum CodingKeys: String, CodingKey {
-        case id, name, founder, foundedDate, about, headquarters, yearsActive, parentCompany, website, nationality, imageName, history
+        case id, name, founders, creativeDirectors, foundedYear, about, headquarters, yearsActive, parentCompany, website, nationality, imageName, history
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         name = try container.decodeIfPresent(String.self, forKey: .name) ?? "N/A"
-        founder = try container.decodeIfPresent(String.self, forKey: .founder) ?? "N/A"
-        foundedDate = try container.decodeIfPresent(String.self, forKey: .foundedDate) ?? "N/A"
+        founders = try container.decodeIfPresent([String].self, forKey: .founders) ?? ["N/A"]
+        creativeDirectors = try container.decodeIfPresent([CreativeDirector].self, forKey: .creativeDirectors) ?? []
+        foundedYear = try container.decodeIfPresent(String.self, forKey: .foundedYear) ?? "N/A"
         about = try container.decodeIfPresent(String.self, forKey: .about) ?? "N/A"
         headquarters = try container.decodeIfPresent(String.self, forKey: .headquarters) ?? "N/A"
         yearsActive = try container.decodeIfPresent(String.self, forKey: .yearsActive) ?? "N/A"
@@ -43,9 +62,11 @@ struct Brand: Codable, Identifiable, Hashable {
         website = try container.decodeIfPresent(String.self, forKey: .website) ?? "N/A"
         nationality = try container.decodeIfPresent(String.self, forKey: .nationality) ?? "N/A"
         imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? "default_image"
-        history = try container.decodeIfPresent(Array.self, forKey: .history) ?? []
+        history = try container.decodeIfPresent([String].self, forKey: .history) ?? []
     }
 }
+
+
 
 
 @MainActor
@@ -71,6 +92,8 @@ extension Brand: Equatable {
 
 extension Array where Element == Brand {
     func findBrand(byName name: String) -> Brand? {
-        return self.first { $0.name.lowercased().contains(name.lowercased()) }
+        return self.first { brand in
+            brand.name.lowercased() == name.lowercased()
+        }
     }
 }

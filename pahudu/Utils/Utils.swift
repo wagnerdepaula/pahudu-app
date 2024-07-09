@@ -54,7 +54,7 @@ func cleanURL(_ urlString: String) -> String {
 
 
 extension UIApplication {
-    static func triggerHapticFeedback(style: UIImpactFeedbackGenerator.FeedbackStyle = .soft) {
+    static func triggerHapticFeedback(style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
         let generator = UIImpactFeedbackGenerator(style: style)
         generator.impactOccurred()
     }
@@ -71,3 +71,5 @@ enum ViewMode: CaseIterable {
         }
     }
 }
+
+

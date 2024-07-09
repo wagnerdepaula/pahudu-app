@@ -22,7 +22,7 @@ extension Font {
     }
     
     static var title3: Font {
-        .custom("Inter-Regular", size: 20)
+        .custom("Inter-Medium", size: 20)
     }
     
     static var headline: Font {
@@ -73,3 +73,25 @@ extension Font {
 
 
 
+// Extension to apply font features
+extension View {
+    func fontFeatures(_ features: [[UIFontDescriptor.FeatureKey: Any]]) -> some View {
+        self.modifier(FontFeatureModifier(features: features))
+    }
+}
+
+// Font feature modifier
+struct FontFeatureModifier: ViewModifier {
+    let features: [[UIFontDescriptor.FeatureKey: Any]]
+
+    func body(content: Content) -> some View {
+        content.environment(\.font, customFont)
+    }
+
+    private var customFont: Font {
+        let descriptor = UIFontDescriptor(name: "Inter-Regular", size: 14).addingAttributes([
+            .featureSettings: features
+        ])
+        return Font(UIFont(descriptor: descriptor, size: 14))
+    }
+}

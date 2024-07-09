@@ -85,13 +85,14 @@ struct PahuduApp: App {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterialDark)
-        //navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+        navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         navigationBarAppearance.shadowColor = .clear
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: UIFont(name: "Inter-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17),
             .foregroundColor: UIColor.clear
+                    
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
             .font: UIFont(name: "Inter-Regular", size: 34) ?? UIFont.systemFont(ofSize: 34),
@@ -111,8 +112,8 @@ struct PahuduApp: App {
     private func configureToolbarAppearance() {
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithDefaultBackground()
-        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterialDark)
-        //toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+        toolbarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         toolbarAppearance.shadowColor = .clear
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
@@ -128,8 +129,8 @@ struct PahuduApp: App {
     private func configureTabBarAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
-        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterialDark)
-        //tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+        tabBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         tabBarAppearance.shadowColor = .clear
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Primary.foreground)

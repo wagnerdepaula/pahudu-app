@@ -100,7 +100,7 @@ struct DayView: View {
 //            //                    Text("Get Tickets")
 //            //                        .font(.callout)
 //            //                        .foregroundColor(Colors.Primary.foreground)
-//            //                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+//            //                        .padding(EdgeInsets(top: 7, leading: 20, bottom: 7, trailing: 20))
 //            //                        .background(Colors.Primary.blue)
 //            //                        .cornerRadius(25)
 //            //                }

@@ -108,7 +108,7 @@ struct DesignersListView: View {
                                 Section(header: Text(character).id(character)
                                     .font(.callout)
                                     .foregroundStyle(Colors.Secondary.foreground)
-                                    .padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                                 ) {
                                     ForEach(designersForLetter, id: \.id) { designer in
                                         DesignerRow(designer: designer, eventModel: eventModel, showDetails: $showDetails, width: width)
@@ -180,7 +180,7 @@ struct DesignerRow: View {
                     Colors.Secondary.background
                 }
                 .frame(width: width, height: width)
-                .background(Colors.Secondary.foreground)
+                .background(Colors.Tertiary.foreground)
                 .clipShape(
                     Circle()
                 )
@@ -189,23 +189,23 @@ struct DesignerRow: View {
                         .stroke(Colors.Primary.background, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
                 }
                 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(designer.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.subheadline)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                    
-                    if let affiliation = designer.affiliation {
-                        Text("\(affiliation.brand)")
-                            .foregroundColor(Colors.Tertiary.foreground)
-                            .font(.caption)
-                            .lineLimit(2)
-                            .lineSpacing(2)
-                            .truncationMode(.tail)
-                            .multilineTextAlignment(.leading)
-                    }
-                }
+                
+                Text(designer.name)
+                    .foregroundColor(Colors.Primary.foreground)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                
+                
+//                VStack(alignment: .leading, spacing: 3) {
+//                    Text("\(designer.nationality)")
+//                        .foregroundColor(Colors.Tertiary.foreground)
+//                        .font(.caption)
+//                        .lineLimit(2)
+//                        .lineSpacing(2)
+//                        .truncationMode(.tail)
+//                        .multilineTextAlignment(.leading)
+//                }
                 
                 
             }
@@ -248,7 +248,7 @@ struct DesignersGridView: View {
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 20)
-            .drawingGroup()
+            //.drawingGroup()
         }
         .scrollIndicators(.hidden)
         .background(Colors.Primary.background)
@@ -295,7 +295,7 @@ struct DesignerImage: View {
                 Colors.Secondary.background
             }
             .frame(width: geometry.size.width, height: geometry.size.width)
-            .background(Colors.Secondary.foreground)
+            .background(Colors.Tertiary.foreground)
             .clipShape(
                 Circle()
             )

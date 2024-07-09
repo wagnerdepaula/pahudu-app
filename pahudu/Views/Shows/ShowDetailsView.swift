@@ -21,10 +21,13 @@ struct ShowDetailsView: View {
         ScrollView {
             VStack(spacing: 0) {
                 GeometryReader { geometry in
+                    
                     let offsetY = geometry.frame(in: .global).minY
+                    
                     ZStack(alignment: .bottom) {
                         
                         LinearGradient(gradient: Gradient(colors: [Colors.Primary.background, Colors.Secondary.background]), startPoint: .top, endPoint: .bottom)
+                        
                         
                         AsyncCachedImage(url: URL(string: "\(Path.shows)/lg/\(show.imageName)")!) { image in
                             image
@@ -40,7 +43,7 @@ struct ShowDetailsView: View {
                                     }
                                 }
                         } placeholder: {
-                            Color.clear
+                            Colors.Secondary.background
                         }
                     }
                     .frame(maxWidth: size, maxHeight: size, alignment: .bottom)
@@ -49,27 +52,11 @@ struct ShowDetailsView: View {
                 
                 
                 
-                
                 VStack(alignment: .leading, spacing: 20) {
-                    
-                    Text(show.name)
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.largeTitle)
-                        .kerning(-0.3)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
-                    TypedText(text: "\(show.about) \(show.keyHighlights)")
-                        .foregroundColor(Colors.Primary.foreground)
-                        .font(.body)
-                        .lineSpacing(6)
-                    
                     
                     
                     // Table
                     VStack(spacing: 0) {
-                        
-                        Spacer(minLength: 15)
                         
                         if show.acronym != "N/A" {
                             DetailsSectionView(title: "Acronym", detail: show.acronym)
@@ -114,12 +101,18 @@ struct ShowDetailsView: View {
                     )
                     
                     
+                    TypedText(text: "\(show.about) \(show.keyHighlights)")
+                        .foregroundColor(Colors.Primary.foreground)
+                        .font(.body)
+                        .lineSpacing(6)
                     
-                    VStack(alignment: .leading, spacing: 14) {
+                    
+                    
+                    VStack(alignment: .leading, spacing: 15) {
                         ForEach(Array(show.history.enumerated()), id: \.element) { index, item in
                             HStack(alignment: .top, spacing: 0) {
                                 Text("\(index + 1).")
-                                    .foregroundColor(Colors.Tertiary.foreground)
+                                    .foregroundColor(Colors.Quaternary.foreground)
                                     .font(.body)
                                     .frame(width: 25, alignment: .leading)
                                 Text(item)
@@ -132,8 +125,6 @@ struct ShowDetailsView: View {
                     }
                     
                     Spacer(minLength:50)
-                    
-                    
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 

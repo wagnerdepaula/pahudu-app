@@ -105,7 +105,7 @@ struct ShowsListView: View {
                                 Section(header: Text(character).id(character)
                                     .font(.callout)
                                     .foregroundStyle(Colors.Secondary.foreground)
-                                    .padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
+                                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                                 ) {
                                     ForEach(showsForLetter, id: \.id) { show in
                                         ShowRow(show: show, eventModel: eventModel, showDetails: $showDetails, width: width)
@@ -175,13 +175,9 @@ struct ShowRow: View {
                 } placeholder: {
                     Colors.Secondary.background
                 }
-                .overlay {
-                    Rectangle()
-                        .stroke(Colors.Secondary.divider, lineWidth: 1)
-                }
                 .frame(width: width, height: width)
                 .foregroundColor(Colors.Primary.foreground)
-                .background(Colors.Primary.background)
+                .background(Colors.Secondary.background)
                 .clipShape(
                     Rectangle()
                 )
@@ -278,13 +274,9 @@ struct ShowImage: View {
             } placeholder: {
                 Colors.Secondary.background
             }
-            .overlay {
-                Rectangle()
-                    .stroke(Colors.Secondary.divider, lineWidth: 1)
-            }
             .frame(width: geometry.size.width, height: geometry.size.width)
             .foregroundColor(Colors.Primary.foreground)
-            .background(Colors.Primary.background)
+            .background(Colors.Secondary.background)
             .clipShape(
                 Rectangle()
             )

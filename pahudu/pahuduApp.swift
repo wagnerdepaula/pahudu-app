@@ -86,7 +86,7 @@ struct PahuduApp: App {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithDefaultBackground()
         navigationBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+//        navigationBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         navigationBarAppearance.shadowColor = .clear
         
         navigationBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
@@ -113,7 +113,7 @@ struct PahuduApp: App {
         let toolbarAppearance = UIToolbarAppearance()
         toolbarAppearance.configureWithDefaultBackground()
         toolbarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+//        toolbarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         toolbarAppearance.shadowColor = .clear
         
         let barButtonItemAppearance = UIBarButtonItemAppearance()
@@ -130,7 +130,7 @@ struct PahuduApp: App {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
         tabBarAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
+//        tabBarAppearance.backgroundColor = UIColor(Colors.Primary.background).withAlphaComponent(0.6)
         tabBarAppearance.shadowColor = .clear
         
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor(Colors.Primary.foreground)
